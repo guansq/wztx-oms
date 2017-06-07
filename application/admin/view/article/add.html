@@ -1,0 +1,58 @@
+
+{block name="style"}
+<link href="//cdn.bootcss.com/wangeditor/2.1.20/css/wangEditor.css" rel="stylesheet">
+{/block}
+<style type="text/css">
+  #editor-trigger {
+    height: 400px;
+    /*max-height: 500px;*/
+  }
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+</style>
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action='{:url("$classuri/add")}' data-auto="true" method="post">
+  <div class="layui-form-item">
+    <p class="h2 text-center"></p>
+  </div>
+
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">文章标题 </label>
+    <div class="layui-input-block">
+      <input type="text" name="title" value='' required="required" title="请输入文章标题" placeholder="请输入文章标题" class="layui-input">
+    </div>
+  </div>
+
+
+  <div id="editor-container" class="container">
+    <!--<div id="editor-trigger" name="content"><p>请输入内容</p></div>-->
+    <textarea id="editor-trigger" name="content" style="display:none;">
+        <p>请输入内容...</p>
+    </textarea>
+  </div>
+
+
+  <div class="hr-line-dashed"></div>
+
+  <div class="layui-form-item text-center">
+    <button class="layui-btn" type='submit'>保存数据</button>
+  </div>
+
+</form>
+
+<script type="text/javascript">
+
+  require(["wangEditor"],function(){
+    var editor = new wangEditor('editor-trigger');
+    // 配置上传图片的地址
+    editor.config.uploadImgUrl = '/plugs/uploadbyjs';
+    editor.create();
+  });
+
+
+
+</script>
