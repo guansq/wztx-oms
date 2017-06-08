@@ -50,7 +50,7 @@ class Share extends BaseController{
      */
     public function read($id){
         //
-        return view('edit');
+        return view('setting');
     }
 
     /**

@@ -5,39 +5,70 @@
 {/block}
 
 {block name="content"}
-<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action='{:url("$classuri/add")}' data-auto="true" method="post">
-  <div class="layui-form-item">
-    <p class="h2 text-center"></p>
+<main class="main">
+  <div class="head_box">
+    <a href="javascript:void(0);">财务管理</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">提现申请</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">提现详情</a>
   </div>
-
-
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">Banner名称 </label>
-    <div class="layui-input-block">
-      <input type="text" name="name" value='' required="required" title="请输入Banner名称" placeholder="请输入Banner名称" class="layui-input">
+  <div class="con_box">
+    <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>提现详情</p>
+    <div class="money_tab">
+      <table class="table table-bordered">
+        <tbody>
+        <tr>
+          <td class="col-sm-4">手机号码：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">姓名：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">申请时间：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">申请金额：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">账户余额：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">银行名称：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">银行帐号：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">开户人：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">处理结果：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        <tr>
+          <td class="col-sm-4">备注：</td>
+          <td class="col-sm-8"></td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="money_btn">
+        <button type="button" class="btn btn-primary mr_20">确定</button>
+        <button type="button" class="btn btn-primary">取消</button>
+      </div>
     </div>
   </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">上传图片 </label>
-    <div class="layui-input-block">
-      <img data-tips-image style="height:auto;max-height:100px;min-width:100px" src=""/>
-      <input type="hidden" name="src" onchange="$(this).prev('img').attr('src', this.value)" value="" class="layui-input">
-      <a class="btn btn-link" data-file="one" data-field="src">上传图片</a>
-    </div>
-  </div>
-
-
-
-  <div class="hr-line-dashed"></div>
-
-  <div class="layui-form-item text-center">
-    <button class="layui-btn" type='submit'>保存数据</button>
-  </div>
-
-</form>
+</main>
 {/block}
 
 {block name="script"}
+
 {/block}

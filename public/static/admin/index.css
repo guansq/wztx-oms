@@ -1,0 +1,270 @@
+a{
+  text-decoration: none;
+  color: #333333;
+}
+a:hover{
+  color: #333333;
+}
+html,body{
+  height: 100%;
+  min-height: 100%;
+}
+.main{
+  width: 100%;
+  height: auto;
+}
+.head_box{
+  width: 100%;
+  height: 40px;
+  background: #F2F2F2;
+  padding: 0 0 0 10px;
+  line-height: 40px;
+}
+.head_box a{
+  font-size: 14px;
+}
+.con_box{
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+  padding: 20px 0 0 10px;
+}
+.con_box .h1{
+  margin: 0;
+  font-size: 22px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+.con_box .h1 span{
+  font-size: 13px;
+  color: #666666;
+  margin-left: 10px;
+}
+.operate_box{
+  padding: 20px 0 0 0;
+}
+.mr_20{
+  margin-right: 20px;
+}
+.operate_box .operate_tab{
+  padding: 15px 0 0 0;
+}
+.operate_box .operate_tab button{
+  padding: 4px 18px;
+}
+.operate_box .operate_tab_btn{
+  padding: 5px 0 18px 0;
+}
+.operate_box .operate_table thead th{
+  padding: 8px;
+  border-bottom-width: 0px;
+}
+.operate_box .operate_table .row{
+  margin: 0;
+}
+.operate_box .operate_table .row div{
+  padding: 0;
+}
+.bomb_box{
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.407843137254902);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+.new_admin{
+  position: absolute;
+  width: 500px;
+  height: 360px;
+  border-radius: 10px;
+  background: #ffffff;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 15px 0 0 0;
+}
+.new_admin h2{
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  padding-left: 15px;
+  border-bottom: 1px solid #dddddd;
+  padding-bottom: 8px;
+}
+.new_admin .info_admin{
+  padding: 10px 15px 10px 15px;
+  border-bottom: 1px solid #ddd;
+}
+.new_admin .info_admin form label{
+  padding-right: 0;
+  font-weight: normal;
+}
+.new_admin .new_btn{
+  padding-top: 10px;
+  text-align: center;
+}
+.new_admin .new_btn button{
+  padding: 4px 20px;
+}
+/*
+  客服管理页面
+*/
+.custom_btn{
+  margin-top: 20px;
+}
+.custom_btn button{
+  padding: 4px 20px;
+  margin-left: 15px;
+}
+/*
+  个人货主页面
+*/
+.look{
+  color: #177ad8;
+}
+.look:hover{
+  text-decoration: none;
+  color: #177ad8;
+}
+/*
+  个人货主详情
+*/
+.con_box .p_tit{
+  margin: 0;
+  font-size: 16px;
+  height: 40px;
+  line-height: 40px;
+  background: #D7D7D7;
+  padding-left: 10px;
+}
+.con_box .p_tit span{
+  margin-right: 5px;
+  vertical-align: text-top;
+}
+.details_box{
+  padding: 15px 0 0 0;
+}
+.datails_tit{
+  overflow: hidden;
+  padding-bottom: 25px;
+}
+.datails_tit h3{
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+  display: inline-block;
+  width: 10%;
+  float: left;
+}
+.datails_tit .hr_span{
+  display: inline-block;
+  width: 45%;
+  height: 1.5px;
+  background: #dddddd;
+  float: left;
+  margin-top: 9px;
+}
+.info_table{
+  width: 300px;
+  height: auto;
+  margin: 0 auto;
+}
+.info_table td{
+  text-align: center;
+}
+.authentication{
+  padding: 25px 0;
+}
+.auth_box{
+  margin-bottom: 15px;
+}
+.auth_box .auth_img{
+  width: 300px;
+  height: 170px;
+  line-height: 170px;
+  text-align: center;
+  margin: 0 auto;
+  border: 1px solid #dddddd;
+  background: #F2F2F2;
+}
+.auth_box .auth_btn{
+  width: 300px;
+  height: auto;
+  padding-top: 30px;
+  margin: 0 auto;
+}
+.auth_box .auth_btn button{
+  width: 100%;
+  margin-bottom: 20px;
+}
+/*
+  广告列表
+*/
+.add_carousel{
+  position: absolute;
+  width: 560px;
+  height: 375px;
+  border-radius: 10px;
+  background: #ffffff;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 30px 30px 0 30px;
+}
+.add_carousel .td1{
+  text-align: right;
+  vertical-align: inherit;
+}
+.carousel_img{
+  height: 40px;
+  background: #cccccc;
+  margin-right: 20px;
+}
+.sure_btn{
+  text-align: center;
+}
+.sure_btn button{
+  width: 220px;
+}
+/*
+  交易统计
+*/
+.sheet{
+  padding: 15px 0 0 0;
+}
+.echarts_box{
+  width: 100%;
+  height: 500px;
+}
+.money_tab{
+  padding: 15px;
+}
+.money_btn{
+  text-align: right;
+}
+.money_btn button{
+  width: 100px;
+}
+.commission{
+  width: 600px;
+  margin: 0 auto;
+}
+
+
+
+
+
+
+
+
+
+
+

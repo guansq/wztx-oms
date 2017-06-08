@@ -5,38 +5,146 @@
 {/block}
 
 {block name="content"}
-<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action='{:url("$classuri/add")}' data-auto="true" method="post">
-  <div class="layui-form-item">
-    <p class="h2 text-center"></p>
+<main class="main">
+  <div class="head_box">
+    <a href="javascript:void(0);">司机管理</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">司机列表</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">司机详情</a>
   </div>
-
-
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">Banner名称 </label>
-    <div class="layui-input-block">
-      <input type="text" name="name" value='' required="required" title="请输入Banner名称" placeholder="请输入Banner名称" class="layui-input">
+  <div class="con_box">
+    <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>司机详情</p>
+    <div class="details_box">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>企业信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="info_table">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td class="col-sm-6">姓名</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">性别</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">身份证号</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">地址</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">物流类型</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="auth_box">
+          <section class="auth_img">
+            手持身份证照
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="authentication">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>身份认证</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          身份证正面照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          身份证反面照
+        </section>
+      </div>
+    </div>
+    <div class="authentication">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>车辆认证</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="info_table">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td class="col-sm-6">车型</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">车长</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">载重</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">可载体积</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">车牌号</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">保单截止日期</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">行驶证截止日期</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          车头和车牌号码照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          驾驶证照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          行驶证照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          保险单照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          运营证照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_btn">
+          <button type="button" class="btn btn-primary">通过审核</button>
+          <button type="button" class="btn btn-primary">删除</button>
+          <button type="button" class="btn btn-primary">冻结账户</button>
+        </section>
+      </div>
     </div>
   </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">上传图片 </label>
-    <div class="layui-input-block">
-      <img data-tips-image style="height:auto;max-height:100px;min-width:100px" src=""/>
-      <input type="hidden" name="src" onchange="$(this).prev('img').attr('src', this.value)" value="" class="layui-input">
-      <a class="btn btn-link" data-file="one" data-field="src">上传图片</a>
-    </div>
-  </div>
-
-
-
-  <div class="hr-line-dashed"></div>
-
-  <div class="layui-form-item text-center">
-    <button class="layui-btn" type='submit'>保存数据</button>
-  </div>
-
-</form>
+</main>
 {/block}
 
 {block name="script"}

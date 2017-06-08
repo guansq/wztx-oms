@@ -50,7 +50,7 @@ class Shipper extends BaseController
      */
     public function read($id)
     {
-        //
+        return view('edit');
     }
 
     /**

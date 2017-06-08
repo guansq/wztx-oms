@@ -1,44 +1,129 @@
 {extend name='extra@admin/content' /}
 
+{block name="style"}
+
+{/block}
+
 {block name="button"}
 
 {/block}
 
 {block name="content"}
-<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action='{:url("$classuri/1")}' data-auto="true" method="post">
-  <div class="layui-form-item">
-    <p class="h2 text-center"></p>
+<main class="main">
+  <div class="head_box">
+    <a href="javascript:void(0);">财务管理</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">交易统计</a>
   </div>
-
-
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">Banner名称 </label>
-    <div class="layui-input-block">
-      <input type="text" name="name" value='' required="required" title="请输入Banner名称" placeholder="请输入Banner名称" class="layui-input">
+  <div class="con_box">
+    <h1 class="h1">交易统计</h1>
+    <div class="operate_box">
+      <form class="form-inline">
+        <div class="form-group mr_20">
+          <select class="form-control mr_20">
+            <option>今日</option>
+            <option>最近7日</option>
+            <option>最近15日</option>
+            <option>最近30日</option>
+          </select>
+          <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 开始时间">
+          到
+          <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 结束时间">
+        </div>
+      </form>
+      <div class="sheet">
+        <div id="echarts" class="echarts_box"></div>
+      </div>
     </div>
   </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">上传图片 </label>
-    <div class="layui-input-block">
-      <img data-tips-image style="height:auto;max-height:100px;min-width:100px" src=""/>
-      <input type="hidden" name="src" onchange="$(this).prev('img').attr('src', this.value)" value="" class="layui-input">
-      <a class="btn btn-link" data-file="one" data-field="src">上传图片</a>
-    </div>
-  </div>
-
-
-
-  <div class="hr-line-dashed"></div>
-
-  <div class="layui-form-item text-center">
-    <button class="layui-btn" type='submit'>保存数据</button>
-  </div>
-
-</form>
+</main>
 {/block}
 
 {block name="script"}
+<script>
+  require(["echarts","laydate"],function(echarts){
 
+    $(document).ready(function(){
+      initPage(echarts);
+    });
+
+
+  });
+  function initPage(echarts){
+    //时间日期选择器
+    $(".date_time").focus(function(){
+      /*
+       laydate插件提供显示日期控件的方法
+       laydate(options)
+       * options - 选项,格式为 { key : value }
+       * 选项
+       * format - 日期格式
+       *
+       默认格式为 YYYY-MM-DD hh:mm:ss(标准格式)
+       * 客户端
+       * 服务器端
+       * 数据库
+       * istime - 是否开启时间选择
+       * 默认值为false,不开启
+       * isclear - 是否显示清空按钮
+       * istoday - 是否显示今天按钮
+       * issure - 是否显示确认按钮
+       */
+      laydate({
+        format:"YYYY年MM月DD日 hh:mm:ss",
+        istime:true,
+        isclear:true,
+        istoday:true,
+        issure:true
+      });
+    });
+
+    //echarts
+    var myChart = echarts.init(document.getElementById('echarts'));
+
+    var option = {
+      title: {
+        text: '供应商质量合格率',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{c}'
+      },
+      legend: {
+        left: 'left',
+        data: [ '订单量','交易总额']
+      },
+      xAxis: {
+        type: 'category',
+        name: '时间',
+        splitLine: {show: false},
+        data: ['2017-01', '2017-02', '2017-03', '2017-04', '2017-05', '2017-06', '2017-07', '2017-08', '2017-09']
+      },
+      grid: {
+        left: '1%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      yAxis: {
+        type: 'value',
+        name: '趋势图'
+      },
+      series: [
+        {
+          name: '订单量',
+          type: 'line',
+          data: [3, 20, 44, 18, 68, 35,60,23,88]
+        },
+        {
+          name: '交易总额',
+          type: 'line',
+          data: [3, 5, 8, 50, 8, 35,6,30,28]
+        },
+      ]
+    };
+    myChart.setOption(option);
+  }
+</script>
 {/block}

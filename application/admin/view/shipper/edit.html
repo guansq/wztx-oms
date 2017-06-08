@@ -5,7 +5,76 @@
 {/block}
 
 {block name="content"}
-
+<main class="main">
+  <div class="head_box">
+    <a href="javascript:void(0);">货主管理</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">个人货主</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">个人货主详情</a>
+  </div>
+  <div class="con_box">
+    <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>个人货主详情</p>
+    <div class="details_box">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>基本信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="info_table">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td class="col-sm-6">姓名</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">性别</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">身份证</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">手机号</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="authentication">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>认证信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          手持身份证照片
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          身份证正面照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          身份证反面照
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_btn">
+          <button type="button" class="btn btn-primary">通过审核</button>
+          <button type="button" class="btn btn-primary">删除</button>
+          <button type="button" class="btn btn-primary">冻结账户</button>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
 {/block}
 
 {block name="script"}
