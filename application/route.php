@@ -8,7 +8,10 @@ return [
     //-------------------
     '__domain__'=>[
         //'atwwg.api'      => 'api',
-        //'atwwg.oms'      => 'admin',
+        'wztx.oms'      => 'admin',
         //'atwwg.spl'      => 'spl'
+    ],
+    '__rest__'=>[
+        'driver'      => 'Driver'
     ],
 ];

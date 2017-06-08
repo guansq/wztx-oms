@@ -123,7 +123,7 @@ define(['jquery', 'admin.plugs'], function () {
     /*! 注册 data-icon 事件行为 */
     this.$body.on('click', '[data-icon]', function () {
         var field = $(this).attr('data-icon') || $(this).attr('data-field') || 'icon';
-        var url = window.ROOT_URL + '/index.php/plugs/icon.html?field=' + field;
+        var url = window.ROOT_URL + '/plugs/icon?field=' + field;
         $.form.iframe(url, '图标选择');
     });
 
