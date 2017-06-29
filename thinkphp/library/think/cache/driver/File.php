@@ -28,7 +28,11 @@ class File extends Driver
     ];
 
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @param array $options
      */
     public function __construct($options = [])
@@ -225,6 +229,10 @@ class File extends Driver
         foreach ($files as $path) {
             if (is_dir($path)) {
                 array_map('unlink', glob($path . '/*.php'));
+<<<<<<< HEAD
+=======
+                rmdir($path);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             } else {
                 unlink($path);
             }

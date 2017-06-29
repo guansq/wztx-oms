@@ -19,7 +19,10 @@ use think\response\Xml as XmlResponse;
 
 class Response
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     // 原始数据
     protected $data;
 
@@ -40,7 +43,11 @@ class Response
     protected $content = null;
 
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access   public
      * @param mixed $data    输出数据
      * @param int   $code
@@ -50,12 +57,20 @@ class Response
     public function __construct($data = '', $code = 200, array $header = [], $options = [])
     {
         $this->data($data);
+<<<<<<< HEAD
         $this->header = $header;
         $this->code   = $code;
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         if (!empty($options)) {
             $this->options = array_merge($this->options, $options);
         }
         $this->contentType($this->contentType, $this->charset);
+<<<<<<< HEAD
+=======
+        $this->header = array_merge($this->header, $header);
+        $this->code   = $code;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -113,7 +128,15 @@ class Response
             http_response_code($this->code);
             // 发送头部信息
             foreach ($this->header as $name => $val) {
+<<<<<<< HEAD
                 header($name . ':' . $val);
+=======
+                if (is_null($val)) {
+                    header($name);
+                } else {
+                    header($name . ':' . $val);
+                }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
 

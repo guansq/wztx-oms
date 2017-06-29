@@ -11,7 +11,10 @@
 
 namespace think\model\relation;
 
+<<<<<<< HEAD
 use think\Db;
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 use think\db\Query;
 use think\Loader;
 use think\Model;
@@ -20,7 +23,11 @@ use think\model\Relation;
 class HasMany extends Relation
 {
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param Model  $parent     上级模型对象
      * @param string $model      模型名
@@ -45,9 +52,22 @@ class HasMany extends Relation
     public function getRelation($subRelation = '', $closure = null)
     {
         if ($closure) {
+<<<<<<< HEAD
             call_user_func_array($closure, [& $this->query]);
         }
         return $this->relation($subRelation)->select();
+=======
+            call_user_func_array($closure, [ & $this->query]);
+        }
+        $list   = $this->relation($subRelation)->select();
+        $parent = clone $this->parent;
+
+        foreach ($list as &$model) {
+            $model->setParent($parent);
+        }
+
+        return $list;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -84,7 +104,16 @@ class HasMany extends Relation
                 if (!isset($data[$result->$localKey])) {
                     $data[$result->$localKey] = [];
                 }
+<<<<<<< HEAD
                 $result->setAttr($attr, $this->resultSetBuild($data[$result->$localKey]));
+=======
+
+                foreach ($data[$result->$localKey] as &$relationModel) {
+                    $relationModel->setParent(clone $result);
+                }
+
+                $result->setRelation($attr, $this->resultSetBuild($data[$result->$localKey]));
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
     }
@@ -108,7 +137,16 @@ class HasMany extends Relation
             if (!isset($data[$result->$localKey])) {
                 $data[$result->$localKey] = [];
             }
+<<<<<<< HEAD
             $result->setAttr(Loader::parseName($relation), $this->resultSetBuild($data[$result->$localKey]));
+=======
+
+            foreach ($data[$result->$localKey] as &$relationModel) {
+                $relationModel->setParent(clone $result);
+            }
+
+            $result->setRelation(Loader::parseName($relation), $this->resultSetBuild($data[$result->$localKey]));
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
     }
 
@@ -125,7 +163,11 @@ class HasMany extends Relation
         $count    = 0;
         if (isset($result->$localKey)) {
             if ($closure) {
+<<<<<<< HEAD
                 call_user_func_array($closure, [& $this->query]);
+=======
+                call_user_func_array($closure, [ & $this->query]);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
             $count = $this->query->where([$this->foreignKey => $result->$localKey])->count();
         }
@@ -141,14 +183,23 @@ class HasMany extends Relation
     public function getRelationCountQuery($closure)
     {
         if ($closure) {
+<<<<<<< HEAD
             call_user_func_array($closure, [& $this->query]);
+=======
+            call_user_func_array($closure, [ & $this->query]);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
 
         return $this->query->where([
             $this->foreignKey => [
                 'exp',
+<<<<<<< HEAD
                 '=' . $this->parent->getTable() . '.' . $this->parent->getPk()
             ]
+=======
+                '=' . $this->parent->getTable() . '.' . $this->parent->getPk(),
+            ],
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         ])->fetchSql()->count();
     }
 
@@ -167,7 +218,11 @@ class HasMany extends Relation
         $foreignKey = $this->foreignKey;
         // 预载入关联查询 支持嵌套预载入
         if ($closure) {
+<<<<<<< HEAD
             call_user_func_array($closure, [& $model]);
+=======
+            call_user_func_array($closure, [ & $model]);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
         $list = $model->where($where)->with($subRelation)->select();
 
@@ -183,7 +238,11 @@ class HasMany extends Relation
      * 保存（新增）当前关联数据对象
      * @access public
      * @param mixed $data 数据 可以使用数组 关联模型对象 和 关联对象的主键
+<<<<<<< HEAD
      * @return integer
+=======
+     * @return Model|false
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      */
     public function save($data)
     {
@@ -191,9 +250,15 @@ class HasMany extends Relation
             $data = $data->getData();
         }
         // 保存关联表数据
+<<<<<<< HEAD
         $data[$this->foreignKey] = $this->parent->{$this->localKey};
         $model                   = new $this->model;
         return $model->save($data);
+=======
+        $model                   = new $this->model;
+        $data[$this->foreignKey] = $this->parent->{$this->localKey};
+        return $model->save($data) ? $model : false;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -217,6 +282,7 @@ class HasMany extends Relation
      * @param string  $operator 比较操作符
      * @param integer $count    个数
      * @param string  $id       关联表的统计字段
+<<<<<<< HEAD
      * @return Query
      */
     public function has($operator = '>=', $count = 1, $id = '*')
@@ -224,6 +290,16 @@ class HasMany extends Relation
         $table = $this->query->getTable();
         return $this->parent->db()->alias('a')
             ->join($table . ' b', 'a.' . $this->localKey . '=b.' . $this->foreignKey, $this->joinType)
+=======
+     * @param string  $joinType JOIN类型
+     * @return Query
+     */
+    public function has($operator = '>=', $count = 1, $id = '*', $joinType = 'INNER')
+    {
+        $table = $this->query->getTable();
+        return $this->parent->db()->alias('a')
+            ->join($table . ' b', 'a.' . $this->localKey . '=b.' . $this->foreignKey, $joinType)
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             ->group('b.' . $this->foreignKey)
             ->having('count(' . $id . ')' . $operator . $count);
     }

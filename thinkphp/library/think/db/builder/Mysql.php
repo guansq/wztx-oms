@@ -36,6 +36,12 @@ class Mysql extends Builder
             $key                = 'json_extract(' . $field . ', \'$.' . $name . '\')';
         } elseif (strpos($key, '.') && !preg_match('/[,\'\"\(\)`\s]/', $key)) {
             list($table, $key) = explode('.', $key, 2);
+<<<<<<< HEAD
+=======
+            if ('__TABLE__' == $table) {
+                $table = $this->query->getTable();
+            }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             if (isset($options['alias'][$table])) {
                 $table = $options['alias'][$table];
             }
@@ -44,6 +50,12 @@ class Mysql extends Builder
             $key = '`' . $key . '`';
         }
         if (isset($table)) {
+<<<<<<< HEAD
+=======
+            if (strpos($table, '.')) {
+                $table = str_replace('.', '`.`', $table);
+            }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $key = '`' . $table . '`.' . $key;
         }
         return $key;

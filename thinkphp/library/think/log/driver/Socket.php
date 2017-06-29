@@ -43,7 +43,11 @@ class Socket
     protected $allowForceClientIds = []; //配置强制推送且被授权的client_id
 
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @param array $config 缓存参数
      * @access public
      */

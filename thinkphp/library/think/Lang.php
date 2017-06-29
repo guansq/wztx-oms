@@ -25,6 +25,13 @@ class Lang
     protected static $langCookieExpire = 3600;
     // 允许语言列表
     protected static $allowLangList = [];
+<<<<<<< HEAD
+=======
+    // Accept-Language转义为对应语言包名称 系统默认配置
+    protected static $acceptLanguage = [
+        'zh-hans-cn' => 'zh-cn',
+    ];
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 
     // 设定当前的语言
     public static function range($range = '')
@@ -34,6 +41,10 @@ class Lang
         } else {
             self::$range = $range;
         }
+<<<<<<< HEAD
+=======
+        return self::$range;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -93,7 +104,10 @@ class Lang
     /**
      * 获取语言定义(不区分大小写)
      * @param string|null   $name 语言变量
+<<<<<<< HEAD
      * @param array         $vars 变量替换
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @param string        $range 语言作用域
      * @return mixed
      */
@@ -152,6 +166,7 @@ class Lang
     {
         // 自动侦测设置获取语言选择
         $langSet = '';
+<<<<<<< HEAD
         if (isset($_GET[self::$langDetectVar])) {
             // url中设置了语言变量
             $langSet = strtolower($_GET[self::$langDetectVar]);
@@ -164,14 +179,33 @@ class Lang
             preg_match('/^([a-z\d\-]+)/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
             $langSet = strtolower($matches[1]);
             Cookie::set(self::$langCookieVar, $langSet, self::$langCookieExpire);
+=======
+
+        if (isset($_GET[self::$langDetectVar])) {
+            // url中设置了语言变量
+            $langSet = strtolower($_GET[self::$langDetectVar]);
+        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            // 自动侦测浏览器语言
+            preg_match('/^([a-z\d\-]+)/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
+            $langSet     = strtolower($matches[1]);
+            $acceptLangs = Config::get('header_accept_lang');
+            if (isset($acceptLangs[$langSet])) {
+                $langSet = $acceptLangs[$langSet];
+            } elseif (isset(self::$acceptLanguage[$langSet])) {
+                $langSet = self::$acceptLanguage[$langSet];
+            }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
         if (empty(self::$allowLangList) || in_array($langSet, self::$allowLangList)) {
             // 合法的语言
             self::$range = $langSet ?: self::$range;
         }
+<<<<<<< HEAD
         if ('zh-hans-cn' == self::$range) {
             self::$range = 'zh-cn';
         }
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         return self::$range;
     }
 

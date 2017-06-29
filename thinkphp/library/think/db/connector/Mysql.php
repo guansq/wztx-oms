@@ -21,6 +21,11 @@ use think\Log;
 class Mysql extends Connection
 {
 
+<<<<<<< HEAD
+=======
+    protected $builder = '\\think\\db\\builder\\Mysql';
+
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     /**
      * 解析pdo连接的dsn信息
      * @access protected
@@ -49,7 +54,11 @@ class Mysql extends Connection
      */
     public function getFields($tableName)
     {
+<<<<<<< HEAD
         $this->initConnect(true);
+=======
+        $this->initConnect(false);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         list($tableName) = explode(' ', $tableName);
         if (false === strpos($tableName, '`')) {
             if (strpos($tableName, '.')) {
@@ -89,7 +98,11 @@ class Mysql extends Connection
      */
     public function getTables($dbName = '')
     {
+<<<<<<< HEAD
         $this->initConnect(true);
+=======
+        $this->initConnect(false);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         $sql = !empty($dbName) ? 'SHOW TABLES FROM ' . $dbName : 'SHOW TABLES ';
         // 调试开始
         $this->debug(true);
@@ -127,4 +140,8 @@ class Mysql extends Connection
     {
         return true;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 }

@@ -26,7 +26,11 @@ class Lite extends Driver
     ];
 
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      *
      * @param array $options

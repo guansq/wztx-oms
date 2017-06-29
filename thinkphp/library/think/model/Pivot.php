@@ -16,6 +16,7 @@ use think\Model;
 class Pivot extends Model
 {
 
+<<<<<<< HEAD
     /**
      * 架构函数
      * @access public
@@ -31,6 +32,31 @@ class Pivot extends Model
         }
 
         $this->table = $table;
+=======
+    /** @var Model */
+    public $parent;
+
+    protected $autoWriteTimestamp = false;
+
+    /**
+     * 架构函数
+     * @access public
+     * @param Model         $parent 上级模型
+     * @param array|object  $data 数据
+     * @param string        $table 中间数据表名
+     */
+    public function __construct(Model $parent, $data = [], $table = '')
+    {
+        $this->parent = $parent;
+
+        if (is_null($this->name)) {
+            $this->name = $table;
+        }
+
+        parent::__construct($data);
+
+        $this->class = $this->name;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
 }

@@ -37,6 +37,14 @@ class Console
         $this->formatter->setDecorated($decorated);
     }
 
+<<<<<<< HEAD
+=======
+    public function getFormatter()
+    {
+        return $this->formatter;
+    }
+
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     public function setDecorated($decorated)
     {
         $this->formatter->setDecorated($decorated);

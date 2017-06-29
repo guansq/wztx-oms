@@ -84,7 +84,11 @@ class Log
     public static function record($msg, $type = 'log')
     {
         self::$log[$type][] = $msg;
+<<<<<<< HEAD
         if (IS_CLI && count(self::$log[$type]) > 100) {
+=======
+        if (IS_CLI) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             // 命令行下面日志写入改进
             self::save();
         }
@@ -101,7 +105,11 @@ class Log
 
     /**
      * 当前日志记录的授权key
+<<<<<<< HEAD
      * @param string  $key  授权key
+=======
+     * @param string $key 授权key
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @return void
      */
     public static function key($key)
@@ -111,7 +119,11 @@ class Log
 
     /**
      * 检查日志写入权限
+<<<<<<< HEAD
      * @param array  $config  当前日志配置参数
+=======
+     * @param array $config 当前日志配置参数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @return bool
      */
     public static function check($config)
@@ -166,13 +178,22 @@ class Log
 
     /**
      * 实时写入日志信息 并支持行为
+<<<<<<< HEAD
      * @param mixed  $msg  调试信息
      * @param string $type 信息类型
+=======
+     * @param mixed  $msg   调试信息
+     * @param string $type  信息类型
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @param bool   $force 是否强制写入
      * @return bool
      */
     public static function write($msg, $type = 'log', $force = false)
     {
+<<<<<<< HEAD
+=======
+        $log = self::$log;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         // 封装日志信息
         if (true === $force || empty(self::$config['level'])) {
             $log[$type][] = $msg;
@@ -188,7 +209,15 @@ class Log
             self::init(Config::get('log'));
         }
         // 写入日志
+<<<<<<< HEAD
         return self::$driver->save($log, false);
+=======
+        $result = self::$driver->save($log);
+        if ($result) {
+            self::$log = [];
+        }
+        return $result;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**

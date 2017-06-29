@@ -56,7 +56,11 @@ class Session
             $isDoStart = true;
         }
 
+<<<<<<< HEAD
         if (isset($config['prefix'])) {
+=======
+        if (isset($config['prefix']) && (self::$prefix === '' || self::$prefix === null)) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             self::$prefix = $config['prefix'];
         }
         if (isset($config['var_session_id']) && isset($_REQUEST[$config['var_session_id']])) {

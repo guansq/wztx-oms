@@ -25,6 +25,10 @@ class Schema extends Command
     protected function configure()
     {
         $this->setName('optimize:schema')
+<<<<<<< HEAD
+=======
+            ->addOption('config', null, Option::VALUE_REQUIRED, 'db config .')
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             ->addOption('db', null, Option::VALUE_REQUIRED, 'db name .')
             ->addOption('table', null, Option::VALUE_REQUIRED, 'table name .')
             ->addOption('module', null, Option::VALUE_REQUIRED, 'module name .')
@@ -36,13 +40,24 @@ class Schema extends Command
         if (!is_dir(RUNTIME_PATH . 'schema')) {
             @mkdir(RUNTIME_PATH . 'schema', 0755, true);
         }
+<<<<<<< HEAD
+=======
+        $config = [];
+        if ($input->hasOption('config')) {
+            $config = $input->getOption('config');
+        }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         if ($input->hasOption('module')) {
             $module = $input->getOption('module');
             // 读取模型
             $list = scandir(APP_PATH . $module . DS . 'model');
             $app  = App::$namespace;
             foreach ($list as $file) {
+<<<<<<< HEAD
                 if ('.' == $file || '..' == $file) {
+=======
+                if (0 === strpos($file, '.')) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                     continue;
                 }
                 $class = '\\' . $app . '\\' . $module . '\\model\\' . pathinfo($file, PATHINFO_FILENAME);
@@ -53,17 +68,29 @@ class Schema extends Command
         } elseif ($input->hasOption('table')) {
             $table = $input->getOption('table');
             if (!strpos($table, '.')) {
+<<<<<<< HEAD
                 $dbName = Db::getConfig('database');
+=======
+                $dbName = Db::connect($config)->getConfig('database');
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
             $tables[] = $table;
         } elseif ($input->hasOption('db')) {
             $dbName = $input->getOption('db');
+<<<<<<< HEAD
             $tables = Db::getTables($dbName);
+=======
+            $tables = Db::connect($config)->getTables($dbName);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         } elseif (!\think\Config::get('app_multi_module')) {
             $app  = App::$namespace;
             $list = scandir(APP_PATH . 'model');
             foreach ($list as $file) {
+<<<<<<< HEAD
                 if ('.' == $file || '..' == $file) {
+=======
+                if (0 === strpos($file, '.')) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                     continue;
                 }
                 $class = '\\' . $app . '\\model\\' . pathinfo($file, PATHINFO_FILENAME);
@@ -72,11 +99,19 @@ class Schema extends Command
             $output->writeln('<info>Succeed!</info>');
             return;
         } else {
+<<<<<<< HEAD
             $tables = Db::getTables();
         }
 
         $db = isset($dbName) ? $dbName . '.' : '';
         $this->buildDataBaseSchema($tables, $db);
+=======
+            $tables = Db::connect($config)->getTables();
+        }
+
+        $db = isset($dbName) ? $dbName . '.' : '';
+        $this->buildDataBaseSchema($tables, $db, $config);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 
         $output->writeln('<info>Succeed!</info>');
     }
@@ -94,16 +129,27 @@ class Schema extends Command
         }
     }
 
+<<<<<<< HEAD
     protected function buildDataBaseSchema($tables, $db)
     {
         if ('' == $db) {
             $dbName = Db::getConfig('database') . '.';
+=======
+    protected function buildDataBaseSchema($tables, $db, $config)
+    {
+        if ('' == $db) {
+            $dbName = Db::connect($config)->getConfig('database') . '.';
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         } else {
             $dbName = $db;
         }
         foreach ($tables as $table) {
             $content = '<?php ' . PHP_EOL . 'return ';
+<<<<<<< HEAD
             $info    = Db::getFields($db . $table);
+=======
+            $info    = Db::connect($config)->getFields($db . $table);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $content .= var_export($info, true) . ';';
             file_put_contents(RUNTIME_PATH . 'schema' . DS . $dbName . $table . EXT, $content);
         }

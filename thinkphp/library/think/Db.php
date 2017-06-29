@@ -36,7 +36,11 @@ use think\db\Query;
  * @method integer update(array $data) static 更新记录
  * @method integer delete(mixed $data = null) static 删除记录
  * @method boolean chunk(integer $count, callable $callback, string $column = null) static 分块获取数据
+<<<<<<< HEAD
  * @method mixed query(string $sql, array $bind = [], boolean $fetch = false, boolean $master = false, mixed $class = null) static SQL查询
+=======
+ * @method mixed query(string $sql, array $bind = [], boolean $master = false, bool $pdo = false) static SQL查询
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
  * @method integer execute(string $sql, array $bind = [], boolean $fetch = false, boolean $getLastInsID = false, string $sequence = null) static SQL执行
  * @method Paginator paginate(integer $listRows = 15, mixed $simple = null, array $config = []) static 分页查询
  * @method mixed transaction(callable $callback) static 执行数据库事务
@@ -44,6 +48,11 @@ use think\db\Query;
  * @method void commit() static 用于非自动提交状态下面的查询提交
  * @method void rollback() static 事务回滚
  * @method boolean batchQuery(array $sqlArray) static 批处理执行SQL语句
+<<<<<<< HEAD
+=======
+ * @method string quote(string $str) static SQL指令安全过滤
+ * @method string getLastInsID($sequence = null) static 获取最近插入的ID
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
  */
 class Db
 {

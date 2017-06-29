@@ -32,7 +32,11 @@ abstract class Builder
     protected $deleteSql    = 'DELETE FROM %TABLE% %USING% %JOIN% %WHERE% %ORDER%%LIMIT% %LOCK%%COMMENT%';
 
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param Connection    $connection 数据库连接对象实例
      * @param Query         $query      数据库查询对象实例
@@ -98,14 +102,28 @@ abstract class Builder
         $result = [];
         foreach ($data as $key => $val) {
             $item = $this->parseKey($key, $options);
+<<<<<<< HEAD
+=======
+            if (is_object($val) && method_exists($val, '__toString')) {
+                // 对象数据写入
+                $val = $val->__toString();
+            }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             if (false === strpos($key, '.') && !in_array($key, $fields, true)) {
                 if ($options['strict']) {
                     throw new Exception('fields not exists:[' . $key . ']');
                 }
+<<<<<<< HEAD
             } elseif (isset($val[0]) && 'exp' == $val[0]) {
                 $result[$item] = $val[1];
             } elseif (is_null($val)) {
                 $result[$item] = 'NULL';
+=======
+            } elseif (is_null($val)) {
+                $result[$item] = 'NULL';
+            } elseif (isset($val[0]) && 'exp' == $val[0]) {
+                $result[$item] = $val[1];
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             } elseif (is_scalar($val)) {
                 // 过滤非标量数据
                 if (0 === strpos($val, ':') && $this->query->isBind(substr($val, 1))) {
@@ -115,9 +133,12 @@ abstract class Builder
                     $this->query->bind('__data__' . $key, $val, isset($bind[$key]) ? $bind[$key] : PDO::PARAM_STR);
                     $result[$item] = ':__data__' . $key;
                 }
+<<<<<<< HEAD
             } elseif (is_object($val) && method_exists($val, '__toString')) {
                 // 对象数据写入
                 $result[$item] = $val->__toString();
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
         return $result;
@@ -221,6 +242,17 @@ abstract class Builder
     protected function parseWhere($where, $options)
     {
         $whereStr = $this->buildWhere($where, $options);
+<<<<<<< HEAD
+=======
+        if (!empty($options['soft_delete'])) {
+            // 附加软删除条件
+            list($field, $condition) = $options['soft_delete'];
+
+            $binds    = $this->query->getFieldsBind($options);
+            $whereStr = $whereStr ? '( ' . $whereStr . ' ) AND ' : '';
+            $whereStr = $whereStr . $this->parseWhereItem($field, $condition, '', $options, $binds);
+        }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         return empty($whereStr) ? '' : ' WHERE ' . $whereStr;
     }
 
@@ -250,7 +282,14 @@ abstract class Builder
                     // 使用闭包查询
                     $query = new Query($this->connection);
                     call_user_func_array($value, [ & $query]);
+<<<<<<< HEAD
                     $str[] = ' ' . $key . ' ( ' . $this->buildWhere($query->getOptions('where'), $options) . ' )';
+=======
+                    $whereClause = $this->buildWhere($query->getOptions('where'), $options);
+                    if (!empty($whereClause)) {
+                        $str[] = ' ' . $key . ' ( ' . $whereClause . ' )';
+                    }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 } elseif (strpos($field, '|')) {
                     // 不同字段使用相同查询条件（OR）
                     $array = explode('|', $field);
@@ -276,6 +315,10 @@ abstract class Builder
 
             $whereStr .= empty($whereStr) ? substr(implode(' ', $str), strlen($key) + 1) : implode(' ', $str);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         return $whereStr;
     }
 
@@ -335,9 +378,20 @@ abstract class Builder
 
         $whereStr = '';
         if (in_array($exp, ['=', '<>', '>', '>=', '<', '<='])) {
+<<<<<<< HEAD
             // 比较运算 及 模糊匹配
             $whereStr .= $key . ' ' . $exp . ' ' . $this->parseValue($value, $field);
         } elseif ('LIKE' == $exp || 'NOT LIKE' == $exp) {
+=======
+            // 比较运算
+            if ($value instanceof \Closure) {
+                $whereStr .= $key . ' ' . $exp . ' ' . $this->parseClosure($value);
+            } else {
+                $whereStr .= $key . ' ' . $exp . ' ' . $this->parseValue($value, $field);
+            }
+        } elseif ('LIKE' == $exp || 'NOT LIKE' == $exp) {
+            // 模糊匹配
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             if (is_array($value)) {
                 foreach ($value as $item) {
                     $array[] = $key . ' ' . $exp . ' ' . $this->parseValue($item, $field);
@@ -376,7 +430,11 @@ abstract class Builder
                 } else {
                     $zone = implode(',', $this->parseValue($value, $field));
                 }
+<<<<<<< HEAD
                 $whereStr .= $key . ' ' . $exp . ' (' . $zone . ')';
+=======
+                $whereStr .= $key . ' ' . $exp . ' (' . (empty($zone) ? "''" : $zone) . ')';
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         } elseif (in_array($exp, ['NOT BETWEEN', 'BETWEEN'])) {
             // BETWEEN 查询

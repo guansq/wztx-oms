@@ -51,21 +51,30 @@ class Cache
                 self::$instance[$name] = new $class($options);
             }
         }
+<<<<<<< HEAD
         self::$handler = self::$instance[$name];
         return self::$handler;
+=======
+        return self::$instance[$name];
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
      * 自动初始化缓存
      * @access public
      * @param array         $options  配置数组
+<<<<<<< HEAD
      * @return void
+=======
+     * @return Driver
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      */
     public static function init(array $options = [])
     {
         if (is_null(self::$handler)) {
             // 自动初始化缓存
             if (!empty($options)) {
+<<<<<<< HEAD
                 self::connect($options);
             } elseif ('complex' == Config::get('cache.type')) {
                 self::connect(Config::get('cache.default'));
@@ -73,6 +82,17 @@ class Cache
                 self::connect(Config::get('cache'));
             }
         }
+=======
+                $connect = self::connect($options);
+            } elseif ('complex' == Config::get('cache.type')) {
+                $connect = self::connect(Config::get('cache.default'));
+            } else {
+                $connect = self::connect(Config::get('cache'));
+            }
+            self::$handler = $connect;
+        }
+        return self::$handler;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -81,12 +101,21 @@ class Cache
      * @param string $name 缓存标识
      * @return Driver
      */
+<<<<<<< HEAD
     public static function store($name)
     {
         if ('complex' == Config::get('cache.type')) {
             self::connect(Config::get('cache.' . $name), strtolower($name));
         }
         return self::$handler;
+=======
+    public static function store($name = '')
+    {
+        if ('' !== $name && 'complex' == Config::get('cache.type')) {
+            return self::connect(Config::get('cache.' . $name), strtolower($name));
+        }
+        return self::init();
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -97,9 +126,14 @@ class Cache
      */
     public static function has($name)
     {
+<<<<<<< HEAD
         self::init();
         self::$readTimes++;
         return self::$handler->has($name);
+=======
+        self::$readTimes++;
+        return self::init()->has($name);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -111,9 +145,14 @@ class Cache
      */
     public static function get($name, $default = false)
     {
+<<<<<<< HEAD
         self::init();
         self::$readTimes++;
         return self::$handler->get($name, $default);
+=======
+        self::$readTimes++;
+        return self::init()->get($name, $default);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -126,9 +165,14 @@ class Cache
      */
     public static function set($name, $value, $expire = null)
     {
+<<<<<<< HEAD
         self::init();
         self::$writeTimes++;
         return self::$handler->set($name, $value, $expire);
+=======
+        self::$writeTimes++;
+        return self::init()->set($name, $value, $expire);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -140,9 +184,14 @@ class Cache
      */
     public static function inc($name, $step = 1)
     {
+<<<<<<< HEAD
         self::init();
         self::$writeTimes++;
         return self::$handler->inc($name, $step);
+=======
+        self::$writeTimes++;
+        return self::init()->inc($name, $step);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -154,9 +203,14 @@ class Cache
      */
     public static function dec($name, $step = 1)
     {
+<<<<<<< HEAD
         self::init();
         self::$writeTimes++;
         return self::$handler->dec($name, $step);
+=======
+        self::$writeTimes++;
+        return self::init()->dec($name, $step);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -167,9 +221,14 @@ class Cache
      */
     public static function rm($name)
     {
+<<<<<<< HEAD
         self::init();
         self::$writeTimes++;
         return self::$handler->rm($name);
+=======
+        self::$writeTimes++;
+        return self::init()->rm($name);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -180,9 +239,14 @@ class Cache
      */
     public static function clear($tag = null)
     {
+<<<<<<< HEAD
         self::init();
         self::$writeTimes++;
         return self::$handler->clear($tag);
+=======
+        self::$writeTimes++;
+        return self::init()->clear($tag);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -193,10 +257,16 @@ class Cache
      */
     public static function pull($name)
     {
+<<<<<<< HEAD
         self::init();
         self::$readTimes++;
         self::$writeTimes++;
         return self::$handler->pull($name);
+=======
+        self::$readTimes++;
+        self::$writeTimes++;
+        return self::init()->pull($name);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -209,9 +279,14 @@ class Cache
      */
     public static function remember($name, $value, $expire = null)
     {
+<<<<<<< HEAD
         self::init();
         self::$readTimes++;
         return self::$handler->remember($name, $value, $expire);
+=======
+        self::$readTimes++;
+        return self::init()->remember($name, $value, $expire);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -224,8 +299,12 @@ class Cache
      */
     public static function tag($name, $keys = null, $overlay = false)
     {
+<<<<<<< HEAD
         self::init();
         return self::$handler->tag($name, $keys, $overlay);
+=======
+        return self::init()->tag($name, $keys, $overlay);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
 }

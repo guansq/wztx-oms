@@ -80,6 +80,12 @@ class Url
             if (!empty($match[1])) {
                 $domain = $match[1];
             }
+<<<<<<< HEAD
+=======
+            if (!is_null($match[2])) {
+                $suffix = $match[2];
+            }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         } elseif (!empty($rule) && isset($name)) {
             throw new \InvalidArgumentException('route name not exists:' . $name);
         } else {
@@ -153,7 +159,12 @@ class Url
         // 检测域名
         $domain = self::parseDomain($url, $domain);
         // URL组装
+<<<<<<< HEAD
         $url             = $domain . (self::$root ?: Request::instance()->root()) . '/' . ltrim($url, '/');
+=======
+        $url = $domain . rtrim(self::$root ?: Request::instance()->root(), '/') . '/' . ltrim($url, '/');
+
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         self::$bindCheck = false;
         return $url;
     }
@@ -264,7 +275,11 @@ class Url
                 $host       = $request->host();
                 $rootDomain = substr_count($host, '.') > 1 ? substr(strstr($host, '.'), 1) : $host;
             }
+<<<<<<< HEAD
             if (!strpos($domain, $rootDomain)) {
+=======
+            if (substr_count($domain, '.') < 2 && !strpos($domain, $rootDomain)) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 $domain .= '.' . $rootDomain;
             }
         }
@@ -287,6 +302,7 @@ class Url
     public static function getRuleUrl($rule, &$vars = [])
     {
         foreach ($rule as $item) {
+<<<<<<< HEAD
             list($url, $pattern, $domain) = $item;
             if (empty($pattern)) {
                 return [$url, $domain];
@@ -299,6 +315,20 @@ class Url
                 } elseif (2 == $val) {
                     $url    = str_replace(['/[:' . $key . ']', '[:' . $key . ']', '<' . $key . '?>'], '', $url);
                     $result = [$url, $domain];
+=======
+            list($url, $pattern, $domain, $suffix) = $item;
+            if (empty($pattern)) {
+                return [$url, $domain, $suffix];
+            }
+            foreach ($pattern as $key => $val) {
+                if (isset($vars[$key])) {
+                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], urlencode($vars[$key]), $url);
+                    unset($vars[$key]);
+                    $result = [$url, $domain, $suffix];
+                } elseif (2 == $val) {
+                    $url    = str_replace(['/[:' . $key . ']', '[:' . $key . ']', '<' . $key . '?>'], '', $url);
+                    $result = [$url, $domain, $suffix];
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 } else {
                     break;
                 }

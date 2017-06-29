@@ -7,3 +7,4 @@
 /nbproject
 /static/runtime/
 /.env
+/application/admin/controller/Map.php

@@ -25,7 +25,11 @@ class Sqlsrv extends Connection
         PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_STRINGIFY_FETCHES => false,
     ];
+<<<<<<< HEAD
 
+=======
+    protected $builder = '\\think\\db\\builder\\Sqlsrv';
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     /**
      * 解析pdo连接的dsn信息
      * @access protected
@@ -49,7 +53,11 @@ class Sqlsrv extends Connection
      */
     public function getFields($tableName)
     {
+<<<<<<< HEAD
         $this->initConnect(true);
+=======
+        $this->initConnect(false);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         list($tableName) = explode(' ', $tableName);
         $sql             = "SELECT   column_name,   data_type,   column_default,   is_nullable
         FROM    information_schema.tables AS t
@@ -99,7 +107,11 @@ class Sqlsrv extends Connection
      */
     public function getTables($dbName = '')
     {
+<<<<<<< HEAD
         $this->initConnect(true);
+=======
+        $this->initConnect(false);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         $sql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_TYPE = 'BASE TABLE'

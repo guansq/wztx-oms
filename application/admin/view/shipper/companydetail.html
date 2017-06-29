@@ -7,14 +7,14 @@
 {block name="content"}
 <main class="main">
     <div class="head_box">
-        <a href="javascript:void(0);">司机管理</a>
+        <a href="javascript:void(0);">货主管理</a>
         <span> >> </span>
-        <a href="javascript:void(0);">司机列表</a>
+        <a href="javascript:void(0);">公司货主</a>
         <span> >> </span>
-        <a href="javascript:void(0);">司机详情</a>
+        <a href="javascript:void(0);">公司货主详情</a>
     </div>
     <div class="con_box">
-        <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>司机详情</p>
+        <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span> 公司货主详情</p>
         <div class="details_box">
             <div class="datails_tit">
                 <span class="hr_span"></span>
@@ -25,43 +25,89 @@
                 <table class="table table-bordered">
                     <tbody>
                     <tr>
-                        <td class="col-sm-6">姓名</td>
+                        <td class="col-sm-6">公司名称</td>
+                        <td class="col-sm-6">{$item.companyname}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">营业执照号</td>
+                        <td class="col-sm-6">{$item.companynumber}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">法人姓名</td>
                         <td class="col-sm-6">{$item.name}</td>
                     </tr>
                     <tr>
-                        <td class="col-sm-6">性别</td>
-                        <td class="col-sm-6">{$item.sexname}</td>
+                        <td class="col-sm-6">法人身份证号</td>
+                        <td class="col-sm-6">{$item.number}</td>
                     </tr>
                     <tr>
-                        <td class="col-sm-6">身份证号</td>
-                        <td class="col-sm-6">{$item.number}</td>
+                        <td class="col-sm-6">企业联系电话</td>
+                        <td class="col-sm-6">{$item.phone}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">地址</td>
                         <td class="col-sm-6">{$item.address}</td>
                     </tr>
                     <tr>
-                        <td class="col-sm-6">物流类型</td>
-                        <td class="col-sm-6">{$item.logisticstype}</td>
+                        <td class="col-sm-6">开户名称</td>
+                        <td class="col-sm-6">{$item.bankname}</td>
                     </tr>
                     <tr>
-                        <td class="col-sm-6">手机号码</td>
-                        <td class="col-sm-6">{$item.phone}</td>
+                        <td class="col-sm-6">开户行</td>
+                        <td class="col-sm-6">{$item.bank}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">结算账号</td>
+                        <td class="col-sm-6">{$item.account}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">保证金金额</td>
+                        <td class="col-sm-6">{:number_format($item.bond,2)}</td>
                     </tr>
                     </tbody>
                 </table>
-                <div class="auth_box">
-                    <section class="auth_img">
-                        <img src="{$item.personholdpic}" alt="手持身份证照">
-                    </section>
-                </div>
             </div>
         </div>
         <div class="authentication">
             <div class="datails_tit">
                 <span class="hr_span"></span>
-                <h3>身份认证</h3>
+                <h3>认证信息</h3>
                 <span class="hr_span"></span>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    <img src="{$item.frontpic}" alt="法人身份证正面照">
+                </section>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    <img src="{$item.backpic}" alt="法人身份证反面照">
+                </section>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    <img src="{$item.businesslicense}" alt="营业执照">
+                </section>
+            </div>
+            <div class="datails_tit">
+                <span class="hr_span"></span>
+                <h3>操作人信息</h3>
+                <span class="hr_span"></span>
+            </div>
+            <div class="info_table">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="col-sm-6">操作人身份证号</td>
+                        <td class="col-sm-6">{$item.personnumber}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    <img src="{$item.holdpic}" alt="手持身份证照片">
+                </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
@@ -71,73 +117,6 @@
             <div class="auth_box">
                 <section class="auth_img">
                     <img src="{$item.personbackpic}" alt="身份证反面照">
-                </section>
-            </div>
-        </div>
-        <div class="authentication">
-            <div class="datails_tit">
-                <span class="hr_span"></span>
-                <h3>车辆认证</h3>
-                <span class="hr_span"></span>
-            </div>
-            <div class="info_table">
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr>
-                        <td class="col-sm-6">车型</td>
-                        <td class="col-sm-6">{$item.carstylename}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">车长</td>
-                        <td class="col-sm-6">{$item.carlengthname}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">载重</td>
-                        <td class="col-sm-6">{$item.weight}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">可载体积</td>
-                        <td class="col-sm-6">{$item.volume}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">车牌号</td>
-                        <td class="col-sm-6">{$item.cardnumber}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">保单截止日期</td>
-                        <td class="col-sm-6">{if $item.policydeadline neq ''}{$item.policydeadline|date='Y-m-d',###}{/if}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">行驶证截止日期</td>
-                        <td class="col-sm-6">{if $item.licensedeadline neq ''}{$item.licensedeadline|date='Y-m-d',###}{/if}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
-                    <img src="{$item.indexpic}" alt="车头和车牌号码照">
-                </section>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
-                    <img src="{$item.drivinglicencepic}" alt="驾驶证照">
-                </section>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
-                    <img src="{$item.vehiclelicensepic}" alt="行驶证照">
-                </section>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
-                    <img src="{$item.insurancepolicypic}" alt="保险单照">
-                </section>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
-                    <img src="{$item.operationpic}" alt="运营证照">
-
                 </section>
             </div>
             <div class="auth_box">
@@ -178,7 +157,6 @@
 {/block}
 
 {block name="script"}
-
 <script>
     var detailid = '{$id}';
     $("#pass").click(function () {
@@ -188,7 +166,7 @@
             layer.close(index);
             layer.load();
             $.ajax({
-                'url' : '{:url("Driver/pass")}',
+                'url' : '{:url("Shipper/pass")}',
                 'type' : 'POST',
                 'data' : {
                     'id':detailid
@@ -224,7 +202,7 @@
             layer.close(index);
             layer.load();
             $.ajax({
-                'url' : '{:url("Driver/auth")}',
+                'url' : '{:url("Shipper/auth")}',
                 'type' : 'POST',
                 'data' : {
                     'id':detailid,
@@ -252,4 +230,5 @@
         });
     })
 </script>
+
 {/block}

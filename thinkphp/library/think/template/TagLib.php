@@ -68,7 +68,11 @@ class TagLib
     protected $comparison = [' nheq ' => ' !== ', ' heq ' => ' === ', ' neq ' => ' != ', ' eq ' => ' == ', ' egt ' => ' >= ', ' gt ' => ' > ', ' elt ' => ' <= ', ' lt ' => ' < '];
 
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param \stdClass $template 模板引擎对象
      */
@@ -190,7 +194,11 @@ class TagLib
      * @param  boolean          $close 是否为闭合标签
      * @return string
      */
+<<<<<<< HEAD
     private function getRegex($tags, $close)
+=======
+    public function getRegex($tags, $close)
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     {
         $begin   = $this->tpl->config('taglib_begin');
         $end     = $this->tpl->config('taglib_end');

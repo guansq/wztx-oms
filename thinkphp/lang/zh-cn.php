@@ -64,4 +64,8 @@ return [
     'invalid request'           => '非法请求',
     'bind attr has exists'      => '模型的属性已经存在',
     'relation data not exists'  => '关联数据不存在',
+<<<<<<< HEAD
+=======
+    'relation not support'      => '关联不支持',
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 ];

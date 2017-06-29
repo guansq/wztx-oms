@@ -25,7 +25,11 @@ class Memcache extends Driver
     ];
 
     /**
+<<<<<<< HEAD
      * 架构函数
+=======
+     * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @param array $options 缓存参数
      * @access public
      * @throws \BadFunctionCallException
@@ -113,7 +117,14 @@ class Memcache extends Driver
     public function inc($name, $step = 1)
     {
         $key = $this->getCacheKey($name);
+<<<<<<< HEAD
         return $this->handler->increment($key, $step);
+=======
+        if ($this->handler->get($key)) {
+            return $this->handler->increment($key, $step);
+        }
+        return $this->handler->set($key, $step);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**

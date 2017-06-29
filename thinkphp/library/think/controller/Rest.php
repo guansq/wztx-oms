@@ -32,7 +32,11 @@ abstract class Rest
     ];
 
     /**
+<<<<<<< HEAD
      * 架构函数 取得模板对象实例
+=======
+     * 构造函数 取得模板对象实例
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      */
     public function __construct()

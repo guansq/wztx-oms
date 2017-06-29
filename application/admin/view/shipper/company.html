@@ -9,32 +9,38 @@
 {/block}
 
 {block name="content"}
-
 <main class="main">
     <div class="head_box">
-        <a href="javascript:void(0);">司机管理</a>
+        <a href="javascript:void(0);">货主管理</a>
         <span> >> </span>
-        <a href="javascript:void(0);">司机列表</a>
+        <a href="javascript:void(0);">公司货主</a>
     </div>
     <div class="con_box">
-        <h1 class="h1">司机列表 <span>（共<b id="totalnum">0</b>条）</span></h1>
+        <h1 class="h1">公司货主 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
             <form class="form-inline">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="司机名称/车牌号" id="name" name="name">
-                    <select class="form-control mr_20" id="sex" name="sex">
-                        <option value="all">性别</option>
-                        <option value="0">男</option>
-                        <option value="1">女</option>
-                    </select>
+                    <input type="text" class="form-control mr_20" placeholder="企业名称" id="companyname">
                     <select class="form-control mr_20" id="province">
                         <option value="all">省份</option>
                         {volist name='provincelist' id='pprovince'}
                         <option value="{$pprovince}">{$pprovince}</option>
                         {/volist}
                     </select>
+                    <select class="form-control mr_20" id="bond_state"  name="bond_state">
+                        <option value="all">保证金状态</option>
+                        <option value="init">未缴纳</option>
+                        <option value="checked">已缴纳</option>
+                        <option value="frozen">冻结</option>
+                    </select>
+                    <select class="form-control" id="auth_state"  name="auth_state">
+                        <option value="all">认证状态</option>
+                        <option value="refuse">已拒绝</option>
+                        <option value="pass">已通过</option>
+                        <option value="init">未认证</option>
+                    </select>
                 </div>
-                <button type="button" class="btn btn-primary" id="searchVal">搜索</button>
+                <button type="button" class="btn btn-primary"  id="searchVal">搜索</button>
             </form>
             <div class="operate_tab">
                 <div class="operate_tab_btn">
@@ -45,13 +51,12 @@
                         <thead>
                         <tr>
                             <th><input class="all" type="checkbox"></th>
-                            <th>姓名</th>
-                            <th>手机号</th>
-                            <th>性别</th>
-                            <th>身份证号</th>
-                            <th>地址</th>
-                            <th>物流类型</th>
-                            <th>车牌号</th>
+                            <th>企业名称</th>
+                            <th>企业电话</th>
+                            <th>所属省份</th>
+                            <th>保证金状态</th>
+                            <th>操作人身份证</th>
+                            <th>认证状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -64,12 +69,12 @@
     </div>
 </main>
 
+
 {/block}
 
 {block name="script"}
 
 <script>
-
     require(["jquery.dataTables", "icheck"], function () {
         require(["dataTables.bootstrap"], function () {
             $(document).ready(function () {
@@ -84,8 +89,9 @@
         $('input').iCheck({
             checkboxClass: 'icheckbox_minimal',
             radioClass: 'iradio_minimal',
-            increaseArea: '20%' // optional
+            increaseArea: '10%' // optional
         });
+
 
         var table = $('#example').DataTable({
             //paging: false, 设置是否分页
@@ -99,18 +105,20 @@
                     "sPrevious": "上页",
                     "sNext": "下页",
                     "sLast": "末页"
-                }
+                },
             },
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": '{:url("Driver/getSpList")}',
+                "url": '{:url("Shipper/getSpList")}',
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
-                    parameter.name = $("#name").val();
+                    parameter.type = 'company';
+                    parameter.companyname = $("#companyname").val();
+                    parameter.auth_state = $("#auth_state").val();
+                    parameter.bond_state = $("#bond_state").val();
                     parameter.province = $("#province").val();
-                    parameter.sex = $("#sex").val();
                 },
             },
             "pageLength": 1,
@@ -118,11 +126,10 @@
                 {"data": "id"},
                 {"data": "name"},
                 {"data": "phone"},
-                {"data": "sexname"},
+                {"data": "province"},
+                {"data": "bond_state"},
                 {"data": "number"},
-                {"data": "address"},
-                {"data": "logisticstype"},
-                {"data": "cardnumber"},
+                {"data": "auth_state"},
                 {"data": "action"},
             ],
             "columnDefs": [
@@ -144,13 +151,12 @@
             //console.log(orderTables);
             table.ajax.reload();
         })
-
         // tr点击选中事件
         $('#example tbody').on('click', 'tr', function () {
             $(this).toggleClass('warning');
         });
 
-        //删除
+        //删除物料
         $('#remove_btn').click(function () {
             table.rows('.warning').remove().draw(false);
         });
