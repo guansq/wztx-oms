@@ -1,0 +1,184 @@
+{extend name='extra@admin/content' /}
+
+{block name="button"}
+
+{/block}
+
+{block name="content"}
+<main class="main">
+    <div class="head_box">
+        <a href="javascript:void(0);">货主管理</a>
+        <span> >> </span>
+        <a href="javascript:void(0);">个人货主</a>
+        <span> >> </span>
+        <a href="javascript:void(0);">个人货主详情</a>
+    </div>
+    <div class="con_box">
+        <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>个人货主详情</p>
+        <div class="details_box">
+            <div class="datails_tit">
+                <span class="hr_span"></span>
+                <h3>基本信息</h3>
+                <span class="hr_span"></span>
+            </div>
+            <div class="info_table">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="col-sm-6">姓名</td>
+                        <td class="col-sm-6">{$item.name}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">性别</td>
+                        <td class="col-sm-6">{if condition="$item.sex eq 1"}女{else /}男{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">身份证</td>
+                        <td class="col-sm-6">{$item.number}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">手机号</td>
+                        <td class="col-sm-6">{$item.phone}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">保证金金额</td>
+                        <td class="col-sm-6">{:number_format($item.bond,2)}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="authentication">
+            <div class="datails_tit">
+                <span class="hr_span"></span>
+                <h3>认证信息</h3>
+                <span class="hr_span"></span>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    <img src="{$item.holdpic}" alt="手持身份证照片">
+                </section>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    <img src="{$item.frontpic}" alt="身份证正面照">
+                </section>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    <img src="{$item.backpic}" alt="身份证反面照">
+                </section>
+            </div>
+            <div class="auth_box">
+                <section class="auth_btn">
+                    {if condition="$item.auth_state eq 'init'"}
+                    <button type="button" class="btn btn-primary" id="pass">通过审核</button>
+                    <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？" >拒绝审核</button>
+                    <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>
+                    {/if}
+                    {if condition="$item.auth_state eq 'pass'"}
+                    <button type="button" class="btn btn-primary">已经通过审核</button>
+                    <button type="button" class="btn btn-primary" disabled="disabled">拒绝审核</button>
+                    {if condition="$item.bond_state eq 'checked'"}
+                    <button type="button" class="btn btn-primary" id="frozen" data-reason="确定冻结账户？">冻结账户</button>
+                    {/if}
+                    {if condition="$item.bond_state eq 'frozen'"}
+                    <button type="button" class="btn btn-primary" id="unfrozen" data-reason="确定取消冻结账户？">取消冻结账户</button>
+                    {/if}
+                    {if condition="$item.bond_state neq 'checked' and $item.bond_state neq 'frozen'"}
+                    <button type="button" class="btn btn-primary">未缴纳保证金</button>
+                    {/if}
+                    {/if}
+                    {if condition="$item.auth_state eq 'refuse'"}
+                    <button type="button" class="btn btn-primary" disabled="disabled">通过审核</button>
+                    <button type="button" class="btn btn-primary" disabled="disabled">{$item.auth_info}</button>
+                    <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>
+                    {/if}
+                    {if condition="$item.is_black eq '0'"}
+                    <button type="button" class="btn btn-primary" id="black" data-reason="确定加入黑名单？">加入黑名单</button>
+                    {else /}
+                    <button type="button" class="btn btn-primary" id="unblack"  data-reason="确定拉回白名单？">拉回白名单</button>
+                    {/if}
+                </section>
+            </div>
+        </div>
+    </div>
+</main>
+{/block}
+
+{block name="script"}
+<script>
+    var detailid = '{$id}';
+    $("#pass").click(function () {
+        layer.confirm('是否通过审核', {
+            btn: ['确定', '取消']
+        }, function (index) {
+            layer.close(index);
+            layer.load();
+            $.ajax({
+                'url' : '{:url("Shipper/pass")}',
+                'type' : 'POST',
+                'data' : {
+                    'id':detailid
+                },
+                'complete' : function(){
+                },
+                'success' : function(obj){
+                    layer.closeAll();
+                    if(obj.code == 2000){
+                        layer.msg('通过审核', function(){
+                            location.reload();
+                        });
+                    }else{
+                        layer.alert(obj.msg);
+                    }
+                },
+                'error' : function(){
+                    layer.closeAll();
+                    layer.alert('请求失败');
+                }
+            });
+        });
+    })
+    $("#black,#unblack,#unfrozen,#frozen,#refuse").click(function () {
+        var titile = $(this).attr('data-reason');
+        var type = $(this).attr('id');
+        layer.prompt({
+            formType: 0,
+            value: '',
+            title: titile,
+        }, function (value, index, elem) {
+            //alert(value); //得到value
+            layer.close(index);
+            layer.load();
+            $.ajax({
+                'url' : '{:url("Shipper/auth")}',
+                'type' : 'POST',
+                'data' : {
+                    'id':detailid,
+                    'type':type,
+                    'title':value,
+                    'phone':'{$item.phone}'
+                },
+                'complete' : function(){
+                },
+                'success' : function(obj){
+                    layer.closeAll();
+                    if(obj.code == 2000){
+                        layer.msg('操作成功', function(){
+                            location.reload();
+                        });
+                    }else{
+                        layer.alert(obj.msg);
+                    }
+                },
+                'error' : function(){
+                    layer.closeAll();
+                    layer.alert('请求失败');
+                }
+            });
+        });
+    })
+</script>
+{/block}

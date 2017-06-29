@@ -20,6 +20,7 @@ return [
         'financial' => 'Financial',
         'withdrawal' => 'Withdrawal',
         'share' => 'Share',
+        'order' => 'Order',
         'orderComment' => 'OrderComment',
     ],
 ];

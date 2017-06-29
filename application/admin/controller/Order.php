@@ -40,7 +40,7 @@ class Order extends BaseController{
      * @return \think\Response
      */
     public function read($id){
-        //
+        return view('edit');
     }
 
     /**

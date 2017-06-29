@@ -11,6 +11,12 @@ class OrderComment extends BaseController{
      * @return \think\Response
      */
     public function index(){
+        $where =[];
+        $start = input('start') == '' ? 0 : input('start');
+        $length = input('length') == '' ? 10 : input('length');
+        $orderCommentLogic = Model('OrderComment', 'logic');
+        $list = $orderCommentLogic->getListInfo($start, $length, $where);
+
         return view();
     }
 

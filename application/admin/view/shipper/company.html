@@ -1,0 +1,189 @@
+{extend name='extra@admin/content' /}
+
+{block name="style"}
+<link href='https://cdn.bootcss.com/iCheck/1.0.2/skins/minimal/minimal.css' rel='stylesheet'>
+{/block}
+
+{block name="button"}
+
+{/block}
+
+{block name="content"}
+<main class="main">
+    <div class="head_box">
+        <a href="javascript:void(0);">货主管理</a>
+        <span> >> </span>
+        <a href="javascript:void(0);">公司货主</a>
+    </div>
+    <div class="con_box">
+        <h1 class="h1">公司货主 <span>（共<b id="totalnum">0</b>条）</span></h1>
+        <div class="operate_box">
+            <form class="form-inline">
+                <div class="form-group mr_20">
+                    <input type="text" class="form-control mr_20" placeholder="企业名称" id="companyname">
+                    <select class="form-control mr_20" id="province">
+                        <option value="all">省份</option>
+                        {volist name='provincelist' id='pprovince'}
+                        <option value="{$pprovince}">{$pprovince}</option>
+                        {/volist}
+                    </select>
+                    <select class="form-control mr_20" id="bond_state"  name="bond_state">
+                        <option value="all">保证金状态</option>
+                        <option value="init">未缴纳</option>
+                        <option value="checked">已缴纳</option>
+                        <option value="frozen">冻结</option>
+                    </select>
+                    <select class="form-control" id="auth_state"  name="auth_state">
+                        <option value="all">认证状态</option>
+                        <option value="refuse">已拒绝</option>
+                        <option value="pass">已通过</option>
+                        <option value="init">未认证</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary"  id="searchVal">搜索</button>
+            </form>
+            <div class="operate_tab">
+                <div class="operate_tab_btn">
+                    <button id="remove_btn" type="button" class="btn btn-info">删除</button>
+                </div>
+                <div class="operate_table">
+                    <table id="example" class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th><input class="all" type="checkbox"></th>
+                            <th>企业名称</th>
+                            <th>企业电话</th>
+                            <th>所属省份</th>
+                            <th>保证金状态</th>
+                            <th>操作人身份证</th>
+                            <th>认证状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{/block}
+
+{block name="script"}
+
+<script>
+    require(["jquery.dataTables", "icheck"], function () {
+        require(["dataTables.bootstrap"], function () {
+            $(document).ready(function () {
+                initPage();
+                initEvent();
+            });
+        })
+    });
+
+    function initPage() {
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_minimal',
+            radioClass: 'iradio_minimal',
+            increaseArea: '10%' // optional
+        });
+
+
+        var table = $('#example').DataTable({
+            //paging: false, 设置是否分页
+            "info": false,  //去除左下角的信息
+            "lengthChange": false, //是否允许用户改变表格每页显示的记录数
+            "ordering": false, //是否允许Datatables开启排序
+            "searching": false,  //是否允许Datatables开启本地搜索
+            language: {
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": '{:url("Shipper/getSpList")}',
+                "type": "POST",
+                "data": function (parameter) {
+                    //添加额外的参数传给服务器
+                    parameter.type = 'company';
+                    parameter.companyname = $("#companyname").val();
+                    parameter.auth_state = $("#auth_state").val();
+                    parameter.bond_state = $("#bond_state").val();
+                    parameter.province = $("#province").val();
+                },
+            },
+            "pageLength": 1,
+            "columns": [
+                {"data": "id"},
+                {"data": "name"},
+                {"data": "phone"},
+                {"data": "province"},
+                {"data": "bond_state"},
+                {"data": "number"},
+                {"data": "auth_state"},
+                {"data": "action"},
+            ],
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    "render": function (data) {
+                        //var url = '{:url(\'Order/detail\')}?id='+data;
+                        return '<input class="check" type="checkbox">';
+                    }
+                }
+            ],
+            "drawCallback": function (settings) {
+                //console.log(settings.json.recordsFiltered);
+                $("#totalnum").html(settings.json.recordsFiltered);
+            },
+        });
+
+        $("#searchVal").on('click', function () {
+            //console.log(orderTables);
+            table.ajax.reload();
+        })
+        // tr点击选中事件
+        $('#example tbody').on('click', 'tr', function () {
+            $(this).toggleClass('warning');
+        });
+
+        //删除物料
+        $('#remove_btn').click(function () {
+            table.rows('.warning').remove().draw(false);
+        });
+    }
+
+    function initEvent() {
+        var checkAll = $('input.all');  //全选的input
+        var checkboxs = $('input.check'); //所有单选的input
+
+        checkAll.on('ifChecked ifUnchecked', function (event) {
+            if (event.type == 'ifChecked') {
+                checkboxs.iCheck('check');
+            } else {
+                checkboxs.iCheck('uncheck');
+            }
+        });
+
+        checkboxs.on('ifChanged', function (event) {
+            if (checkboxs.filter(':checked').length == checkboxs.length) {
+                checkAll.prop('checked', true);
+            } else {
+                checkAll.prop('checked', false);
+            }
+            checkAll.iCheck('update');
+        })
+    }
+
+</script>
+
+{/block}
