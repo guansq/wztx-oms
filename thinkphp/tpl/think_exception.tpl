@@ -79,17 +79,28 @@
 <html>
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
+    <title>系统发生错误</title>
+    <meta name="robots" content="noindex,nofollow" />
+=======
     <title><?php echo \think\Lang::get('System Error'); ?></title>
     <meta name="robots" content="noindex,nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     <style>
         /* Base */
         body {
             color: #333;
+<<<<<<< HEAD
+            font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0 20px 20px;
+=======
             font: 14px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
             margin: 0;
             padding: 0 20px 20px;
             word-break: break-word;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
         h1{
             margin: 10px 0 0;
@@ -105,11 +116,14 @@
             font-size: 18px;
             border-bottom: 1px solid #eee;
         }
+<<<<<<< HEAD
+=======
         h3.subheading {
             color: #4288ce;
             margin: 6px 0 0;
             font-weight: 400;
         }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         h3{
             margin: 12px;
             font-size: 16px;
@@ -150,6 +164,9 @@
             padding: 0;
             margin: 0;
         }
+<<<<<<< HEAD
+    
+=======
         /* Layout */
         .col-md-3 {
             width: 25%;
@@ -171,6 +188,7 @@
                 width: 100%;
             }
         }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         /* Exception Info */
         .exception {
             margin-top: 20px;
@@ -405,6 +423,18 @@
     <div class="exception-var">
         <h2>Environment Variables</h2>
         <?php foreach ((array) $tables as $label => $value) { ?>
+<<<<<<< HEAD
+        <table>
+            <?php if(empty($value)){ ?>
+            <caption><?php echo $label; ?><small>empty</small></caption>
+            <?php } else { ?>
+            <caption><?php echo $label; ?></caption>
+            <tbody>
+                <?php foreach ((array) $value as $key => $val) { ?>
+                <tr>
+                    <td><?php echo htmlentities($key); ?></td>
+                    <td>
+=======
         <div>
             <?php if(empty($value)){ ?>
             <div class="clearfix">
@@ -418,6 +448,7 @@
                 <div class="clearfix">
                     <div class="col-md-3"><strong><?php echo htmlentities($key); ?></strong></div>
                     <div class="col-md-9"><small>
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                         <?php 
                             if(is_array($val) || is_object($val)){ 
                                 echo htmlentities(json_encode($val, JSON_PRETTY_PRINT));
@@ -429,12 +460,21 @@
                                 echo 'Resource';
                             }
                         ?>
+<<<<<<< HEAD
+                    </td>
+                </tr>
+                <?php } ?>
+            </tbody>
+            <?php } ?>
+        </table>
+=======
                     </small></div>
                 </div>
                 <?php } ?>
             </div>
             <?php } ?>
         </div>
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         <?php } ?>
     </div>
     <?php } ?>

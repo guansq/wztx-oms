@@ -18,7 +18,11 @@ use think\Model;
 class HasOne extends OneToOne
 {
     /**
+<<<<<<< HEAD
+     * 架构函数
+=======
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param Model  $parent     上级模型对象
      * @param string $model      模型名
@@ -47,6 +51,12 @@ class HasOne extends OneToOne
         // 执行关联定义方法
         $localKey = $this->localKey;
         if ($closure) {
+<<<<<<< HEAD
+            call_user_func_array($closure, [& $this->query]);
+        }
+        // 判断关联类型执行查询
+        return $this->query->where($this->foreignKey, $this->parent->$localKey)->relation($subRelation)->find();
+=======
             call_user_func_array($closure, [ & $this->query]);
         }
         // 判断关联类型执行查询
@@ -73,6 +83,7 @@ class HasOne extends OneToOne
             ->whereExists(function ($query) use ($table, $localKey, $foreignKey) {
                 $query->table([$table => 'b'])->field('b.' . $foreignKey)->whereExp('a.' . $localKey, '=b.' . $foreignKey);
             });
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -138,6 +149,15 @@ class HasOne extends OneToOne
                     $relationModel = null;
                 } else {
                     $relationModel = $data[$result->$localKey];
+<<<<<<< HEAD
+                }
+                if ($relationModel && !empty($this->bindAttr)) {
+                    // 绑定关联属性
+                    $this->bindAttr($relationModel, $result, $this->bindAttr);
+                }
+                // 设置关联属性
+                $result->setAttr($attr, $relationModel);
+=======
                     $relationModel->setParent(clone $result);
                     $relationModel->isUpdate(true);
                     if (!empty($this->bindAttr)) {
@@ -147,6 +167,7 @@ class HasOne extends OneToOne
                 }
                 // 设置关联属性
                 $result->setRelation($attr, $relationModel);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
     }
@@ -171,6 +192,15 @@ class HasOne extends OneToOne
             $relationModel = null;
         } else {
             $relationModel = $data[$result->$localKey];
+<<<<<<< HEAD
+        }
+
+        if ($relationModel && !empty($this->bindAttr)) {
+            // 绑定关联属性
+            $this->bindAttr($relationModel, $result, $this->bindAttr);
+        }
+        $result->setAttr(Loader::parseName($relation), $relationModel);
+=======
             $relationModel->setParent(clone $result);
             $relationModel->isUpdate(true);
             if (!empty($this->bindAttr)) {
@@ -180,6 +210,7 @@ class HasOne extends OneToOne
         }
 
         $result->setRelation(Loader::parseName($relation), $relationModel);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
 }

@@ -274,6 +274,8 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
     }
 
     /**
+<<<<<<< HEAD
+=======
      * 给每个元素执行个回调
      *
      * @param  callable $callback
@@ -291,6 +293,7 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
     }
 
     /**
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * Retrieve an external iterator
      * @return Traversable An instance of an object implementing <b>Iterator</b> or
      * <b>Traversable</b>
@@ -358,7 +361,11 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
     {
         try {
             $total = $this->total();
+<<<<<<< HEAD
+        } catch (Exception $e) {
+=======
         } catch (\DomainException $e) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $total = null;
         }
 
@@ -366,8 +373,12 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
             'total'        => $total,
             'per_page'     => $this->listRows(),
             'current_page' => $this->currentPage(),
+<<<<<<< HEAD
+            'data'         => $this->items->toArray()
+=======
             'last_page'    => $this->lastPage,
             'data'         => $this->items->toArray(),
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         ];
     }
 

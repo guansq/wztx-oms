@@ -11,13 +11,26 @@
 
 namespace think\model\relation;
 
+<<<<<<< HEAD
+=======
 use think\Collection;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 use think\db\Query;
 use think\Exception;
 use think\Loader;
 use think\Model;
 use think\model\Pivot;
 use think\model\Relation;
+<<<<<<< HEAD
+
+class BelongsToMany extends Relation
+{
+    // 中间表模型
+    protected $middle;
+
+    /**
+     * 架构函数
+=======
 use think\Paginator;
 
 class BelongsToMany extends Relation
@@ -31,6 +44,7 @@ class BelongsToMany extends Relation
 
     /**
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param Model  $parent     上级模型对象
      * @param string $model      模型名
@@ -44,6 +58,33 @@ class BelongsToMany extends Relation
         $this->model      = $model;
         $this->foreignKey = $foreignKey;
         $this->localKey   = $localKey;
+<<<<<<< HEAD
+        $this->middle     = $table;
+        $this->query      = (new $model)->db();
+    }
+
+    /**
+     * 延迟获取关联数据
+     * @param string   $subRelation 子关联名
+     * @param \Closure $closure     闭包查询条件
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getRelation($subRelation = '', $closure = null)
+    {
+        $foreignKey = $this->foreignKey;
+        $localKey   = $this->localKey;
+        $middle     = $this->middle;
+        if ($closure) {
+            call_user_func_array($closure, [& $this->query]);
+        }
+        // 关联查询
+        $pk                              = $this->parent->getPk();
+        $condition['pivot.' . $localKey] = $this->parent->$pk;
+        $result                          = $this->belongsToManyQuery($middle, $foreignKey, $localKey, $condition)->relation($subRelation)->select();
+        foreach ($result as $set) {
+            $pivot = [];
+            foreach ($set->getData() as $key => $val) {
+=======
         if (false !== strpos($table, '\\')) {
             $this->pivotName = $table;
             $this->middle    = basename(str_replace('\\', '/', $table));
@@ -85,10 +126,19 @@ class BelongsToMany extends Relation
         foreach ($models as $model) {
             $pivot = [];
             foreach ($model->getData() as $key => $val) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 if (strpos($key, '__')) {
                     list($name, $attr) = explode('__', $key, 2);
                     if ('pivot' == $name) {
                         $pivot[$attr] = $val;
+<<<<<<< HEAD
+                        unset($set->$key);
+                    }
+                }
+            }
+            $set->pivot = new Pivot($pivot, $this->middle);
+        }
+=======
                         unset($model->$key);
                     }
                 }
@@ -163,10 +213,13 @@ class BelongsToMany extends Relation
     {
         $result = $this->buildQuery()->find($data);
         $this->hydratePivot([$result]);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         return $result;
     }
 
     /**
+<<<<<<< HEAD
+=======
      * 查找多条记录 如果不存在则抛出异常
      * @access public
      * @param array|string|Query|\Closure $data
@@ -229,6 +282,7 @@ class BelongsToMany extends Relation
     }
 
     /**
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * 预载入关联查询（数据集）
      * @access public
      * @param array    $resultSet   数据集
@@ -267,7 +321,11 @@ class BelongsToMany extends Relation
                     $data[$result->$pk] = [];
                 }
 
+<<<<<<< HEAD
+                $result->setAttr($attr, $this->resultSetBuild($data[$result->$pk]));
+=======
                 $result->setRelation($attr, $this->resultSetBuild($data[$result->$pk]));
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
     }
@@ -293,7 +351,11 @@ class BelongsToMany extends Relation
             if (!isset($data[$pk])) {
                 $data[$pk] = [];
             }
+<<<<<<< HEAD
+            $result->setAttr(Loader::parseName($relation), $this->resultSetBuild($data[$pk]));
+=======
             $result->setRelation(Loader::parseName($relation), $this->resultSetBuild($data[$pk]));
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
     }
 
@@ -310,7 +372,11 @@ class BelongsToMany extends Relation
         $count = 0;
         if (isset($result->$pk)) {
             $pk    = $result->$pk;
+<<<<<<< HEAD
+            $count = $this->belongsToManyQuery($this->middle, $this->foreignKey, $this->localKey, ['pivot.' . $this->localKey => $pk])->count();
+=======
             $count = $this->belongsToManyQuery($this->foreignKey, $this->localKey, ['pivot.' . $this->localKey => $pk])->count();
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
         return $count;
     }
@@ -323,11 +389,19 @@ class BelongsToMany extends Relation
      */
     public function getRelationCountQuery($closure)
     {
+<<<<<<< HEAD
+        return $this->belongsToManyQuery($this->middle, $this->foreignKey, $this->localKey, [
+            'pivot.' . $this->localKey => [
+                'exp',
+                '=' . $this->parent->getTable() . '.' . $this->parent->getPk()
+            ]
+=======
         return $this->belongsToManyQuery($this->foreignKey, $this->localKey, [
             'pivot.' . $this->localKey => [
                 'exp',
                 '=' . $this->parent->getTable() . '.' . $this->parent->getPk(),
             ],
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         ])->fetchSql()->count();
     }
 
@@ -342,7 +416,11 @@ class BelongsToMany extends Relation
     protected function eagerlyManyToMany($where, $relation, $subRelation = '')
     {
         // 预载入关联查询 支持嵌套预载入
+<<<<<<< HEAD
+        $list = $this->belongsToManyQuery($this->middle, $this->foreignKey, $this->localKey, $where)->with($subRelation)->select();
+=======
         $list = $this->belongsToManyQuery($this->foreignKey, $this->localKey, $where)->with($subRelation)->select();
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 
         // 组装模型数据
         $data = [];
@@ -357,7 +435,11 @@ class BelongsToMany extends Relation
                     }
                 }
             }
+<<<<<<< HEAD
+            $set->pivot                      = new Pivot($pivot, $this->middle);
+=======
             $set->pivot                      = $this->newPivot($pivot);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $data[$pivot[$this->localKey]][] = $set;
         }
         return $data;
@@ -366,11 +448,26 @@ class BelongsToMany extends Relation
     /**
      * BELONGS TO MANY 关联查询
      * @access public
+<<<<<<< HEAD
+     * @param string $table      中间表名
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @param string $foreignKey 关联模型关联键
      * @param string $localKey   当前模型关联键
      * @param array  $condition  关联查询条件
      * @return Query
      */
+<<<<<<< HEAD
+    protected function belongsToManyQuery($table, $foreignKey, $localKey, $condition = [])
+    {
+        // 关联查询封装
+        $tableName  = $this->query->getTable();
+        $relationFk = $this->query->getPk();
+        return $this->query->field($tableName . '.*')
+            ->field(true, false, $table, 'pivot', 'pivot__')
+            ->join($table . ' pivot', 'pivot.' . $foreignKey . '=' . $tableName . '.' . $relationFk)
+            ->where($condition);
+=======
     protected function belongsToManyQuery($foreignKey, $localKey, $condition = [])
     {
         // 关联查询封装
@@ -387,6 +484,7 @@ class BelongsToMany extends Relation
                 ->where($condition);
         }
         return $query;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -429,7 +527,11 @@ class BelongsToMany extends Relation
      * @access public
      * @param mixed $data  数据 可以使用数组、关联模型对象 或者 关联对象的主键
      * @param array $pivot 中间表额外数据
+<<<<<<< HEAD
+     * @return int
+=======
      * @return array|Pivot
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @throws Exception
      */
     public function attach($data, $pivot = [])
@@ -459,12 +561,16 @@ class BelongsToMany extends Relation
             $ids                    = (array) $id;
             foreach ($ids as $id) {
                 $pivot[$this->foreignKey] = $id;
+<<<<<<< HEAD
+                $result                   = $this->query->table($this->middle)->insert($pivot, true);
+=======
                 $this->pivot->insert($pivot, true);
                 $result[] = $this->newPivot($pivot);
             }
             if (count($result) == 1) {
                 // 返回中间表模型对象
                 $result = $result[0];
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
             return $result;
         } else {
@@ -497,7 +603,12 @@ class BelongsToMany extends Relation
         if (isset($id)) {
             $pivot[$this->foreignKey] = is_array($id) ? ['in', $id] : $id;
         }
+<<<<<<< HEAD
+        $this->query->table($this->middle)->where($pivot)->delete();
+
+=======
         $this->pivot->where($pivot)->delete();
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         // 删除关联表数据
         if (isset($id) && $relationDel) {
             $model = $this->model;
@@ -506,6 +617,8 @@ class BelongsToMany extends Relation
     }
 
     /**
+<<<<<<< HEAD
+=======
      * 数据同步
      * @param array $ids
      * @param bool  $detaching
@@ -555,16 +668,23 @@ class BelongsToMany extends Relation
     }
 
     /**
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * 执行基础查询（进执行一次）
      * @access protected
      * @return void
      */
     protected function baseQuery()
     {
+<<<<<<< HEAD
+        if (empty($this->baseQuery)) {
+            $pk = $this->parent->getPk();
+            $this->query->join($this->middle . ' pivot', 'pivot.' . $this->foreignKey . '=' . $this->query->getTable() . '.' . $this->query->getPk())->where('pivot.' . $this->localKey, $this->parent->$pk);
+=======
         if (empty($this->baseQuery) && $this->parent->getData()) {
             $pk    = $this->parent->getPk();
             $table = $this->pivot->getTable();
             $this->query->join($table . ' pivot', 'pivot.' . $this->foreignKey . '=' . $this->query->getTable() . '.' . $this->query->getPk())->where('pivot.' . $this->localKey, $this->parent->$pk);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $this->baseQuery = true;
         }
     }

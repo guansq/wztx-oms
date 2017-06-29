@@ -11,7 +11,10 @@
 namespace think\console\command\optimize;
 
 use think\App;
+<<<<<<< HEAD
+=======
 use think\Config;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
@@ -33,7 +36,11 @@ class Autoload extends Command
 /**
  * 类库映射
  */
+<<<<<<< HEAD
+ 
+=======
 
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 return [
 
 EOF;
@@ -43,6 +50,11 @@ EOF;
             'think\\'              => LIB_PATH . 'think',
             'behavior\\'           => LIB_PATH . 'behavior',
             'traits\\'             => LIB_PATH . 'traits',
+<<<<<<< HEAD
+            ''                     => realpath(rtrim(EXTEND_PATH))
+        ];
+
+=======
             ''                     => realpath(rtrim(EXTEND_PATH)),
         ];
 
@@ -51,6 +63,7 @@ EOF;
             $namespacesToScan[$namespace . '\\'] = realpath($dir);
         }
 
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         krsort($namespacesToScan);
         $classMap = [];
         foreach ($namespacesToScan as $namespace => $dir) {
@@ -90,7 +103,11 @@ EOF;
                 $this->output->writeln(
                     '<warning>Warning: Ambiguous class resolution, "' . $class . '"' .
                     ' was found in both "' . str_replace(["',\n"], [
+<<<<<<< HEAD
+                        ''
+=======
                         '',
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                     ], $classMap[$class]) . '" and "' . $path . '", the first will be used.</warning>'
                 );
             }
@@ -102,6 +119,22 @@ EOF;
     {
 
         $baseDir    = '';
+<<<<<<< HEAD
+        $appPath    = $this->normalizePath(realpath(APP_PATH));
+        $libPath    = $this->normalizePath(realpath(LIB_PATH));
+        $extendPath = $this->normalizePath(realpath(EXTEND_PATH));
+        $path       = $this->normalizePath($path);
+
+        if (strpos($path, $libPath . '/') === 0) {
+            $path    = substr($path, strlen(LIB_PATH));
+            $baseDir = 'LIB_PATH';
+        } elseif (strpos($path, $appPath . '/') === 0) {
+            $path    = substr($path, strlen($appPath) + 1);
+            $baseDir = 'APP_PATH';
+        } elseif (strpos($path, $extendPath . '/') === 0) {
+            $path    = substr($path, strlen($extendPath) + 1);
+            $baseDir = 'EXTEND_PATH';
+=======
         $libPath    = $this->normalizePath(realpath(LIB_PATH));
         $appPath    = $this->normalizePath(realpath(APP_PATH));
         $extendPath = $this->normalizePath(realpath(EXTEND_PATH));
@@ -120,6 +153,7 @@ EOF;
         } elseif ($rootPath !== null && strpos($path, $rootPath . '/') === 0) {
             $path    = substr($path, strlen($rootPath) + 1);
             $baseDir = 'ROOT_PATH';
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
 
         if ($path !== false) {
@@ -131,9 +165,12 @@ EOF;
 
     protected function normalizePath($path)
     {
+<<<<<<< HEAD
+=======
         if ($path === false) {
             return;
         }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         $parts    = [];
         $path     = strtr($path, '\\', '/');
         $prefix   = '';

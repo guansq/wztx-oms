@@ -28,6 +28,9 @@ class Clear extends Command
 
     protected function execute(Input $input, Output $output)
     {
+<<<<<<< HEAD
+        $path  = $input->getOption('path') ?: RUNTIME_PATH;
+=======
         $path = $input->getOption('path') ?: RUNTIME_PATH;
 
         if (is_dir($path)) {
@@ -40,15 +43,25 @@ class Clear extends Command
     protected function clearPath($path)
     {
         $path  = realpath($path) . DS;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         $files = scandir($path);
         if ($files) {
             foreach ($files as $file) {
                 if ('.' != $file && '..' != $file && is_dir($path . $file)) {
+<<<<<<< HEAD
+                    array_map('unlink', glob($path . $file . '/*.*'));
+                } elseif (is_file($path . $file)) {
+=======
                     $this->clearPath($path . $file);
                 } elseif ('.gitignore' != $file && is_file($path . $file)) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                     unlink($path . $file);
                 }
             }
         }
+<<<<<<< HEAD
+        $output->writeln("<info>Clear Successed</info>");
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 }

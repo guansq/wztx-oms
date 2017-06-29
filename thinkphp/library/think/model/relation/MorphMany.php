@@ -11,8 +11,13 @@
 
 namespace think\model\relation;
 
+<<<<<<< HEAD
+use think\Db;
+use think\db\Query;
+=======
 use think\db\Query;
 use think\Exception;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 use think\Loader;
 use think\Model;
 use think\model\Relation;
@@ -26,7 +31,11 @@ class MorphMany extends Relation
     protected $type;
 
     /**
+<<<<<<< HEAD
+     * 架构函数
+=======
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param Model  $parent    上级模型对象
      * @param string $model     模型名
@@ -53,6 +62,11 @@ class MorphMany extends Relation
     public function getRelation($subRelation = '', $closure = null)
     {
         if ($closure) {
+<<<<<<< HEAD
+            call_user_func_array($closure, [& $this->query]);
+        }
+        return $this->relation($subRelation)->select();
+=======
             call_user_func_array($closure, [ & $this->query]);
         }
         $list   = $this->relation($subRelation)->select();
@@ -88,6 +102,7 @@ class MorphMany extends Relation
     public function hasWhere($where = [])
     {
         throw new Exception('relation not support: hasWhere');
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -125,11 +140,15 @@ class MorphMany extends Relation
                 if (!isset($data[$result->$pk])) {
                     $data[$result->$pk] = [];
                 }
+<<<<<<< HEAD
+                $result->setAttr($attr, $this->resultSetBuild($data[$result->$pk]));
+=======
                 foreach ($data[$result->$pk] as &$relationModel) {
                     $relationModel->setParent(clone $result);
                     $relationModel->isUpdate(true);
                 }
                 $result->setRelation($attr, $this->resultSetBuild($data[$result->$pk]));
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
     }
@@ -149,6 +168,11 @@ class MorphMany extends Relation
         if (isset($result->$pk)) {
             $data = $this->eagerlyMorphToMany([
                 $this->morphKey  => $result->$pk,
+<<<<<<< HEAD
+                $this->morphType => $this->type
+            ], $relation, $subRelation, $closure);
+            $result->setAttr(Loader::parseName($relation), $this->resultSetBuild($data[$result->$pk]));
+=======
                 $this->morphType => $this->type,
             ], $relation, $subRelation, $closure);
 
@@ -162,6 +186,7 @@ class MorphMany extends Relation
             }
 
             $result->setRelation(Loader::parseName($relation), $this->resultSetBuild($data[$result->$pk]));
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
     }
 
@@ -178,7 +203,11 @@ class MorphMany extends Relation
         $count = 0;
         if (isset($result->$pk)) {
             if ($closure) {
+<<<<<<< HEAD
+                call_user_func_array($closure, [& $this->query]);
+=======
                 call_user_func_array($closure, [ & $this->query]);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
             $count = $this->query->where([$this->morphKey => $result->$pk, $this->morphType => $this->type])->count();
         }
@@ -194,15 +223,25 @@ class MorphMany extends Relation
     public function getRelationCountQuery($closure)
     {
         if ($closure) {
+<<<<<<< HEAD
+            call_user_func_array($closure, [& $this->query]);
+=======
             call_user_func_array($closure, [ & $this->query]);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
 
         return $this->query->where([
             $this->morphKey  => [
                 'exp',
+<<<<<<< HEAD
+                '=' . $this->parent->getTable() . '.' . $this->parent->getPk()
+            ],
+            $this->morphType => $this->type
+=======
                 '=' . $this->parent->getTable() . '.' . $this->parent->getPk(),
             ],
             $this->morphType => $this->type,
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         ])->fetchSql()->count();
     }
 
@@ -219,7 +258,11 @@ class MorphMany extends Relation
     {
         // 预载入关联查询 支持嵌套预载入
         if ($closure) {
+<<<<<<< HEAD
+            call_user_func_array($closure, [& $this]);
+=======
             call_user_func_array($closure, [ & $this]);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
         $list     = $this->query->where($where)->with($subRelation)->select();
         $morphKey = $this->morphKey;
@@ -235,7 +278,11 @@ class MorphMany extends Relation
      * 保存（新增）当前关联数据对象
      * @access public
      * @param mixed $data 数据 可以使用数组 关联模型对象 和 关联对象的主键
+<<<<<<< HEAD
+     * @return integer
+=======
      * @return Model|false
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      */
     public function save($data)
     {
@@ -245,10 +292,17 @@ class MorphMany extends Relation
         // 保存关联表数据
         $pk = $this->parent->getPk();
 
+<<<<<<< HEAD
+        $data[$this->morphKey]  = $this->parent->$pk;
+        $data[$this->morphType] = $this->type;
+        $model                  = new $this->model;
+        return $model->save($data);
+=======
         $model                  = new $this->model;
         $data[$this->morphKey]  = $this->parent->$pk;
         $data[$this->morphType] = $this->type;
         return $model->save($data) ? $model : false;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -273,7 +327,11 @@ class MorphMany extends Relation
      */
     protected function baseQuery()
     {
+<<<<<<< HEAD
+        if (empty($this->baseQuery)) {
+=======
         if (empty($this->baseQuery) && $this->parent->getData()) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $pk                    = $this->parent->getPk();
             $map[$this->morphKey]  = $this->parent->$pk;
             $map[$this->morphType] = $this->type;

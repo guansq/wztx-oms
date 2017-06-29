@@ -11,8 +11,13 @@
 
 namespace think\model\relation;
 
+<<<<<<< HEAD
+use think\Db;
+use think\db\Query;
+=======
 use think\db\Query;
 use think\Exception;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 use think\Loader;
 use think\Model;
 use think\model\Relation;
@@ -25,7 +30,11 @@ class HasManyThrough extends Relation
     protected $through;
 
     /**
+<<<<<<< HEAD
+     * 架构函数
+=======
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access   public
      * @param Model  $parent     上级模型对象
      * @param string $model      模型名
@@ -54,13 +63,20 @@ class HasManyThrough extends Relation
     public function getRelation($subRelation = '', $closure = null)
     {
         if ($closure) {
+<<<<<<< HEAD
+            call_user_func_array($closure, [& $this->query]);
+        }
+=======
             call_user_func_array($closure, [ & $this->query]);
         }
 
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         return $this->relation($subRelation)->select();
     }
 
     /**
+<<<<<<< HEAD
+=======
      * 根据关联条件查询当前模型
      * @access public
      * @param string  $operator 比较操作符
@@ -86,6 +102,7 @@ class HasManyThrough extends Relation
     }
 
     /**
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * 预载入关联查询
      * @access public
      * @param array    $resultSet   数据集
@@ -96,7 +113,12 @@ class HasManyThrough extends Relation
      * @return void
      */
     public function eagerlyResultSet(&$resultSet, $relation, $subRelation, $closure, $class)
+<<<<<<< HEAD
+    {
+    }
+=======
     {}
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 
     /**
      * 预载入关联查询 返回模型对象
@@ -109,7 +131,12 @@ class HasManyThrough extends Relation
      * @return void
      */
     public function eagerlyResult(&$result, $relation, $subRelation, $closure, $class)
+<<<<<<< HEAD
+    {
+    }
+=======
     {}
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 
     /**
      * 关联统计
@@ -119,7 +146,12 @@ class HasManyThrough extends Relation
      * @return integer
      */
     public function relationCount($result, $closure)
+<<<<<<< HEAD
+    {
+    }
+=======
     {}
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 
     /**
      * 执行基础查询（进执行一次）
@@ -128,7 +160,11 @@ class HasManyThrough extends Relation
      */
     protected function baseQuery()
     {
+<<<<<<< HEAD
+        if (empty($this->baseQuery)) {
+=======
         if (empty($this->baseQuery) && $this->parent->getData()) {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $through      = $this->through;
             $model        = $this->model;
             $alias        = Loader::parseName(basename(str_replace('\\', '/', $model)));

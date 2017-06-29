@@ -192,7 +192,11 @@ if (!function_exists('db')) {
      * @param bool          $force 是否强制重新连接
      * @return \think\db\Query
      */
+<<<<<<< HEAD
+    function db($name = '', $config = [], $force = true)
+=======
     function db($name = '', $config = [], $force = false)
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     {
         return Db::connect($config, $force)->name($name);
     }
@@ -354,6 +358,24 @@ if (!function_exists('cache')) {
     {
         if (is_array($options)) {
             // 缓存操作的同时初始化
+<<<<<<< HEAD
+            Cache::connect($options);
+        } elseif (is_array($name)) {
+            // 缓存初始化
+            return Cache::connect($name);
+        }
+        if (is_null($name)) {
+            return Cache::clear($value);
+        } elseif ('' === $value) {
+            // 获取缓存
+            return 0 === strpos($name, '?') ? Cache::has(substr($name, 1)) : Cache::get($name);
+        } elseif (is_null($value)) {
+            // 删除缓存
+            return Cache::rm($name);
+        } elseif (0 === strpos($name, '?') && '' !== $value) {
+            $expire = is_numeric($options) ? $options : null;
+            return Cache::remember(substr($name, 1), $value, $expire);
+=======
             $cache = Cache::connect($options);
         } elseif (is_array($name)) {
             // 缓存初始化
@@ -373,6 +395,7 @@ if (!function_exists('cache')) {
         } elseif (0 === strpos($name, '?') && '' !== $value) {
             $expire = is_numeric($options) ? $options : null;
             return $cache->remember(substr($name, 1), $value, $expire);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         } else {
             // 缓存数据
             if (is_array($options)) {
@@ -381,9 +404,15 @@ if (!function_exists('cache')) {
                 $expire = is_numeric($options) ? $options : null; //默认快捷缓存设置过期时间
             }
             if (is_null($tag)) {
+<<<<<<< HEAD
+                return Cache::set($name, $value, $expire);
+            } else {
+                return Cache::tag($tag)->set($name, $value, $expire);
+=======
                 return $cache->set($name, $value, $expire);
             } else {
                 return $cache->tag($tag)->set($name, $value, $expire);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
     }
@@ -498,16 +527,26 @@ if (!function_exists('redirect')) {
      * @param mixed         $url 重定向地址 支持Url::build方法的地址
      * @param array|integer $params 额外参数
      * @param integer       $code 状态码
+<<<<<<< HEAD
+     * @return \think\response\Redirect
+     */
+    function redirect($url = [], $params = [], $code = 302)
+=======
      * @param array         $with 隐式传参
      * @return \think\response\Redirect
      */
     function redirect($url = [], $params = [], $code = 302, $with = [])
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     {
         if (is_integer($params)) {
             $code   = $params;
             $params = [];
         }
+<<<<<<< HEAD
+        return Response::create($url, 'redirect', $code)->params($params);
+=======
         return Response::create($url, 'redirect', $code)->params($params)->with($with);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 }
 

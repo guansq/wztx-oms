@@ -17,16 +17,25 @@ use think\Model;
 class BelongsTo extends OneToOne
 {
     /**
+<<<<<<< HEAD
+     * 架构函数
+=======
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param Model  $parent 上级模型对象
      * @param string $model 模型名
      * @param string $foreignKey 关联外键
      * @param string $localKey 关联主键
      * @param string $joinType JOIN类型
+<<<<<<< HEAD
+     */
+    public function __construct(Model $parent, $model, $foreignKey, $localKey, $joinType = 'INNER')
+=======
      * @param string $relation  关联名
      */
     public function __construct(Model $parent, $model, $foreignKey, $localKey, $joinType = 'INNER', $relation = null)
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     {
         $this->parent     = $parent;
         $this->model      = $model;
@@ -34,7 +43,10 @@ class BelongsTo extends OneToOne
         $this->localKey   = $localKey;
         $this->joinType   = $joinType;
         $this->query      = (new $model)->db();
+<<<<<<< HEAD
+=======
         $this->relation   = $relation;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -50,6 +62,9 @@ class BelongsTo extends OneToOne
         if ($closure) {
             call_user_func_array($closure, [ & $this->query]);
         }
+<<<<<<< HEAD
+        return $this->query->where($this->localKey, $this->parent->$foreignKey)->relation($subRelation)->find();
+=======
         $relationModel = $this->query
             ->where($this->localKey, $this->parent->$foreignKey)
             ->relation($subRelation)
@@ -99,6 +114,7 @@ class BelongsTo extends OneToOne
             ->field($model . '.*')
             ->join($table . ' ' . $relation, $model . '.' . $this->foreignKey . '=' . $relation . '.' . $this->localKey, $this->joinType)
             ->where($where);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -135,12 +151,19 @@ class BelongsTo extends OneToOne
             // 关联数据封装
             foreach ($resultSet as $result) {
                 // 关联模型
+<<<<<<< HEAD
+                if (!isset($data[$result->$localKey])) {
+                    $relationModel = null;
+                } else {
+                    $relationModel = $data[$result->$localKey];
+=======
                 if (!isset($data[$result->$foreignKey])) {
                     $relationModel = null;
                 } else {
                     $relationModel = $data[$result->$foreignKey];
                     $relationModel->setParent(clone $result);
                     $relationModel->isUpdate(true);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 }
 
                 if ($relationModel && !empty($this->bindAttr)) {
@@ -148,7 +171,11 @@ class BelongsTo extends OneToOne
                     $this->bindAttr($relationModel, $result, $this->bindAttr);
                 }
                 // 设置关联属性
+<<<<<<< HEAD
+                $result->setAttr($attr, $relationModel);
+=======
                 $result->setRelation($attr, $relationModel);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
     }
@@ -168,18 +195,30 @@ class BelongsTo extends OneToOne
         $foreignKey = $this->foreignKey;
         $data       = $this->eagerlyWhere($this, [$localKey => $result->$foreignKey], $localKey, $relation, $subRelation, $closure);
         // 关联模型
+<<<<<<< HEAD
+        if (!isset($data[$result->$localKey])) {
+            $relationModel = null;
+        } else {
+            $relationModel = $data[$result->$localKey];
+=======
         if (!isset($data[$result->$foreignKey])) {
             $relationModel = null;
         } else {
             $relationModel = $data[$result->$foreignKey];
             $relationModel->setParent(clone $result);
             $relationModel->isUpdate(true);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         }
         if ($relationModel && !empty($this->bindAttr)) {
             // 绑定关联属性
             $this->bindAttr($relationModel, $result, $this->bindAttr);
         }
         // 设置关联属性
+<<<<<<< HEAD
+        $result->setAttr(Loader::parseName($relation), $relationModel);
+    }
+
+=======
         $result->setRelation(Loader::parseName($relation), $relationModel);
     }
 
@@ -214,4 +253,5 @@ class BelongsTo extends OneToOne
 
         return $this->parent->setRelation($this->relation, null);
     }
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 }

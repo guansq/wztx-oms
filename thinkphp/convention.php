@@ -5,6 +5,11 @@ return [
     // | 应用设置
     // +----------------------------------------------------------------------
 
+<<<<<<< HEAD
+    // 应用命名空间
+    'app_namespace'          => 'app',
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     // 应用调试模式
     'app_debug'              => true,
     // 应用Trace
@@ -105,8 +110,11 @@ return [
     'request_cache'          => false,
     // 请求缓存有效期
     'request_cache_expire'   => null,
+<<<<<<< HEAD
+=======
     // 全局请求缓存排除规则
     'request_cache_except'   => [],
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 
     // +----------------------------------------------------------------------
     // | 模板设置
@@ -204,7 +212,11 @@ return [
         // 是否自动开启 SESSION
         'auto_start'     => true,
         'httponly'       => true,
+<<<<<<< HEAD
+        'secure'         => true,
+=======
         'secure'         => false,
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     ],
 
     // +----------------------------------------------------------------------
@@ -272,6 +284,13 @@ return [
         'datetime_format' => 'Y-m-d H:i:s',
         // 是否需要进行SQL性能分析
         'sql_explain'     => false,
+<<<<<<< HEAD
+        // Builder类
+        'builder'         => '',
+        // Query类
+        'query'           => '\\think\\db\\Query',
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     ],
 
     //分页配置

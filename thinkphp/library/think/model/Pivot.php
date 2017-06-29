@@ -16,6 +16,23 @@ use think\Model;
 class Pivot extends Model
 {
 
+<<<<<<< HEAD
+    /**
+     * 架构函数
+     * @access public
+     * @param array|object $data 数据
+     * @param string $table 中间数据表名
+     */
+    public function __construct($data = [], $table = '')
+    {
+        if (is_object($data)) {
+            $this->data = get_object_vars($data);
+        } else {
+            $this->data = $data;
+        }
+
+        $this->table = $table;
+=======
     /** @var Model */
     public $parent;
 
@@ -39,6 +56,7 @@ class Pivot extends Model
         parent::__construct($data);
 
         $this->class = $this->name;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
 }

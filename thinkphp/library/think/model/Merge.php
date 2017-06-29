@@ -11,7 +11,10 @@
 
 namespace think\model;
 
+<<<<<<< HEAD
+=======
 use think\Db;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 use think\db\Query;
 use think\Model;
 
@@ -23,7 +26,11 @@ class Merge extends Model
     protected $mapFields     = []; //  需要处理的模型映射字段，避免混淆 array( id => 'user.id'  )
 
     /**
+<<<<<<< HEAD
+     * 架构函数
+=======
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param array|object $data 数据
      */
@@ -121,6 +128,24 @@ class Merge extends Model
      * @access public
      * @param string $model  模型名称
      * @param array  $data   数据
+<<<<<<< HEAD
+     * @param bool   $insert 是否新增
+     * @return array
+     */
+    protected function parseData($model, $data, $insert = false)
+    {
+        $item = [];
+        foreach ($data as $key => $val) {
+            if ($insert || in_array($key, $this->change) || $this->isPk($key)) {
+                if ($this->fk != $key && array_key_exists($key, $this->mapFields)) {
+                    list($name, $key) = explode('.', $this->mapFields[$key]);
+                    if ($model == $name) {
+                        $item[$key] = $val;
+                    }
+                } else {
+                    $item[$key] = $val;
+                }
+=======
      * @return array
      */
     protected function parseData($model, $data)
@@ -134,6 +159,7 @@ class Merge extends Model
                 }
             } else {
                 $item[$key] = $val;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             }
         }
         return $item;
@@ -172,11 +198,14 @@ class Merge extends Model
             $this->setAttr($this->updateTime, null);
         }
 
+<<<<<<< HEAD
+=======
         // 事件回调
         if (false === $this->trigger('before_write', $this)) {
             return false;
         }
 
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
         $db = $this->db();
         $db->startTrans();
         $pk = $this->getPk();
@@ -193,6 +222,10 @@ class Merge extends Model
                     $where = $this->updateWhere;
                 }
 
+<<<<<<< HEAD
+                // 处理模型数据
+                $data = $this->parseData($this->name, $this->data);
+=======
                 // 获取有更新的数据
                 $data = $this->getChangedData();
                 // 保留主键数据
@@ -203,6 +236,7 @@ class Merge extends Model
                 }
                 // 处理模型数据
                 $data = $this->parseData($this->name, $data);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 if (is_string($pk) && isset($data[$pk])) {
                     if (!isset($where[$pk])) {
                         unset($where);
@@ -218,12 +252,23 @@ class Merge extends Model
                     $name  = is_int($key) ? $model : $key;
                     $table = is_int($key) ? $db->getTable($model) : $model;
                     // 处理关联模型数据
+<<<<<<< HEAD
+                    $data  = $this->parseData($name, $this->data);
+                    $query = new Query;
+                    if ($query->table($table)->strict(false)->where($this->fk, $this->data[$this->getPk()])->update($data)) {
+                        $result = 1;
+                    }
+                }
+                // 清空change
+                $this->change = [];
+=======
                     $data = $this->parseData($name, $data);
                     if (Db::table($table)->strict(false)->where($this->fk, $this->data[$this->getPk()])->update($data)) {
                         $result = 1;
                     }
                 }
 
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 // 新增回调
                 $this->trigger('after_update', $this);
             } else {
@@ -240,7 +285,11 @@ class Merge extends Model
                 }
 
                 // 处理模型数据
+<<<<<<< HEAD
+                $data = $this->parseData($this->name, $this->data, true);
+=======
                 $data = $this->parseData($this->name, $this->data);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 // 写入主表数据
                 $result = $db->name($this->name)->strict(false)->insert($data);
                 if ($result) {
@@ -249,6 +298,12 @@ class Merge extends Model
                     if ($insertId) {
                         if (is_string($pk)) {
                             $this->data[$pk] = $insertId;
+<<<<<<< HEAD
+                            if ($this->fk == $pk) {
+                                $this->change[] = $pk;
+                            }
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                         }
                         $this->data[$this->fk] = $insertId;
                     }
@@ -262,20 +317,34 @@ class Merge extends Model
                         $name  = is_int($key) ? $model : $key;
                         $table = is_int($key) ? $db->getTable($model) : $model;
                         // 处理关联模型数据
+<<<<<<< HEAD
+                        $data  = $this->parseData($name, $source, true);
+                        $query = new Query;
+                        $query->table($table)->strict(false)->insert($data);
+=======
                         $data = $this->parseData($name, $source);
                         Db::table($table)->strict(false)->insert($data);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                     }
                 }
                 // 标记为更新
                 $this->isUpdate = true;
+<<<<<<< HEAD
+                // 清空change
+                $this->change = [];
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 // 新增回调
                 $this->trigger('after_insert', $this);
             }
             $db->commit();
+<<<<<<< HEAD
+=======
             // 写入回调
             $this->trigger('after_write', $this);
 
             $this->origin = $this->data;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             return $result;
         } catch (\Exception $e) {
             $db->rollback();

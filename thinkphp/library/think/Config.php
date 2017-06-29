@@ -87,7 +87,11 @@ class Config
             return isset(self::$config[$range][strtolower($name)]);
         } else {
             // 二维数组设置和获取支持
+<<<<<<< HEAD
+            $name = explode('.', $name);
+=======
             $name = explode('.', $name, 2);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             return isset(self::$config[$range][strtolower($name[0])][$name[1]]);
         }
     }
@@ -111,7 +115,11 @@ class Config
             return isset(self::$config[$range][$name]) ? self::$config[$range][$name] : null;
         } else {
             // 二维数组设置和获取支持
+<<<<<<< HEAD
+            $name    = explode('.', $name);
+=======
             $name    = explode('.', $name, 2);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
             $name[0] = strtolower($name[0]);
             return isset(self::$config[$range][$name[0]][$name[1]]) ? self::$config[$range][$name[0]][$name[1]] : null;
         }
@@ -135,7 +143,11 @@ class Config
                 self::$config[$range][strtolower($name)] = $value;
             } else {
                 // 二维数组设置和获取支持
+<<<<<<< HEAD
+                $name                                                 = explode('.', $name);
+=======
                 $name                                                 = explode('.', $name, 2);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 self::$config[$range][strtolower($name[0])][$name[1]] = $value;
             }
             return;

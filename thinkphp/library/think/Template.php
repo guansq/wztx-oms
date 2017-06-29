@@ -57,7 +57,11 @@ class Template
     protected $storage;
 
     /**
+<<<<<<< HEAD
+     * 架构函数
+=======
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      */
     public function __construct(array $config = [])
@@ -927,7 +931,11 @@ class Template
                         if (false === strpos($name, '(')) {
                             $name = '(isset(' . $name . ') && (' . $name . ' !== \'\')?' . $name . ':' . $args[1] . ')';
                         } else {
+<<<<<<< HEAD
+                            $name = '(' . $name . ' !== \'\'?' . $name . ':' . $args[1] . ')';
+=======
                             $name = '(' . $name . ' ?: ' . $args[1] . ')';
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                         }
                         break;
                     default: // 通用模板函数

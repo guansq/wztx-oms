@@ -23,24 +23,38 @@ class MorphTo extends Relation
     protected $morphType;
     // 多态别名
     protected $alias;
+<<<<<<< HEAD
+
+    /**
+     * 架构函数
+=======
     protected $relation;
 
     /**
      * 构造函数
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access public
      * @param Model  $parent    上级模型对象
      * @param string $morphType 多态字段名
      * @param string $morphKey  外键名
      * @param array  $alias     多态别名定义
+<<<<<<< HEAD
+     */
+    public function __construct(Model $parent, $morphType, $morphKey, $alias = [])
+=======
      * @param string $relation  关联名
      */
     public function __construct(Model $parent, $morphType, $morphKey, $alias = [], $relation = null)
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     {
         $this->parent    = $parent;
         $this->morphType = $morphType;
         $this->morphKey  = $morphKey;
         $this->alias     = $alias;
+<<<<<<< HEAD
+=======
         $this->relation  = $relation;
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -56,6 +70,10 @@ class MorphTo extends Relation
         // 多态模型
         $model = $this->parseModel($this->parent->$morphType);
         // 主键数据
+<<<<<<< HEAD
+        $pk = $this->parent->$morphKey;
+        return (new $model)->relation($subRelation)->find($pk);
+=======
         $pk            = $this->parent->$morphKey;
         $relationModel = (new $model)->relation($subRelation)->find($pk);
 
@@ -88,6 +106,7 @@ class MorphTo extends Relation
     public function hasWhere($where = [])
     {
         throw new Exception('relation not support: hasWhere');
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -123,6 +142,8 @@ class MorphTo extends Relation
     }
 
     /**
+<<<<<<< HEAD
+=======
      * 移除关联查询参数
      * @access public
      * @return $this
@@ -133,6 +154,7 @@ class MorphTo extends Relation
     }
 
     /**
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * 预载入关联查询
      * @access public
      * @param array    $resultSet   数据集
@@ -173,11 +195,15 @@ class MorphTo extends Relation
                         if (!isset($data[$result->$morphKey])) {
                             throw new Exception('relation data not exists :' . $this->model);
                         } else {
+<<<<<<< HEAD
+                            $result->setAttr($attr, $data[$result->$morphKey]);
+=======
                             $relationModel = $data[$result->$morphKey];
                             $relationModel->setParent(clone $result);
                             $relationModel->isUpdate(true);
 
                             $result->setRelation($attr, $relationModel);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                         }
                     }
                 }
@@ -229,6 +255,11 @@ class MorphTo extends Relation
         $pk   = $this->parent->{$this->morphKey};
         $data = (new $model)->with($subRelation)->find($pk);
         if ($data) {
+<<<<<<< HEAD
+            $data->isUpdate(true);
+        }
+        $result->setAttr(Loader::parseName($relation), $data ?: null);
+=======
             $data->setParent(clone $result);
             $data->isUpdate(true);
         }
@@ -269,6 +300,7 @@ class MorphTo extends Relation
         $this->parent->save();
 
         return $this->parent->setRelation($this->relation, null);
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     }
 
     /**
@@ -277,5 +309,10 @@ class MorphTo extends Relation
      * @return void
      */
     protected function baseQuery()
+<<<<<<< HEAD
+    {
+    }
+=======
     {}
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
 }

@@ -33,6 +33,11 @@ abstract class Relation
     protected $foreignKey;
     // 关联表主键
     protected $localKey;
+<<<<<<< HEAD
+    // 关联查询参数
+    protected $option;
+=======
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
     // 基础查询
     protected $baseQuery;
 
@@ -77,6 +82,21 @@ abstract class Relation
         return (new $this->model)->toCollection($resultSet);
     }
 
+<<<<<<< HEAD
+    /**
+     * 移除关联查询参数
+     * @access public
+     * @return $this
+     */
+    public function removeOption()
+    {
+        $this->query->removeOption();
+        return $this;
+    }
+
+    /**
+     * 执行基础查询（进执行一次）
+=======
     protected function getQueryFields($model)
     {
         $fields = $this->query->getOptions('field');
@@ -105,6 +125,7 @@ abstract class Relation
 
     /**
      * 执行基础查询（仅执行一次）
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
      * @access protected
      * @return void
      */
@@ -118,8 +139,15 @@ abstract class Relation
 
             $result = call_user_func_array([$this->query, $method], $args);
             if ($result instanceof Query) {
+<<<<<<< HEAD
+                $this->option = $result->getOptions();
                 return $this;
             } else {
+                $this->option    = [];
+=======
+                return $this;
+            } else {
+>>>>>>> 43c1601fcae9771a4c23a155533aa4412a3a0d0e
                 $this->baseQuery = false;
                 return $result;
             }
