@@ -11,202 +11,225 @@
 {block name="content"}
 
 <main class="main">
-	<div class="head_box">
-		<a href="javascript:void(0);">评价管理</a>
-		<span> >> </span>
-		<a href="javascript:void(0);">评价列表</a>
-	</div>
-	<div class="con_box">
-		<h1 class="h1">评价列表 <span>（共200条）</span></h1>
-		<div class="operate_box">
-			<form class="form-inline">
-				<div class="form-group mr_20">
-					<input type="text" class="form-control mr_20" placeholder="订单编号">
-					<input type="text" class="form-control mr_20" placeholder="司机/货主姓名">
-					<input type="text" style="min-width: 220px;" class="date_time form-control mr_20" placeholder="开始时间">
-					<input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="结束时间">
-				</div>
-				<button type="button" class="btn btn-primary">查询</button>
-			</form>
-			<div class="operate_tab">
-				<div class="operate_tab_btn">
-					<button id="remove_btn" type="button" class="btn btn-info">删除</button>
-				</div>
-				<div class="operate_table">
-					<table id="example" class="table table-bordered" width="100%" cellspacing="0">
-						<thead>
-						<tr>
-							<th><input class="all" type="checkbox"></th>
-							<th>订单编号</th>
-							<th>评论者</th>
-							<th>发货时效</th>
-							<th>服务态度</th>
-							<th>满意度</th>
-							<th>评论时间</th>
-							<th>评论信息</th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr>
-							<td><input class="check" type="checkbox"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input class="check" type="checkbox"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input class="check" type="checkbox"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input class="check" type="checkbox"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input class="check" type="checkbox"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input class="check" type="checkbox"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="head_box">
+        <a href="javascript:void(0);">评价管理</a>
+        <span> >> </span>
+        <a href="javascript:void(0);">评价列表</a>
+    </div>
+    <div class="con_box">
+        <h1 class="h1">评价列表 <span>（共<b id="totalnum">0</b>条）</span></h1>
+        <div class="operate_box">
+            <form class="form-inline">
+                <div class="form-group mr_20">
+                    <input type="text" class="form-control mr_20" placeholder="订单编号" id="ordernum" name="ordernum">
+                    <input type="text" class="form-control mr_20" placeholder="司机/货主姓名" id="name" name="name">
+                    <input type="text" style="min-width: 220px;" class="date_time form-control mr_20" placeholder="开始时间"
+                           id="begintime" name="begintime">
+                    <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="结束时间"
+                           id="endtime" name="endtime">
+                </div>
+                <button type="button" class="btn btn-primary" id="searchVal">查询</button>
+            </form>
+            <div class="operate_tab">
+                <div class="operate_tab_btn">
+                    <button id="remove_btn" type="button" class="btn btn-info">删除</button>
+                </div>
+                <div class="operate_table">
+                    <table id="example" class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th><input class="all" type="checkbox"></th>
+                            <th>订单编号</th>
+                            <th>评论者</th>
+                            <th>发货时效</th>
+                            <th>服务态度</th>
+                            <th>满意度</th>
+                            <th>评论时间</th>
+                            <th>评论信息</th>
+                            <th>屏蔽</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 {/block}
 
 {block name="script"}
 <script>
-  require(["jquery.dataTables","icheck","laydate"],function(){
-    require(["dataTables.bootstrap"],function(){
-      $(document).ready(function() {
-        initPage();
-        initEvent();
-      } );
-    })
-  });
-
-  function initPage(){
-
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_minimal',
-      radioClass: 'iradio_minimal',
-      increaseArea: '20%' // optional
+    require(["jquery.dataTables", "icheck", "laydate"], function () {
+        require(["dataTables.bootstrap"], function () {
+            $(document).ready(function () {
+                initPage();
+                initEvent();
+            });
+        })
     });
 
-    //时间日期选择器
-    $(".date_time").focus(function(){
-			/*
-			 laydate插件提供显示日期控件的方法
-			 laydate(options)
-			 * options - 选项,格式为 { key : value }
-			 * 选项
-			 * format - 日期格式
-			 *
-			 默认格式为 YYYY-MM-DD hh:mm:ss(标准格式)
-			 * 客户端
-			 * 服务器端
-			 * 数据库
-			 * istime - 是否开启时间选择
-			 * 默认值为false,不开启
-			 * isclear - 是否显示清空按钮
-			 * istoday - 是否显示今天按钮
-			 * issure - 是否显示确认按钮
-			 */
-      laydate({
-        format:"YYYY年MM月DD日 hh:mm:ss",
-        istime:true,
-        isclear:true,
-        istoday:true,
-        issure:true
-      });
-    });
+    function initPage() {
 
-    var table = $('#example').DataTable({
-      //paging: false, 设置是否分页
-      "info": false,  //去除左下角的信息
-      "lengthChange": false, //是否允许用户改变表格每页显示的记录数
-      "ordering": false, //是否允许Datatables开启排序
-      "searching": false,  //是否允许Datatables开启本地搜索
-      language: {
-        "oPaginate": {
-          "sFirst": "首页",
-          "sPrevious": "上页",
-          "sNext": "下页",
-          "sLast": "末页"
-        }
-      }
-    });
-    // tr点击选中事件
-    $('#example tbody').on( 'click', 'tr', function () {
-      $(this).toggleClass('warning');
-    });
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_minimal',
+            radioClass: 'iradio_minimal',
+            increaseArea: '20%' // optional
+        });
 
-  }
+        //时间日期选择器
+        $(".date_time").focus(function () {
+            /*
+             laydate插件提供显示日期控件的方法
+             laydate(options)
+             * options - 选项,格式为 { key : value }
+             * 选项
+             * format - 日期格式
+             *
+             默认格式为 YYYY-MM-DD hh:mm:ss(标准格式)
+             * 客户端
+             * 服务器端
+             * 数据库
+             * istime - 是否开启时间选择
+             * 默认值为false,不开启
+             * isclear - 是否显示清空按钮
+             * istoday - 是否显示今天按钮
+             * issure - 是否显示确认按钮
+             */
+            laydate({
+                format: "YYYY-MM-DD",
+                //istime : true,
+                isclear: true,
+                istoday: true,
+                issure: true
+            });
+        });
 
-  function initEvent(){
-    var checkAll =$('input.all');  //全选的input
-    var checkboxs =$('input.check'); //所有单选的input
+        var table = $('#example').DataTable({
+            //paging: false, 设置是否分页
+            "info": false,  //去除左下角的信息
+            "lengthChange": false, //是否允许用户改变表格每页显示的记录数
+            "ordering": false, //是否允许Datatables开启排序
+            "searching": false,  //是否允许Datatables开启本地搜索
+            language: {
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                }
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": '{:url("OrderComment/getCommentList")}',
+                "type": "POST",
+                "data": function (parameter) {
+                    //添加额外的参数传给服务器
+                    parameter.name = $("#name").val();
+                    parameter.ordernum = $("#ordernum").val();
+                    parameter.endtime = $("#endtime").val();
+                    parameter.begintime = $("#begintime").val();
+                },
+            },
+            "pageLength": 1,
+            "columns": [
+                {"data": "id"},
+                {"data": "pay_orderid"},
+                {"data": "spbasename"},
+                {"data": "limitship"},
+                {"data": "attitude"},
+                {"data": "satisfaction"},
+                {"data": "posttime"},
+                {"data": "content"},
+                {"data": "action"},
+            ],
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    "render": function (data) {
+                        //var url = '{:url(\'Order/detail\')}?id='+data;
+                        return '<input class="check" type="checkbox">';
+                    }
+                }
+            ],
+            "drawCallback": function (settings) {
+                //console.log(settings.json.recordsFiltered);
+                $("#totalnum").html(settings.json.recordsFiltered);
 
-    checkAll.on('ifChecked ifUnchecked',function(event){
-      if(event.type == 'ifChecked'){
-        checkboxs.iCheck('check');
-      }else{
-        checkboxs.iCheck('uncheck');
-      }
-    });
+            },
+        });
 
-    checkboxs.on('ifChanged',function(event){
-      if(checkboxs.filter(':checked').length == checkboxs.length){
-        checkAll.prop('checked',true);
-      }else{
-        checkAll.prop('checked',false);
-      }
-      checkAll.iCheck('update');
-    })
-  }
+        $("#searchVal").on('click', function () {
+            //console.log(orderTables);
+            table.ajax.reload();
+        })
+
+        // tr点击选中事件
+        $('#example tbody').on('click', 'tr', function () {
+            $(this).toggleClass('warning');
+        });
+
+
+    }
+    function changeStauts(status, id, msg) {
+        layer.confirm(msg, {
+            btn: ['确定', '取消']
+        }, function (index) {
+            layer.close(index);
+            layer.load();
+            $.ajax({
+                'url': '{:url("OrderComment/updateStatus")}',
+                'type': 'POST',
+                'data': {
+                    'id': id,
+                    'status': status
+                },
+                'complete': function () {
+                },
+                'success': function (obj) {
+                    layer.closeAll();
+                    if (obj.code == 2000) {
+                        layer.msg('操作成功', function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.alert(obj.msg);
+                    }
+                },
+                'error': function () {
+                    layer.closeAll();
+                    layer.alert('请求失败');
+                }
+            });
+        });
+    }
+
+    function initEvent() {
+        var checkAll = $('input.all');  //全选的input
+        var checkboxs = $('input.check'); //所有单选的input
+
+        checkAll.on('ifChecked ifUnchecked', function (event) {
+            if (event.type == 'ifChecked') {
+                checkboxs.iCheck('check');
+            } else {
+                checkboxs.iCheck('uncheck');
+            }
+        });
+
+        checkboxs.on('ifChanged', function (event) {
+            if (checkboxs.filter(':checked').length == checkboxs.length) {
+                checkAll.prop('checked', true);
+            } else {
+                checkAll.prop('checked', false);
+            }
+            checkAll.iCheck('update');
+        })
+    }
+
 
 </script>
 {/block}

@@ -8,3 +8,5 @@
 /static/runtime/
 /.env
 /application/admin/controller/Map.php
+/thinkphp/
+/vendor/
