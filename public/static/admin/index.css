@@ -124,11 +124,10 @@ html,body{
 /*
   个人货主页面
 */
-.look{
+.look, .hang-up, .settle{
   color: #177ad8;
 }
-.look:hover{
-  text-decoration: none;
+.look:hover, .hang-up:hover, .settle:hover{
   color: #177ad8;
 }
 /*
@@ -256,6 +255,12 @@ html,body{
 .commission{
   width: 600px;
   margin: 0 auto;
+}
+/*
+  new add
+*/
+.form-inline .min-w{
+  width: 250px;
 }
 
 
