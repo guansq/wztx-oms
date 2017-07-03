@@ -1,7 +1,7 @@
 {extend name='extra@admin/content' /}
 
 {block name="style"}
-<link rel="stylesheet" href="//cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.css">
+<link href='https://cdn.bootcss.com/iCheck/1.0.2/skins/minimal/minimal.css' rel='stylesheet'>
 {/block}
 
 {block name="button"}
@@ -11,60 +11,107 @@
 {block name="content"}
 
 <main class="main">
-	<div class="mt_box">
-		<div class="inquiry_box">
+	<div class="head_box">
+		<a href="javascript:void(0);">订单管理</a>
+		<span> >> </span>
+		<a href="javascript:void(0);">订单列表</a>
+	</div>
+	<div class="con_box">
+		<h1 class="h1">订单列表 <span>（共200条）</span></h1>
+		<div class="operate_box">
 			<form class="form-inline">
-				<input type="text" class="form-control" id="code" placeholder="供应商编码">
-				<input type="text" class="form-control" id="name" placeholder="供应商名称">
-				<select class="form-control" id="type_name">
-					<option value="">供应商分类</option>
-				</select>
-				<select class="form-control" id="status">
-					<option value="">状态</option>
-					<option value="uncheck">待审核</option>
-					<option value="normal">正常</option>
-					<option value="forbid">禁用</option>
-				</select>
-				<select class="form-control" id="pay_way_status">
-					<option value="">付款方式审核</option>
-					<option value="uncheck">待审核</option>
-					<option value="pass">不需要审核</option>
-				</select>
-				<!--<select class="form-control">
-          <option>供应商资质审核</option>
-          <option>待审核</option>
-          <option>不需要审核</option>
-        </select>-->
-				<button type="button" id="searchVal" class="btn btn-info">查询</button>
+				<div class="form-group mr_20">
+					<input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地">
+					<select class="form-control mr_20">
+						<option>订单状态</option>
+						<option>报价中</option>
+						<option>待发货</option>
+						<option>发货中</option>
+						<option>已完成</option>
+					</select>
+					<select class="form-control mr_20">
+						<option>订单类型</option>
+						<option>同程配送</option>
+						<option>长途配送</option>
+					</select>
+					<select class="form-control mr_20">
+						<option>货物保险</option>
+						<option>有</option>
+						<option>无</option>
+					</select>
+					<input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="订单时间">
+				</div>
+				<button type="button" class="btn btn-primary">查询</button>
 			</form>
-		</div>
-		<div class="mt_table">
-			<div class="pb_15">
-				<!--<button type="button" id="synchronization_btn" class="btn btn-info mr_15">立即同步ERP数据</button>-->
-				<button type="button" data-modal='{:url("$classuri/add")}' class="btn btn-info" style="margin-right: 15px;">导入Excel</button>
-				<button type="button" id="excel_out"  class="btn btn-info" style="margin-right: 15px;">导出Excel</button>
-				<!--<button type="button" id="lookThrough" class="btn btn-warning mr_15">审核供应商</button>-->
-				<!--<button type="button" id="remove_btn" class="btn btn-danger mr_15">删除</button>-->
-			</div>
-			<div>
-				<table id="example" class="display table table-bordered" cellspacing="0" width="100%">
-					<thead>
-					<tr>
-						<th>供应商编码</th>
-						<th>供应商名称</th>
-						<th>供应商分类</th>
-						<th>技术评分</th>
-						<th>供应商交货及时率</th>
-						<th>供应商质量合格率</th>
-						<th>供应商资质评分</th>
-						<th>状态</th>
-						<th>付款方式审核</th>
-						<th>供应商资质</th>
-						<th>操作</th>
-					</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
+			<div class="operate_tab">
+				<div class="operate_table">
+					<table id="example" class="table table-bordered" width="100%" cellspacing="0">
+						<thead>
+						<tr>
+							<th><input class="all" type="checkbox"></th>
+							<th>订单编号</th>
+							<th>出发地</th>
+							<th>目的地</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td><input class="check" type="checkbox"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>
+								<a class="look" href="javascript: void(0);">查看</a>
+								<a class="hang-up" href="javascript: void(0);">挂起</a>
+								<a class="settle" href="javascript: void(0);">结算</a>
+							</td>
+						</tr>
+						<tr>
+							<td><input class="check" type="checkbox"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input class="check" type="checkbox"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input class="check" type="checkbox"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input class="check" type="checkbox"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input class="check" type="checkbox"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -73,23 +120,23 @@
 {/block}
 
 {block name="script"}
-<!--<script src="/static/admin/supporter/index.js"/>-->
 <script>
-  /**
-   * 供应商管理页面
-   * Created by Administrator on 2017/5/11.
-   */
-  var supporterTable;
-  require(["jquery.dataTables","laydate","layui"],function(){
+  require(["jquery.dataTables","icheck","laydate"],function(){
     require(["dataTables.bootstrap"],function(){
-      $(document).ready(function(){
+      $(document).ready(function() {
         initPage();
         initEvent();
-      });
+      } );
     })
   });
-
   function initPage(){
+
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_minimal',
+      radioClass: 'iradio_minimal',
+      increaseArea: '20%' // optional
+    });
+
     //时间日期选择器
     $(".date_time").focus(function(){
 			/*
@@ -118,38 +165,11 @@
       });
     });
 
-    //datatable
-    supporterTable = $('#example').DataTable({
 
-      "processing": true,
-      "serverSide": false,
-      "ajax": {
-        "url": '{:URL("Supporter/getSupList")}',
-        "type": "POST",
-        "data": function(parameter){
-          //添加额外的参数传给服务器
-          parameter.code = $("#code").val();
-          parameter.name = $("#name").val();
-          parameter.type_name = $("#type_name").val();
-          parameter.status = $("#status").val();
-          parameter.pay_way_status = $("#pay_way_status").val();
-        }
-      },
-      "pageLength": 10,
-      "columns": [
-        { "data": "code" },
-        { "data": "name" },
-        { "data": "type_name" },
-        { "data": "tech_score" },
-        { "data": "arv_rate" },
-        { "data": "pp_rate" },
-        { "data": "quali_score" },
-        { "data": "status" },
-        { "data": "pay_type_status" },
-        { "data": "quali" },
-        { "data": "action" }
-      ],
-      //paging: false, //设置是否分页
+
+
+    var table = $('#example').DataTable({
+      //paging: false, 设置是否分页
       "info": false,  //去除左下角的信息
       "lengthChange": false, //是否允许用户改变表格每页显示的记录数
       "ordering": false, //是否允许Datatables开启排序
@@ -163,91 +183,38 @@
         }
       }
     });
-
     // tr点击选中事件
     $('#example tbody').on( 'click', 'tr', function () {
-      $(this).toggleClass('danger');
-    } );
-    // 立即同步ERP 点击事件
-    $('#synchronization_btn').click( function () {
-      var url = "{:URL('Supporter/updataU9info')}";
-
-      layer.confirm("你确定要同步数据吗？",{
-        bth: ['确定','取消']
-      },function(index,layero){
-        layer.close(index);
-        layer.load(1,{
-          shade: [0.1,"#fff"]
-        });
-        $.post(url,function(resdata){
-          var obj = JSON.parse(resdata);
-          if(obj.supInfo.code == 2000 || obj.prInfo.code == 2000 || obj.prToIo.code == 2000){
-            $.form.reload();
-            layer.closeAll();
-          }else{
-            alert("更新失败");
-          }
-        })
-      });
-
+      $(this).toggleClass('warning');
     });
-    //审核供应商
-    $('#lookThrough').click( function () {
-      //....
-    });
-    //删除物料
+
+    //删除
     $('#remove_btn').click( function () {
-      supporterTable.rows('.danger').remove().draw( false );
+      table.rows('.warning').remove().draw( false );
     } );
-
-
   }
 
   function initEvent(){
-    //编辑事件
-    $('#example .edit').click(function(e){
-      //
+    var checkAll =$('input.all');  //全选的input
+    var checkboxs =$('input.check'); //所有单选的input
+
+    checkAll.on('ifChecked ifUnchecked',function(event){
+      if(event.type == 'ifChecked'){
+        checkboxs.iCheck('check');
+      }else{
+        checkboxs.iCheck('uncheck');
+      }
+    });
+
+    checkboxs.on('ifChanged',function(event){
+      if(checkboxs.filter(':checked').length == checkboxs.length){
+        checkAll.prop('checked',true);
+      }else{
+        checkAll.prop('checked',false);
+      }
+      checkAll.iCheck('update');
     })
   }
-
-  //导入Excel
-  $("#excel_in").click(function(){
-    layer.confirm('确定导入吗', {
-      btn: ['确定导入','取消导入']
-    }, function(index){
-      layer.close(index);
-
-      //在这里面输入任何合法的js语句
-			/*layer.open({
-			 type: 1 //Page层类型
-			 ,area: ['500px', '300px']
-			 //,title: '你好，layer。'
-			 ,shade: 0.6 //遮罩透明度
-			 //,maxmin: true //允许全屏最小化
-			 ,anim: 1 //0-6的动画形式，-1不开启
-			 ,content: '<div style="margin-left: 180px;margin-top: 50px;">' +
-			 '<form action="{:url(\'Supporter/uploadExcel\')}" class="layui-form" enctype="multipart/form-data" method="post">' +
-			 '<input type="file" lay-title="请上传excel" align="center" name="excel" lay-ext="xlsx|xls" > ' +
-			 ' <br> <button type="submit" class="layui-btn">上传并导入数据</button></form></div>'
-			 });*/
-    });
-  })
-
-
-  //导出
-  $("#excel_out").click(function(){
-
-    layer.confirm('是否进行导出', {
-      btn: ['确定导出','取消导出']
-    }, function(index){
-      layer.close(index);
-      window.open("{:url('Supporter/exportExcel')}");
-    });
-  })
-  $("#searchVal").on('click', function () {
-    //console.log(orderTables);
-    supporterTable.ajax.reload();
-  })
 
 </script>
 {/block}
