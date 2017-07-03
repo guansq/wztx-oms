@@ -15,18 +15,21 @@
     <h1 class="h1">佣金设置</h1>
     <div class="operate_box">
       <div class="commission">
-        <form class="form-horizontal">
+        <form class="form-horizontal" onsubmit="return false;" action="{:url('Config/index')}" data-auto="true" method="post">
           <div class="form-group" style="margin: 0 0 15px 0;">
             <label class="col-sm-2 control-label">分享佣金&nbsp;:&nbsp;</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" placeholder="">
+              <input type="text" class="form-control" name="share_percent" placeholder="" style="float:left; width: 80%" value="{:sysconf('share_percent')}">%
             </div>
+
+          </div>
+          <div class="form-group" style="margin: 0 0 15px 0;">
+            金额以首单总额为基数计算
           </div>
           <div class="form-group custom_btn">
             <label class="col-sm-2 control-label"></label>
             <div class="col-sm-6">
-              <button type="button" class="btn btn-primary mr_20">修改</button>
-              <button type="button" class="btn btn-primary">确定</button>
+              <button type="submit" class="btn btn-primary" >确定</button>
             </div>
           </div>
         </form>

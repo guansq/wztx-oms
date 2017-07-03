@@ -18,7 +18,7 @@ return [
         'driver' => 'Driver',
         'shipper' => 'Shipper',
         'financial' => 'Financial',
-        'withdrawal' => 'Withdrawal',
+        'withdraw' => 'Withdraw',
         'share' => 'Share',
         'order' => 'Order',
         'orderComment' => 'OrderComment',

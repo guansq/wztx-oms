@@ -222,7 +222,10 @@ class Driver extends BaseController
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
     }
-
+    //获取司机抢单范围
+    public function range(){
+        return view();
+    }
     /**
      * 显示创建资源表单页.
      *
@@ -250,10 +253,10 @@ class Driver extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id)
+    public function read()
     {
         //
-        return view('edit');
+     //  return view('edit');
     }
 
     /**

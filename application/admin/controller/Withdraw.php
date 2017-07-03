@@ -4,33 +4,47 @@ namespace app\admin\controller;
 
 use think\Request;
 
-class Share extends BaseController {
-    /**
-     * 分享设置
-     *
-     * @return \think\Response
-     */
-    public function setting() {
-        return view();
-    }
+class Withdraw extends BaseController{
+
 
     /**
      * 显示资源列表
      *
      * @return \think\Response
      */
-    public function index() {
+    public function index(){
+        $where =[];
+        $start = input('start') == '' ? 0 : input('start');
+        $length = input('length') == '' ? 10 : input('length');
+        $withdrawLogic = Model('Withdraw', 'logic');
+        $listAll = $withdrawLogic->getListInfo($start, $length, $where);
+        var_dump($listAll);
+
+        $returnArr = [];
+        foreach ($listAll as $key =>$item){
+            $list1 = $withdrawLogic->getListItem(['id'=>$item['id']]);
+            var_dump($list1);
+            $returnArr[] = [
+//                'accountid' =>  $list[0]['shareid'],//id
+//                'sharename' => $list[0]['sharename'],//用户名称
+//                'num' => $list[0]['num'],//手机号
+//                'total' =>  $list[0]['total'],
+//                'action' => ''
+            ];
+        }
+
+
         return view();
     }
 
     /**
-     * 得到分享列表-司机和货主端
+     * 得到提现列表-司机和货主端
      */
 
-    public function getShareList() {
+    public function getWithDrawList() {
         $where = [];
         $get = input('param.');
-        foreach (['name'] as $key) {
+        foreach (['name','type'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
                     $where['sharename'] = ['like', "%{$get[$key]}%"];
@@ -41,33 +55,32 @@ class Share extends BaseController {
         }
         $start = input('start') == '' ? 0 : input('start');
         $length = input('length') == '' ? 10 : input('length');
-        $shareLogic = Model('Share', 'logic');
-        $listAll = $shareLogic->getListInfo($start, $length, $where);
+        $withdrawLogic = Model('Withdraw', 'logic');
+        $list = $withdrawLogic->getListInfo($start, $length, $where);
         $returnArr = [];
-        foreach ($listAll as $key =>$item){
-            $list = $shareLogic->getListItem(['shareid'=>$item['shareid'],'type'=>$item['type']]);
+        foreach ($list as $key =>$item){
+            $list = $withdrawLogic->getListItem(['shareid'=>$item['shareid'],'type'=>$item['type']]);
             $returnArr[] = [
                 'accountid' =>  $list[0]['shareid'],//id
                 'sharename' => $list[0]['sharename'],//用户名称
                 'num' => $list[0]['num'],//手机号
                 'total' =>  $list[0]['total'],
                 'action' => ''
-                ];
+            ];
         }
 
-        $total = $shareLogic->getListNum($where);
+        $total = $withdrawLogic->getListNum($where);
         // var_dump($returnArr);
         $info = ['draw' => time(), 'recordsTotal' => $total, 'recordsFiltered' => $total, 'data' => $returnArr, 'extdata' => $where];
 
         return json($info);
     }
-
     /**
      * 显示创建资源表单页.
      *
      * @return \think\Response
      */
-    public function create() {
+    public function create(){
         return view();
     }
 
@@ -77,7 +90,7 @@ class Share extends BaseController {
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function save(Request $request) {
+    public function save(Request $request){
         //
     }
 
@@ -87,8 +100,9 @@ class Share extends BaseController {
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id) {
-        return view('setting');
+    public function read($id){
+        //
+        return view('edit');
     }
 
     /**
@@ -97,7 +111,7 @@ class Share extends BaseController {
      * @param  int $id
      * @return \think\Response
      */
-    public function edit($id) {
+    public function edit($id){
 
     }
 
@@ -105,10 +119,10 @@ class Share extends BaseController {
      * 保存更新的资源
      *
      * @param  \think\Request $request
-     * @param  int $id
+     * @param  int            $id
      * @return \think\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id){
         //
     }
 
@@ -118,7 +132,7 @@ class Share extends BaseController {
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id) {
+    public function delete($id){
         //
     }
 }
