@@ -5,36 +5,169 @@
 {/block}
 
 {block name="content"}
-<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action='{:url("$classuri")}' data-auto="true" method="post">
-  <div class="layui-form-item">
-    <p class="h2 text-center"></p>
-  </div>
 
-  <div class="layui-form-item">
-    <label class="layui-form-label">Banner名称 </label>
-    <div class="layui-input-block">
-      <input type="text" name="name" value='' required="required" title="请输入Banner名称" placeholder="请输入Banner名称" class="layui-input">
+<main class="main">
+  <div class="head_box">
+    <a href="javascript:void(0);">订单管理</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">订单列表</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">订单详情</a>
+  </div>
+  <div class="con_box">
+    <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>订单详情</p>
+    <div class="details_box">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>基本信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="info_table">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td class="col-sm-6">订单状态</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">订单号</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">货品名称</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">重量</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">起始地</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">目的地</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="authentication">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>收货信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="info_table">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td class="col-sm-6">收货人姓名</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">收货人电话</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">收货人地址</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="authentication">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>寄件信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="info_table">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td class="col-sm-6">寄件人姓名</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">寄件人电话</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">寄件人地址</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="authentication">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>车辆信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="info_table">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td class="col-sm-6">车型</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">车长</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">用车时间</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">发货时间</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">到达时间</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">车主姓名</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">联系电话</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          <tr>
+            <td class="col-sm-6">总运费</td>
+            <td class="col-sm-6"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="authentication">
+      <div class="datails_tit">
+        <span class="hr_span"></span>
+        <h3>凭证信息</h3>
+        <span class="hr_span"></span>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          凭证照片1
+        </section>
+      </div>
+      <div class="auth_box">
+        <section class="auth_img">
+          凭证照片2
+        </section>
+      </div>
     </div>
   </div>
+</main>
 
-  <div class="layui-form-item">
-    <label class="layui-form-label">上传图片 </label>
-    <div class="layui-input-block">
-      <img data-tips-image style="height:auto;max-height:100px;min-width:100px" src=""/>
-      <input type="hidden" name="src" onchange="$(this).prev('img').attr('src', this.value)" value="" class="layui-input">
-      <a class="btn btn-link" data-file="one" data-field="src">上传图片</a>
-    </div>
-  </div>
-
-
-
-  <div class="hr-line-dashed"></div>
-
-  <div class="layui-form-item text-center">
-    <button class="layui-btn" type='submit'>保存数据</button>
-  </div>
-
-</form>
 {/block}
 
 {block name="script"}
