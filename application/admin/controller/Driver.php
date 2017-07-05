@@ -226,6 +226,14 @@ class Driver extends BaseController
     public function range(){
         return view();
     }
+    //车型设置
+    public function carstyle(){
+        return view();
+    }
+    //车长设置
+    public function carlength(){
+        return view();
+    }
     /**
      * 显示创建资源表单页.
      *
