@@ -34,6 +34,7 @@ html,body{
   font-size: 22px;
   padding-bottom: 10px;
   border-bottom: 1px solid #dddddd;
+  overflow: hidden;
 }
 .con_box .h1 span{
   font-size: 13px;
@@ -261,6 +262,25 @@ html,body{
 */
 .form-inline .min-w{
   width: 250px;
+}
+.vehicle{
+  display: inline-block;
+  float: right;
+  margin-right: 20px;
+}
+.ve_con{
+  padding-top: 20px;
+}
+.ve_con .ve_type{
+  font-size: 15px;
+  padding: 10px 15px;
+  display: inline-block;
+}
+.ve_con .ve_type input{
+  vertical-align: sub;
+}
+.velength_table{
+  padding-top: 25px;
 }
 
 
