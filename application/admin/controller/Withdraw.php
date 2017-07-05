@@ -31,7 +31,8 @@ class Withdraw extends BaseController{
                 }else if ($key == 'orderno') {
                     $where['withdraw_orderid'] =$get[$key];
                 }else if ($key == 'applytime') {
-                    $where['create_at'] =strtotime($get[$key]);
+                    $where['create_at'] = array('between', array(strtotime($get[$key]), strtotime($get[$key])+86400));
+                  // $where['create_at'] =strtotime($get[$key]);
                 }else {
                     $where[$key] = $get[$key];
                 }
