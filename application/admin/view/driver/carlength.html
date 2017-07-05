@@ -4,38 +4,80 @@
 
 {/block}
 
+{block name="style"}
+
+{/block}
+
 {block name="content"}
 <main class="main">
-    <!--<div class="head_box">-->
-        <!--<a href="javascript:void(0);">抢单范围设置</a>-->
-    <!--</div>-->
+    <div class="head_box">
+        <a href="javascript:void(0);">车长设置</a>
+    </div>
     <div class="con_box">
-        <h1 class="h1">抢单范围设置</h1>
-        <div class="operate_box">
-            <div class="commission">
-                <form class="form-horizontal" onsubmit="return false;" action="{:url('Config/index')}" data-auto="true" method="post">
-                    <div class="form-group" style="margin: 0 0 15px 0;">
-                        <label class="col-sm-3 control-label">司机可抢单范围 ：&nbsp;</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" name="grab_range" placeholder="" value="{:sysconf('grab_range')}" >
-                        </div>
-                        <label class="col-sm-2 control-label">公里&nbsp;</label>
-                    </div>
-
-                    <div class="form-group custom_btn">
-                        <label class="col-sm-3 control-label"></label>
-                        <div class="col-sm-5">
-                            <button type="submit" class="btn btn-primary" >确定</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
+        <h1 class="h1">车长
+            <p class="vehicle">
+                <button type="button" class="btn btn-info" id="add_vehicle">新增</button>
+                <button type="button" class="btn btn-info" id="rem_vehicle">删除</button>
+            </p>
+        </h1>
+        <div class="velength_table">
+            <table id="example" class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>车长</th>
+                    <th>起步价</th>
+                    <th>起步公里数</th>
+                    <th>超出起步公里费</th>
+                    <th>计重费</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>50.0元/公里</td>
+                    <td>0.1元/公里/公斤</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </main>
 {/block}
 
 {block name="script"}
+<script>
+  require(["jquery.dataTables"], function () {
+    require(["dataTables.bootstrap"], function () {
+      $(document).ready(function () {
+        initPage();
+      });
+    })
+  });
+  
+  function initPage(){
+    var table = $('#example').DataTable({
+      //paging: false, 设置是否分页
+      "info": false,  //去除左下角的信息
+      "lengthChange": false, //是否允许用户改变表格每页显示的记录数
+      "ordering": false, //是否允许Datatables开启排序
+      "searching": false,  //是否允许Datatables开启本地搜索
+      language: {
+        "oPaginate": {
+          "sFirst": "首页",
+          "sPrevious": "上页",
+          "sNext": "下页",
+          "sLast": "末页"
+        }
+      }
+    });
+    // tr点击选中事件
+    $('#example tbody').on( 'click', 'tr', function () {
+      $(this).toggleClass('warning');
+    });
 
+  }
+
+</script>
 {/block}
