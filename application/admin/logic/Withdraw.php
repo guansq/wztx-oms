@@ -10,7 +10,7 @@ class Withdraw extends BaseLogic {
        * 得到提现列表
        */
     public function getListInfo($start, $length, $where = []) {
-        $list = Db::name('Withdraw')->field('*')->limit("$start,$length")->select();
+        $list = Db::name('Withdraw')->field('*')->limit("$start,$length")->where($where)->select();
         //echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();
@@ -20,7 +20,7 @@ class Withdraw extends BaseLogic {
     }
 
     /*
-       * 得到提现分页列表
+       * 详情页面
        */
     public function getListItem($where = []) {
 
@@ -35,7 +35,14 @@ class Withdraw extends BaseLogic {
 
     //获得筛选总条数
     public function getListNum($where = []) {
-        $list = Db::name('Withdraw')->field('shareid,type')->group('shareid and type')->where($where)->count();
+        $list = Db::name('Withdraw')->field('*')->where($where)->count();
         return $list;
     }
+    //提现状态
+    function updateStatus($where, $status)
+    {
+        $list = Db::name('Withdraw')->where($where)->update($status);
+        return $list;
+    }
+
 }
