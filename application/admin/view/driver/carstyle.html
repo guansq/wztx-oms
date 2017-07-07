@@ -17,59 +17,32 @@
         <h1 class="h1">车型
             <p class="vehicle">
                 <button type="button" class="btn btn-info" id="add_vehicle">新增</button>
-                <button type="button" class="btn btn-info" id="rem_vehicle">删除</button>
+                <button type="button" class="btn btn-info" id="rem_vehicle">选中车型显示</button>
             </p>
         </h1>
         <div class="ve_con">
+            {volist name='carstyle' id='pcarstyle'}
             <span class="ve_type">
-                <input type="checkbox">
-                车型一
+                <input type="checkbox" name="checkname" id="check{$pcarstyle.id}" value="{$pcarstyle.id}" {if $pcarstyle.status eq 0}checked="true"{/if}  >
+                {$pcarstyle.name}
             </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span><span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
-            <span class="ve_type">
-                <input type="checkbox">
-                车型一
-            </span>
+            {/volist}
         </div>
     </div>
+    <form id="addstyle"class="layui-form layui-box" style='padding:25px 30px 20px 0;display: none' action='{:url("$classuri/carstyleadd")}' data-auto="true" method="post">
+        <div class="layui-form-item">
+            <p class="h2 text-center"></p>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">车型名称 </label>
+            <div class="layui-input-block">
+                <input type="text" name="name" value='' required="required" title="请输入车型名称" placeholder="请输入车型名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type='submit'>保存数据</button>
+        </div>
+    </form>
 </main>
 {/block}
 
@@ -91,6 +64,46 @@
   }
   
   function initEvent(){
+
+      $('#add_vehicle').click(function () {
+          $("#addstyle").show();
+      });
+      //删除
+      $('#rem_vehicle').click(function () {
+          var text="";
+          $("input[name=checkname]").each(function() {
+              if ($(this).is(':checked')) {
+                  text += ","+$(this).val();
+              }
+          });
+          $.ajax({
+              'url' : '{:url("Driver/carstyledel")}',
+              'type' : 'POST',
+              'data' : {
+                  'allid':text
+              },
+              'complete' : function(){
+              },
+              'success' : function(obj){
+                  layer.closeAll();
+                  if(obj.code == 2000){
+                      layer.msg('修改成功', function(){
+                          location.reload();
+                      });
+                  }else{
+                      layer.alert(obj.msg);
+                  }
+              },
+              'error' : function(){
+                  layer.closeAll();
+                  layer.alert('请求失败');
+              }
+          });
+      });
+
+
+
+
     
   }
 

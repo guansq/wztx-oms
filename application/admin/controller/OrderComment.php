@@ -33,7 +33,7 @@ class OrderComment extends BaseController
         foreach (['ordernum', 'name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
-                    $where['spbasename|drbasename'] = ['like', "%{$get[$key]}%"];
+                    $where['sp_name|dr_name'] = ['like', "%{$get[$key]}%"];
                 } elseif ($key == 'ordernum') {
                     $where['pay_orderid'] = ['like', "%{$get[$key]}%"];
                 } else {
@@ -43,11 +43,11 @@ class OrderComment extends BaseController
         }
         //评论时间
         if (!empty($get['begintime']) && !empty($get['endtime'])) {
-            $where['posttime'] = array('between', array(strtotime($get['begintime']), strtotime($get['endtime'])));
+            $where['post_time'] = array('between', array(strtotime($get['begintime']), strtotime($get['endtime'])));
         } elseif (!empty($get['begintime'])) {
-            $where['posttime'] = array('egt', strtotime($get['begintime']));
+            $where['post_time'] = array('egt', strtotime($get['begintime']));
         } elseif (!empty($get['endtime'])) {
-            $where['posttime'] = array('elt', strtotime($get['endtime']));
+            $where['post_time'] = array('elt', strtotime($get['endtime']));
         }
 
         $start = input('start') == '' ? 0 : input('start');
@@ -67,11 +67,11 @@ class OrderComment extends BaseController
             $returnArr[] = [
                 'id' => $v['id'],//id
                 'pay_orderid' => $v['pay_orderid'],//订单编号
-                'spbasename' => $v['spbasename'],//评论者
-                'limitship' => $v['limitship'] . '星',//发货时效几星
+                'spbasename' => $v['sp_name'],//评论者
+                'limitship' => $v['limit_ship'] . '星',//发货时效几星
                 'attitude' => $v['attitude'] . '星',//服务态度几星
                 'satisfaction' => $v['satisfaction'] . '星',//满意度 几星
-                'posttime' => date('Y-m-d H:i:s', $v['posttime']),//评论时间
+                'posttime' => date('Y-m-d H:i:s', $v['post_time']),//评论时间
                 'content' => $v['content'],//评论信息
                 'status' => $v['status'], //是否屏蔽
                 'action' => $action

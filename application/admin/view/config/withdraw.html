@@ -1,0 +1,88 @@
+{extend name='extra@admin/content' /}
+
+{block name="button"}
+
+{/block}
+
+
+{block name="content"}
+<main class="main">
+
+    <div class="con_box">
+        <h1 class="h1">保证金设置</h1>
+        <div class="operate_box">
+            <div class="commission">
+                <form class="form-horizontal" onsubmit="return false;" action="{:url('Config/index')}" data-auto="true"
+                      method="post">
+                    <div class="form-group" style="margin: 0 0 15px 0;">
+                        <label class="col-sm-4 control-label ">账户余额可提现开始日期&nbsp;:&nbsp;</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control date_time" name="withdraw_begintime" placeholder=""
+                                   style="float:left; width: 80%" value="{:sysconf('withdraw_begintime')}">
+                        </div>
+
+                    </div>
+                    <div class="form-group" style="margin: 0 0 15px 0;">
+                        <label class="col-sm-4 control-label ">账户余额可提现结束日期&nbsp;:&nbsp;</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control date_time" name="withdraw_endtime" placeholder=""
+                                   style="float:left; width: 80%" value="{:sysconf('withdraw_endtime')}">
+                        </div>
+
+                    </div>
+                    <div class="form-group custom_btn">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>
+{/block}
+
+{block name="script"}
+<script>
+    require(["jquery.dataTables", "icheck", "laydate"], function () {
+        require(["dataTables.bootstrap"], function () {
+            $(document).ready(function () {
+                initPage();
+
+            });
+        })
+    });
+
+    function initPage() {
+        //时间日期选择器
+        $(".date_time").focus(function () {
+            /*
+             laydate插件提供显示日期控件的方法
+             laydate(options)
+             * options - 选项,格式为 { key : value }
+             * 选项
+             * format - 日期格式
+             *
+             默认格式为 YYYY-MM-DD hh:mm:ss(标准格式)
+             * 客户端
+             * 服务器端
+             * 数据库
+             * istime - 是否开启时间选择
+             * 默认值为false,不开启
+             * isclear - 是否显示清空按钮
+             * istoday - 是否显示今天按钮
+             * issure - 是否显示确认按钮
+             */
+            laydate({
+                format: "YYYY-MM-DD",
+                //istime : true,
+                isclear: true,
+                istoday: true,
+                issure: true
+            });
+        });
+    }
+</script>
+{/block}

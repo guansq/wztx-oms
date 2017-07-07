@@ -12,7 +12,7 @@ class Share extends BaseLogic
        */
     public function getListInfo($start, $length, $where = [])
     {
-        $list = Db::name('ShareList')->field('shareid,type')->group('shareid and type')->limit("$start,$length")->select();
+        $list = Db::name('ShareList')->field('share_id,type')->group('share_id and type')->limit("$start,$length")->select();
         //echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();
@@ -26,7 +26,7 @@ class Share extends BaseLogic
     public function getListItem($where=[])
     {
 
-        $list = Db::name('ShareList')->where($where)->field('count(*) num ,SUM(amount) total,sharename,shareid')->select();
+        $list = Db::name('ShareList')->where($where)->field('count(*) num ,SUM(amount) total,share_name,share_id')->select();
        // echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();
@@ -38,7 +38,7 @@ class Share extends BaseLogic
     //获得筛选总条数
     public function getListNum($where = [])
     {
-        $list = Db::name('ShareList')->field('shareid,type')->group('shareid and type')->where($where)->count();
+        $list = Db::name('ShareList')->field('share_id,type')->group('share_id and type')->where($where)->count();
         return $list;
     }
 }

@@ -5,13 +5,14 @@ namespace app\admin\controller;
 use think\Request;
 use PHPExcel;
 use PHPExcel_IOFactory;
-class Financial extends BaseController{
+
+class Financial extends BaseController {
     /**
      * 交易统计
      *
      * @return \think\Response
      */
-    public function tcStatistics(){
+    public function tcStatistics() {
         return view();
     }
 
@@ -20,7 +21,7 @@ class Financial extends BaseController{
      *
      * @return \think\Response
      */
-    public function rechargeRecord(){
+    public function rechargeRecord() {
 
         return view();
     }
@@ -31,20 +32,20 @@ class Financial extends BaseController{
      */
 
     public function getRechargeList() {
-       // rt_sp_recharge_order
+        // rt_sp_recharge_order
         $where = [];
         $get = input('param.');
         // var_dump($get);
         //手机号码	真实姓名	用户身份	充值时间	充值路径
-        foreach (['phone','name','type','paytime','payway'] as $key) {
+        foreach (['phone', 'name', 'type', 'paytime', 'payway'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
                     $where['name'] = ['like', "%{$get[$key]}%"];
-                }else if ($key == 'payway') {
-                    $where['pay_way'] =$get[$key];
-                }else if ($key == 'paytime') {
-                    $where['pay_time'] = array('between', array(strtotime($get[$key]), strtotime($get[$key])+86400));
-                }else {
+                } else if ($key == 'payway') {
+                    $where['pay_way'] = $get[$key];
+                } else if ($key == 'paytime') {
+                    $where['pay_time'] = array('between', array(strtotime($get[$key]), strtotime($get[$key]) + 86400));
+                } else {
                     $where[$key] = $get[$key];
                 }
             }
@@ -56,8 +57,8 @@ class Financial extends BaseController{
         $returnArr = [];
         foreach ($listAll as $k => $v) {
             $types = [0 => '个人货主端', 1 => '公司货主', 2 => '司机端'];
-            $payways = [0=>'',1=>'支付宝',2=>'微信'];
-            $paystatus = [0=>'未支付',1=>'支付成功',2=>'支付失败'];
+            $payways = [0 => '', 1 => '支付宝', 2 => '微信'];
+            $paystatus = [0 => '未支付', 1 => '支付成功', 2 => '支付失败'];
             //  $action = '';
             //手机号码	真实姓名	用户身份	充值时间	充值路径	充值金额	账户余额
 
@@ -65,8 +66,8 @@ class Financial extends BaseController{
                 'id' => $v['id'],//id
                 'phone' => $v['phone'],//手机号
                 'name' => $v['name'],//真实姓名
-                'type' =>$types[ $v['type']],//用户身份
-                'paytime' => date('Y-m-d',$v['pay_time']),//充值时间
+                'type' => $types[$v['type']],//用户身份
+                'paytime' => empty($v['pay_time']) ? '' : date('Y-m-d', $v['pay_time']),//充值时间
                 'payway' => $payways[$v['pay_way']],//充值路径
                 'amount' => $v['real_amount'],//充值金额 实际支付金额
                 'balance' => $v['balance'],// 账户余额
@@ -74,21 +75,21 @@ class Financial extends BaseController{
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Financial/showdetail', ['id' => $v['id']]) . '" >查看</a>',
             ];
         }
-      // var_dump($returnArr);
+        // var_dump($returnArr);
         $total = $rechargeLogic->getListNum($where);
         // var_dump($returnArr);
         $info = ['draw' => time(), 'recordsTotal' => $total, 'recordsFiltered' => $total, 'data' => $returnArr, 'extdata' => $where];
 
         return json($info);
     }
+
     /**
      *显示详情
      *
      * @param  int $id
      * @return \think\Response
      */
-    public function showdetail($id)
-    {
+    public function showdetail($id) {
         $where = [];
         $type = 0;
         $id = intval(input('id'));
@@ -100,38 +101,39 @@ class Financial extends BaseController{
         $returnArr = $item[0];
         $this->assign('id', $id);
         $this->assign('item', $returnArr);
-        return view('edit');
+        //return view('edit');
     }
+
     /**
      * 显示资源列表
      *
      * @return \think\Response
      */
-    public function index(){
+    public function index() {
         return view();
     }
 
     //导出表格
-    public function exportExcel(){
+    public function exportExcel() {
         // rt_sp_recharge_order
         $where = [];
         $get = input('param.');
         // var_dump($get);
         //手机号码	真实姓名	用户身份	充值时间	充值路径
-        foreach (['phone','name','type','paytime','payway'] as $key) {
+        foreach (['phone', 'name', 'type', 'paytime', 'payway'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
                     $where['name'] = ['like', "%{$get[$key]}%"];
-                }else if ($key == 'payway') {
-                    $where['pay_way'] =$get[$key];
-                }else if ($key == 'paytime') {
-                    $where['pay_time'] = array('between', array(strtotime($get[$key]), strtotime($get[$key])+86400));
-                }else {
+                } else if ($key == 'payway') {
+                    $where['pay_way'] = $get[$key];
+                } else if ($key == 'paytime') {
+                    $where['pay_time'] = array('between', array(strtotime($get[$key]), strtotime($get[$key]) + 86400));
+                } else {
                     $where[$key] = $get[$key];
                 }
             }
         }
-        $path = ROOT_PATH.'public'.DS.'upload'.DS;
+        $path = ROOT_PATH . 'public' . DS . 'upload' . DS;
         $PHPExcel = new PHPExcel(); //实例化PHPExcel类，类似于在桌面上新建一个Excel表格
         $PHPSheet = $PHPExcel->getActiveSheet(); //获得当前活动sheet的操作对象
         $PHPSheet->setTitle('充值记录导出'); //给当前活动sheet设置名称
@@ -148,33 +150,33 @@ class Financial extends BaseController{
         $returnArr = [];
         foreach ($listAll as $k => $v) {
             $types = [0 => '个人货主端', 1 => '公司货主', 2 => '司机端'];
-            $payways = [0=>'',1=>'支付宝',2=>'微信'];
-            $paystatus = [0=>'未支付',1=>'支付成功',2=>'支付失败'];
+            $payways = [0 => '', 1 => '支付宝', 2 => '微信'];
+            $paystatus = [0 => '未支付', 1 => '支付成功', 2 => '支付失败'];
             //  $action = '';
             //手机号码	真实姓名	用户身份	充值时间	充值路径	充值金额	账户余额
             // var_dump($v);
             $num = $num + 1;
-            $PHPSheet->setCellValue('A'.$num, $v['id'])
-                ->setCellValue('B'.$num, $v['phone'])
-                ->setCellValue('C'.$num, $v['name'])
-                ->setCellValue('D'.$num, $types[ $v['type']])
-                ->setCellValue('E'.$num, date('Y-m-d',$v['pay_time']))
-                ->setCellValue('F'.$num, $payways[$v['pay_way']])
-                ->setCellValue('G'.$num,  $v['real_amount'])
-                ->setCellValue('H'.$num, $v['balance'])
-                ->setCellValue('I'.$num,$paystatus[$v['pay_status']]);
+            $PHPSheet->setCellValue('A' . $num, $v['id'])
+                ->setCellValue('B' . $num, $v['phone'])
+                ->setCellValue('C' . $num, $v['name'])
+                ->setCellValue('D' . $num, $types[$v['type']])
+                ->setCellValue('E' . $num, date('Y-m-d', $v['pay_time']))
+                ->setCellValue('F' . $num, $payways[$v['pay_way']])
+                ->setCellValue('G' . $num, $v['real_amount'])
+                ->setCellValue('H' . $num, $v['balance'])
+                ->setCellValue('I' . $num, $paystatus[$v['pay_status']]);
 
         }
 
         $PHPWriter = PHPExcel_IOFactory::createWriter($PHPExcel, 'Excel2007');//按照指定格式生成Excel文件，'Excel2007’表示生成2007版本的xlsx，
-        $PHPWriter->save($path.'/recharge.xlsx'); //表示在$path路径下面生成itemList.xlsx文件
+        $PHPWriter->save($path . '/recharge.xlsx'); //表示在$path路径下面生成itemList.xlsx文件
         $file_name = "recharge.xlsx";
-        $contents = file_get_contents($path.'/recharge.xlsx');
-        $file_size = filesize($path.'/recharge.xlsx');
+        $contents = file_get_contents($path . '/recharge.xlsx');
+        $file_size = filesize($path . '/recharge.xlsx');
         header("Content-type: application/octet-stream;charset=utf-8");
         header("Accept-Ranges: bytes");
         header("Accept-Length: $file_size");
-        header("Content-Disposition: attachment; filename=".$file_name);
+        header("Content-Disposition: attachment; filename=" . $file_name);
         exit($contents);
     }
 
@@ -183,7 +185,7 @@ class Financial extends BaseController{
      *
      * @return \think\Response
      */
-    public function create(){
+    public function create() {
         return view();
     }
 
@@ -193,7 +195,7 @@ class Financial extends BaseController{
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function save(Request $request){
+    public function save(Request $request) {
         //
     }
 
@@ -203,7 +205,7 @@ class Financial extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id){
+    public function read($id) {
         //
         return view('edit');
     }
@@ -214,7 +216,7 @@ class Financial extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function edit($id){
+    public function edit($id) {
 
     }
 
@@ -222,10 +224,10 @@ class Financial extends BaseController{
      * 保存更新的资源
      *
      * @param  \think\Request $request
-     * @param  int            $id
+     * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id) {
         //
     }
 
@@ -235,7 +237,7 @@ class Financial extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id){
+    public function delete($id) {
         //
     }
 }

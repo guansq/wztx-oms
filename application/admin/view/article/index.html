@@ -40,19 +40,26 @@
 <table class="table table-hover">
 	<thead>
 	<tr>
-		<th class='list-table-check-td'>
-			<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
-		</th>
-		<th class='list-table-sort-td'>
-			<button type="submit" class="layui-btn layui-btn-normal layui-btn-mini">排 序</button>
-		</th>
-		<th class='text-center'>名称</th>
 		<th class='text-center'>标题</th>
+		<th class='text-center'>内容</th>
 		<th class='text-center'>操作</th>
 	</tr>
 	</thead>
 	<tbody>
-
+	{foreach $list as $key=>$vo}
+	<tr>
+		<td class='text-center'>{$vo.title}</td>
+		<td class='text-center'>{$vo.content}</td>
+		<td class='text-center'>
+			{if auth("$classuri/add")}
+			<!--<a class="layui-btn" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>-->
+			{/if}
+			{if auth("$classuri/del")}
+			<a class="layui-btn" data-update="{$vo.id}" data-field="delete" data-action='{:url("$classuri/del")}'>删除</a>
+			{/if}
+		</td>
+	</tr>
+	{/foreach}
 		</tbody>
 	</table>
 </form>

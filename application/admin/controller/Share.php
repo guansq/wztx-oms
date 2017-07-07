@@ -33,7 +33,7 @@ class Share extends BaseController {
         foreach (['name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
-                    $where['sharename'] = ['like', "%{$get[$key]}%"];
+                    $where['share_name'] = ['like', "%{$get[$key]}%"];
                 } else {
                     $where[$key] = $get[$key];
                 }
@@ -45,10 +45,10 @@ class Share extends BaseController {
         $listAll = $shareLogic->getListInfo($start, $length, $where);
         $returnArr = [];
         foreach ($listAll as $key =>$item){
-            $list = $shareLogic->getListItem(['shareid'=>$item['shareid'],'type'=>$item['type']]);
+            $list = $shareLogic->getListItem(['share_id'=>$item['share_id'],'type'=>$item['type']]);
             $returnArr[] = [
-                'accountid' =>  $list[0]['shareid'],//id
-                'sharename' => $list[0]['sharename'],//用户名称
+                'accountid' =>  $list[0]['share_id'],//id
+                'sharename' => $list[0]['share_name'],//用户名称
                 'num' => $list[0]['num'],//手机号
                 'total' =>  $list[0]['total'],
                 'action' => ''

@@ -27,9 +27,9 @@ class Withdraw extends BaseController{
         foreach (['orderno','type','phone','name','applytime','status'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
-                    $where['name'] = ['like', "%{$get[$key]}%"];
+                    $where['real_name'] = ['like', "%{$get[$key]}%"];
                 }else if ($key == 'orderno') {
-                    $where['withdraw_orderid'] =$get[$key];
+                    $where['withdraw_code'] =$get[$key];
                 }else if ($key == 'applytime') {
                     $where['create_at'] = array('between', array(strtotime($get[$key]), strtotime($get[$key])+86400));
                   // $where['create_at'] =strtotime($get[$key]);
@@ -51,11 +51,11 @@ class Withdraw extends BaseController{
             //  $action = '';
             $returnArr[] = [
                 'id' => $v['id'],//id
-                'orderno' => $v['withdraw_orderid'],//订单号
-                'name' => $v['name'],//真实姓名
+                'orderno' => $v['withdraw_code'],//订单号
+                'name' => $v['real_name'],//真实姓名
                 'type' =>$types[ $v['type']],//真实姓名
                 'phone' => $v['phone'],//手机号
-                'applytime' => $v['create_at'],//申请时间
+                'applytime' => date('Y-m-d',$v['create_at']) ,//申请时间
                 'amount' => $v['amount'],//申请金额
                 'balance' => $v['balance'],// 账户余额
                 'status' => $results[$v['status']],//状态

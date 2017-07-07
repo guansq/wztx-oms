@@ -27,13 +27,13 @@
                         <option value="{$pprovince}">{$pprovince}</option>
                         {/volist}
                     </select>
-                    <select class="form-control mr_20" id="bond_state"  name="bond_state">
+                    <select class="form-control mr_20" id="bond_status"  name="bond_status">
                         <option value="all">保证金状态</option>
                         <option value="init">未缴纳</option>
                         <option value="checked">已缴纳</option>
                         <option value="frozen">冻结</option>
                     </select>
-                    <select class="form-control" id="auth_state"  name="auth_state">
+                    <select class="form-control" id="auth_status"  name="auth_status">
                         <option value="all">认证状态</option>
                         <option value="refuse">已拒绝</option>
                         <option value="pass">已通过</option>
@@ -116,8 +116,8 @@
                     //添加额外的参数传给服务器
                     parameter.type = 'company';
                     parameter.companyname = $("#companyname").val();
-                    parameter.auth_state = $("#auth_state").val();
-                    parameter.bond_state = $("#bond_state").val();
+                    parameter.auth_status = $("#auth_status").val();
+                    parameter.bond_status = $("#bond_status").val();
                     parameter.province = $("#province").val();
                 },
             },
@@ -127,9 +127,9 @@
                 {"data": "name"},
                 {"data": "phone"},
                 {"data": "province"},
-                {"data": "bond_state"},
+                {"data": "bond_status"},
                 {"data": "number"},
-                {"data": "auth_state"},
+                {"data": "auth_status"},
                 {"data": "action"},
             ],
             "columnDefs": [

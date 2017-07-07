@@ -26,19 +26,19 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">公司名称</td>
-                        <td class="col-sm-6">{$item.companyname}</td>
+                        <td class="col-sm-6">{$item.com_short_name}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">营业执照号</td>
-                        <td class="col-sm-6">{$item.companynumber}</td>
+                        <td class="col-sm-6">{$item.com_buss_num}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">法人姓名</td>
-                        <td class="col-sm-6">{$item.name}</td>
+                        <td class="col-sm-6">{$item.law_person}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">法人身份证号</td>
-                        <td class="col-sm-6">{$item.number}</td>
+                        <td class="col-sm-6">{$item.com_identity}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">企业联系电话</td>
@@ -50,7 +50,7 @@
                     </tr>
                     <tr>
                         <td class="col-sm-6">开户名称</td>
-                        <td class="col-sm-6">{$item.bankname}</td>
+                        <td class="col-sm-6">{$item.deposit_name}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">开户行</td>
@@ -76,17 +76,17 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    <img src="{$item.frontpic}" alt="法人身份证正面照">
+                    <img src="{$item.com_front_pic}" alt="法人身份证正面照">
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    <img src="{$item.backpic}" alt="法人身份证反面照">
+                    <img src="{$item.com_back_pic}" alt="法人身份证反面照">
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    <img src="{$item.businesslicense}" alt="营业执照">
+                    <img src="{$item.buss_pic}" alt="营业执照">
                 </section>
             </div>
             <div class="datails_tit">
@@ -99,47 +99,47 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">操作人身份证号</td>
-                        <td class="col-sm-6">{$item.personnumber}</td>
+                        <td class="col-sm-6">{$item.person_identity}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    <img src="{$item.holdpic}" alt="手持身份证照片">
+                    <img src="{$item.hold_pic}" alt="手持身份证照片">
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    <img src="{$item.personfrontpic}" alt="身份证正面照">
+                    <img src="{$item.person_front_pic}" alt="身份证正面照">
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    <img src="{$item.personbackpic}" alt="身份证反面照">
+                    <img src="{$item.person_back_pic}" alt="身份证反面照">
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_btn">
-                    {if condition="$item.auth_state eq 'init'"}
+                    {if condition="$item.auth_status eq 'init'"}
                     <button type="button" class="btn btn-primary" id="pass">通过审核</button>
                     <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？" >拒绝审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>
                     {/if}
-                    {if condition="$item.auth_state eq 'pass'"}
+                    {if condition="$item.auth_status eq 'pass'"}
                     <button type="button" class="btn btn-primary">已经通过审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">拒绝审核</button>
-                    {if condition="$item.bond_state eq 'checked'"}
+                    {if condition="$item.bond_status eq 'checked'"}
                     <button type="button" class="btn btn-primary" id="frozen" data-reason="确定冻结账户？">冻结账户</button>
                     {/if}
-                    {if condition="$item.bond_state eq 'frozen'"}
+                    {if condition="$item.bond_status eq 'frozen'"}
                     <button type="button" class="btn btn-primary" id="unfrozen" data-reason="确定取消冻结账户？">取消冻结账户</button>
                     {/if}
-                    {if condition="$item.bond_state neq 'checked' and $item.bond_state neq 'frozen'"}
+                    {if condition="$item.bond_status neq 'checked' and $item.bond_status neq 'frozen'"}
                     <button type="button" class="btn btn-primary">未缴纳保证金</button>
                     {/if}
                     {/if}
-                    {if condition="$item.auth_state eq 'refuse'"}
+                    {if condition="$item.auth_status eq 'refuse'"}
                     <button type="button" class="btn btn-primary" disabled="disabled">通过审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">{$item.auth_info}</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>

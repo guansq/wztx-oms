@@ -111,7 +111,9 @@ define(['jquery', 'admin.plugs'], function () {
         if(method = 'excel'){
 
         }
-        var url = window.ROOT_URL + '/index.php/admin/plugs/upfile/mode/' + method + '.html?uptype=' + uptype + '&type=' + type + '&field=' + field;
+        var url = window.ROOT_URL + '/index.php/plugs/upfile/mode/' + method + '.html?uptype=' + uptype + '&type=' + type + '&field=' + field;
+       // console.log(url);
+       // return;
         $.form.iframe(url, title || '文件管理');
     });
 

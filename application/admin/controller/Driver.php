@@ -1,18 +1,20 @@
 <?php
 
 namespace app\admin\controller;
+
 use service\LogService;
 use think\Request;
+use service\DataService;
 
-class Driver extends BaseController
-{
+class Driver extends BaseController {
+    protected $table = 'DrBaseInfo';
+
     /**
      * 显示资源列表
      *
      * @return \think\Response
      */
-    public function index()
-    {
+    public function index() {
         $provincelist = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江',
             '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南',
             '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃',
@@ -25,18 +27,18 @@ class Driver extends BaseController
      * 得到司机列表
      */
 
-    public function getSpList()
-    {
+    public function getSpList() {
         $where = [];
         $get = input('param.');
         //性别 车牌/姓名 省
         // 应用搜索条件
         foreach (['name', 'sex', 'province'] as $key) {
+            $get[$key] = trim($get[$key]);
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'province') {
-                    $where['b.address'] = ['like', "%{$get[$key]}%"];
+                    $where['a.address'] = ['like', "%{$get[$key]}%"];
                 } elseif ($key == 'name') {
-                    $where['b.name|c.cardnumber'] = ['like', "%{$get[$key]}%"];
+                    $where['a.real_name|b.card_number'] = ['like', "%{$get[$key]}%"];
                 } else {
                     $where[$key] = $get[$key];
                 }
@@ -51,20 +53,22 @@ class Driver extends BaseController
             $logisticstypes = [0 => '同城/长途物流', 1 => '同城物流', 2 => '长途物流'];
             $sexname = '';
             if ($v['sex'] === 0) {
-                $sexname = '男';
+                $sexname = '未知';
             } elseif ($v['sex'] === 1) {
+                $sexname = ' 男';
+            } elseif ($v['sex'] === 2) {
                 $sexname = '女';
             }
             //  $action = '';
             $returnArr[] = [
                 'id' => $v['id'],//id
-                'name' => $v['name'],//用户名称
+                'name' => $v['real_name'],//用户名称
                 'phone' => $v['phone'],//手机号
                 'sexname' => $sexname,//性别
-                'number' => $v['number'],//身份证号
+                'number' => $v['identity'],//身份证号
                 'address' => $v['address'],//地址
-                'cardnumber' => $v['cardnumber'],//车牌
-                'logisticstype' => $logisticstypes[$v['logisticstype']], //物流
+                'cardnumber' => $v['card_number'],//车牌
+                'logisticstype' => $logisticstypes[$v['logistic_stype']], //物流
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Driver/showdetail', ['id' => $v['id']]) . '" >查看</a>',
             ];
         }
@@ -82,8 +86,7 @@ class Driver extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function showdetail($id)
-    {
+    public function showdetail($id) {
         $where = [];
         $type = 0;
         $id = intval(input('id'));
@@ -94,43 +97,43 @@ class Driver extends BaseController
         }
         $returnArr = [];
         $returnArr = $item[0];
-        $personauth = $driverLogic->getPersonAuth($id);
-        if (!empty($personauth)) {
-            $returnArr['name'] = $personauth[0]['name'];
-            $sexname = '';
-            if ($personauth[0]['sex'] === 0) {
-                $sexname = '男';
-            } elseif ($personauth[0]['sex'] === 1) {
-                $sexname = '女';
-            }
-            $returnArr['sexname'] = $sexname;
-            $returnArr['number'] = $personauth[0]['number'];
-            $returnArr['address'] = $personauth[0]['address'];
-            $logisticstypes = [0 => '同城/长途物流', 1 => '同城物流', 2 => '长途物流'];
-            $returnArr['logisticstype'] = $logisticstypes[$personauth[0]['logisticstype']];
-            $returnArr['personholdpic'] = $personauth[0]['holdpic'];
-            $returnArr['personbackpic'] = $personauth[0]['backpic'];
-            $returnArr['personfrontpic'] = $personauth[0]['frontpic'];
+        $sexname = '';
+        if ($item[0]['sex'] === 0) {
+            $sexname = '未知';
+        } elseif ($item[0]['sex'] === 1) {
+            $sexname = ' 男';
+        } elseif ($item[0]['sex'] === 2) {
+            $sexname = '女';
         }
-        $carauth = $driverLogic->getCarinfoAuth($personauth[0]['id']);
+        $returnArr['name'] = $item[0]['real_name'];
+        $returnArr['sexname'] = $sexname;
+        $returnArr['number'] = $item[0]['identity'];
+        $returnArr['address'] = $item[0]['address'];
+        $logisticstypes = [0 => '同城/长途物流', 1 => '同城物流', 2 => '长途物流'];
+        $returnArr['logisticstype'] = $logisticstypes[$item[0]['logistic_stype']];
+        $returnArr['personholdpic'] = $item[0]['hold_pic'];
+        $returnArr['personbackpic'] = $item[0]['back_pic'];
+        $returnArr['personfrontpic'] = $item[0]['front_pic'];
+
+        $carauth = $driverLogic->getCarinfoAuth($item[0]['id']);
         if (!empty($carauth)) {
             $carstyle = $driverLogic->getCarList();
             $carstylearray = [];
             foreach ($carstyle as $key => $item) {
                 $carstylearray[$item['id']] = array('name' => $item['name'], 'type' => $item['type']);
             }
-            $returnArr['carlengthname'] = $carstylearray[$carauth[0]['carlength']]['name'];
-            $returnArr['carstylename'] = $carstylearray[$carauth[0]['carstyle']]['name'];
+            $returnArr['carlengthname'] = $carstylearray[$carauth[0]['car_style_length_id']]['name'];
+            $returnArr['carstylename'] = $carstylearray[$carauth[0]['car_style_type_id']]['name'];
             $returnArr['weight'] = $carauth[0]['weight'];
             $returnArr['volume'] = $carauth[0]['volume'];
-            $returnArr['cardnumber'] = $carauth[0]['cardnumber'];
-            $returnArr['policydeadline'] = $carauth[0]['policydeadline'];
-            $returnArr['licensedeadline'] = $carauth[0]['licensedeadline'];
-            $returnArr['indexpic'] = $carauth[0]['indexpic'];
-            $returnArr['vehiclelicensepic'] = $carauth[0]['vehiclelicensepic'];
-            $returnArr['drivinglicencepic'] = $carauth[0]['drivinglicencepic'];
-            $returnArr['insurancepolicypic'] = $carauth[0]['insurancepolicypic'];
-            $returnArr['operationpic'] = $carauth[0]['operationpic'];
+            $returnArr['cardnumber'] = $carauth[0]['card_number'];
+            $returnArr['policydeadline'] = $carauth[0]['policy_deadline'];
+            $returnArr['licensedeadline'] = $carauth[0]['license_deadline'];
+            $returnArr['indexpic'] = $carauth[0]['index_pic'];
+            $returnArr['vehiclelicensepic'] = $carauth[0]['vehicle_license_pic'];
+            $returnArr['drivinglicencepic'] = $carauth[0]['driving_licence_pic'];
+            $returnArr['insurancepolicypic'] = $carauth[0]['insurance_policy_pic'];
+            $returnArr['operationpic'] = $carauth[0]['operation_pic'];
         }
         //var_dump($returnArr);
         $this->assign('id', $id);
@@ -140,11 +143,10 @@ class Driver extends BaseController
     }
 
     //审核通过
-    public function pass()
-    {
+    public function pass() {
         $id = input('id');
         $driverLogic = model('Driver', 'logic');
-        $status = ['auth_state' => 'pass', 'update_at' => time()];
+        $status = ['auth_status' => 'pass', 'update_at' => time()];
         $detail = $driverLogic->updateStatus(['id' => $id], $status);
         // session('user', $user);
         LogService::write('司机端:' . $id, '审核通过');
@@ -156,8 +158,7 @@ class Driver extends BaseController
         //
     }
 
-    public function auth()
-    {
+    public function auth() {
         $titile = input('title');
         $id = input('id');
         $authtype = input('type');
@@ -171,34 +172,34 @@ class Driver extends BaseController
         }
         switch ($authtype) {
             case 'refuse': //拒绝审核
-                $status['auth_state'] = 'refuse';
-                $tmp = $titile . ',' . time();
-                $where['auth_state'] = 'init';
+                $status['auth_status'] = 'refuse';
+                $tmp = $titile;// . ',' . time();
+                $where['auth_status'] = 'init';
                 $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'frozen': //冻结账户
-                $where['bond_state'] = 'checked';
-                $status['bond_state'] = 'frozen';
-                $tmp = $titile . ',' . time();
+                $where['bond_status'] = 'checked';
+                $status['bond_status'] = 'frozen';
+                $tmp = $titile;// . ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'unfrozen': //取消冻结
-                $where['bond_state'] = 'frozen';
-                $status['bond_state'] = 'checked';
-                $tmp = $titile . ',' . time();
+                $where['bond_status'] = 'frozen';
+                $status['bond_status'] = 'checked';
+                $tmp = $titile;// . ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'black': //加入黑名单
                 $where['is_black'] = '0';
                 $status['is_black'] = '1';
-                $tmp = $titile . ',' . time();
+                $tmp = $titile;//. ',' . time();
                 $isblack = 1;
                 // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\''.'-'.$tmp.'\')'];
                 break;
             case 'unblack': //从黑名单删除
                 $where['is_black'] = '1';
                 $status['is_black'] = '0';
-                $tmp = $titile . ',' . time();
+                $tmp = $titile;// . ',' . time();
                 $isblack = 2;
                 // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\''.'-'.$tmp.'\')'];
                 break;
@@ -206,7 +207,7 @@ class Driver extends BaseController
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
         if (in_array($isblack, [1, 2])) {
-            $blackinfo = ['baseid' => $id, 'phone' => input('phone'), 'reason' => ['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')'], 'type' => '1',];
+            $blackinfo = ['user_id' => $id, 'phone' => input('phone'), 'reason' => ['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')'], 'type' => '1',];
             $detail = $driverLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {
@@ -222,25 +223,59 @@ class Driver extends BaseController
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
     }
+
     //获取司机抢单范围
-    public function range(){
+    public function range() {
         return view();
     }
+
     //车型设置
-    public function carstyle(){
+    public function carstyle() {
+        $driverLogic = Model('Driver', 'logic');
+        $where = ['type' => 1];
+        $carstyle = $driverLogic->getCarList($where);
+        $this->assign('carstyle', $carstyle);
         return view();
     }
+
+    //车型添加
+    public function carstyleadd() {
+        $data = input('param.');
+        $data['type'] = 1;
+        $result = DataService::save('CarStyle', $data);
+        $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
+        return view();
+    }
+
+    //车型删除
+    public function carstyledel() {
+        $data = input('param.');
+        $data['status'] = 1;
+        $dealcarstyle = '';
+        $driverLogic = Model('Driver', 'logic');
+        $allid = substr($data['allid'], 1);
+
+        $where = ['id' => ['exp', ' IN (' . $allid . ')'], 'type' => 1];
+        $dealcarstyle = $driverLogic->dealCarStyleList(['type' => 1], ['status' => 1]);
+        $dealcarstyle = $driverLogic->dealCarStyleList($where, ['status' => 0]);
+        if ($dealcarstyle) {
+            return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+        } else {
+            return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+        }
+    }
+
     //车长设置
-    public function carlength(){
+    public function carlength() {
         return view();
     }
+
     /**
      * 显示创建资源表单页.
      *
      * @return \think\Response
      */
-    public function create()
-    {
+    public function create() {
         return view();
     }
 
@@ -250,8 +285,7 @@ class Driver extends BaseController
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function save(Request $request)
-    {
+    public function save(Request $request) {
         //
     }
 
@@ -261,10 +295,9 @@ class Driver extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function read()
-    {
+    public function read() {
         //
-     //  return view('edit');
+        //  return view('edit');
     }
 
     /**
@@ -273,8 +306,7 @@ class Driver extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
 
     }
 
@@ -285,8 +317,7 @@ class Driver extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -296,8 +327,7 @@ class Driver extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id)
-    {
+    public function delete($id) {
         //
     }
 }

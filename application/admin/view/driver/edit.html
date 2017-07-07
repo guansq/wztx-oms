@@ -142,25 +142,25 @@
             </div>
             <div class="auth_box">
                 <section class="auth_btn">
-                    {if condition="$item.auth_state eq 'init'"}
+                    {if condition="$item.auth_status eq 'init'"}
                     <button type="button" class="btn btn-primary" id="pass">通过审核</button>
                     <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？" >拒绝审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>
                     {/if}
-                    {if condition="$item.auth_state eq 'pass'"}
+                    {if condition="$item.auth_status eq 'pass'"}
                     <button type="button" class="btn btn-primary">已经通过审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">拒绝审核</button>
-                    {if condition="$item.bond_state eq 'checked'"}
+                    {if condition="$item.bond_status eq 'checked'"}
                     <button type="button" class="btn btn-primary" id="frozen" data-reason="确定冻结账户？">冻结账户</button>
                     {/if}
-                    {if condition="$item.bond_state eq 'frozen'"}
+                    {if condition="$item.bond_status eq 'frozen'"}
                     <button type="button" class="btn btn-primary" id="unfrozen" data-reason="确定取消冻结账户？">取消冻结账户</button>
                     {/if}
-                    {if condition="$item.bond_state neq 'checked' and $item.bond_state neq 'frozen'"}
+                    {if condition="$item.bond_status neq 'checked' and $item.bond_status neq 'frozen'"}
                     <button type="button" class="btn btn-primary">未缴纳保证金</button>
                     {/if}
                     {/if}
-                    {if condition="$item.auth_state eq 'refuse'"}
+                    {if condition="$item.auth_status eq 'refuse'"}
                     <button type="button" class="btn btn-primary" disabled="disabled">通过审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">{$item.auth_info}</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>

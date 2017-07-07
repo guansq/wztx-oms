@@ -40,27 +40,27 @@ class Shipper extends BaseController
         }
         $get = input('param.');
         if (input('type') == 'person') {
-            $type = 0;
+            $type = input('type');
             //用户名称	手机号	性别	保证金状态	认证状态	操作
             // 应用搜索条件
-            foreach (['name', 'auth_state', 'bond_state', 'sex'] as $key) {
+            foreach (['name', 'auth_status', 'bond_status', 'sex'] as $key) {
                 if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                     if ($key == 'name') {
-                        $where[$key] = ['like', "%{$get[$key]}%"];
+                        $where['real_name'] = ['like', "%{$get[$key]}%"];
                     } else {
                         $where[$key] = $get[$key];
                     }
                 }
             }
         } else if (input('type') == 'company') {
-            $type = 1;
+            $type = input('type');
             // 应用搜索条件
-            foreach (['companyname', 'auth_state', 'bond_state', 'province'] as $key) {
+            foreach (['companyname', 'auth_status', 'bond_status', 'province'] as $key) {
                 if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                     if ($key == 'province') {
-                        $where[$key] = ['like', "%{$get[$key]}%"];
+                        $where['address'] = ['like', "%{$get[$key]}%"];
                     } elseif ($key == 'companyname') {
-                        $where['b.companynickname'] = $get[$key];
+                        $where['b.com_short_name|b.com_name'] = $get[$key];
                     } else {
                         $where[$key] = $get[$key];
                     }
@@ -80,56 +80,69 @@ class Shipper extends BaseController
         $length = input('length') == '' ? 10 : input('length');
         $shipperLogic = Model('Shipper', 'logic');
         $list = $shipperLogic->getListInfo($start, $length, $where);
-
+        $provincelist = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江',
+            '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南',
+            '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃',
+            '青海', '宁夏', '新疆', '台湾', '香港', '澳门', '钓鱼岛'];
         $returnArr = [];
         if (input('type') == 'person') {
             foreach ($list as $k => $v) {
                 //用户名称	手机号	性别	保证金状态	认证状态	操作
-                $auth_states = ['init' => '未认证',
+                $auth_statuss = ['init' => '未认证',
                     'pass' => '认证通过',
                     'refuse' => '认证失败',
                     'delete' => '后台删除'];
-                $bond_states = ['init' => '未缴纳',
+                $bond_statuss = ['init' => '未缴纳',
                     'checked' => '已缴纳',
                     'frozen' => '账户冻结',
                     'black' => '黑名单'];
                 $sexname = '';
                 if ($v['sex'] === 0) {
-                    $sexname = '男';
+                    $sexname = '未知';
                 } elseif ($v['sex'] === 1) {
+                    $sexname = ' 男';
+                }elseif ($v['sex'] === 2) {
                     $sexname = '女';
                 }
                 //  $action = '';
                 $returnArr[] = [
                     'id' => $v['id'],//id
-                    'name' => $v['name'],//用户名称
+                    'name' => $v['real_name'],//用户名称
                     'phone' => $v['phone'],//手机号
                     'sexname' => $sexname,//性别
-                    'auth_state' => $auth_states[$v['auth_state']],//认证状态
-                    'bond_state' => $bond_states[$v['bond_state']],//保证金状态
+                    'auth_status' => $auth_statuss[$v['auth_status']],//认证状态
+                    'bond_status' => $bond_statuss[$v['bond_status']],//保证金状态
                     'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Shipper/showdetail', ['type' => 'person', 'id' => $v['id']]) . '" >查看</a>',
                 ];
             }
         } else if (input('type') == 'company') {
             foreach ($list as $k => $v) {
+                $province = '';
+                foreach ($provincelist as $item=>$value){
+                    if(strpos( $v['address'],$value) !== false){
+                        $province = $value;
+                        break;
+                    }
+                }
+
                 //用户名称	手机号	性别	保证金状态	认证状态	操作
-                $auth_states = ['init' => '未认证',
+                $auth_statuss = ['init' => '未认证',
                     'pass' => '认证通过',
                     'refuse' => '认证失败',
                     'delete' => '后台删除'];
-                $bond_states = ['init' => '未缴纳',
+                $bond_statuss = ['init' => '未缴纳',
                     'checked' => '已缴纳',
                     'frozen' => '账户冻结',
                     'black' => '黑名单'];
                 //  $action = '';
                 $returnArr[] = [
                     'id' => $v['id'],//id
-                    'name' => $v['companynickname'],//企业名称
+                    'name' => $v['com_short_name'],//企业名称
                     'phone' => $v['companyphone'],//企业电话
-                    'province' => $v['province'],//省
-                    'number' => $v['number'],//操作人身份证
-                    'auth_state' => $auth_states[$v['auth_state']],//认证状态
-                    'bond_state' => $bond_states[$v['bond_state']],//保证金状态
+                    'province' => $province,//省
+                    'number' => $v['identity'],//操作人身份证
+                    'auth_status' => $auth_statuss[$v['auth_status']],//认证状态
+                    'bond_status' => $bond_statuss[$v['bond_status']],//保证金状态
                     'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Shipper/showdetail', ['type' => 'company', 'id' => $v['id']]) . '" >查看</a>',
                 ];
             }
@@ -182,12 +195,12 @@ class Shipper extends BaseController
     public function showdetail($id)
     {
         $where = [];
-        $type = 0;
+        $type = input('type');
         $id = intval(input('id'));
         if (!empty(input('type')) && in_array(input('type'), ['person', 'company'])) {
             if (input('type') == 'company') {
                 $tpl = 'companydetail';
-                $type = 1;
+                $type = input('type');
             } else {
                 $tpl = 'persondetail';
             }
@@ -202,6 +215,7 @@ class Shipper extends BaseController
         if (empty($item)) {
             $this->error('未查询到当前用户信息', '');
         }
+        //var_dump($item);
         $this->assign('id', $id);
         $this->assign('item', $item[0]);
 
@@ -247,7 +261,7 @@ class Shipper extends BaseController
     {
         $id = input('id');
         $shipperLogic = model('Shipper', 'logic');
-        $status = ['auth_state' => 'pass', 'update_at' => time()];
+        $status = ['auth_status' => 'pass', 'update_at' => time()];
         $detail = $shipperLogic->updateStatus(['id' => $id], $status);
         // session('user', $user);
         LogService::write('货主端:' . $id, '审核通过');
@@ -274,34 +288,34 @@ class Shipper extends BaseController
         }
         switch ($authtype) {
             case 'refuse': //拒绝审核
-                $status['auth_state'] = 'refuse';
-                $tmp = $titile . ',' . time();
-                $where['auth_state'] = 'init';
+                $status['auth_status'] = 'refuse';
+                $tmp = $titile ;//. ',' . time();
+                $where['auth_status'] = 'init';
                 $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'frozen': //冻结账户
-                $where['bond_state'] = 'checked';
-                $status['bond_state'] = 'frozen';
-                $tmp = $titile . ',' . time();
+                $where['bond_status'] = 'checked';
+                $status['bond_status'] = 'frozen';
+                $tmp = $titile ;//. ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'unfrozen': //取消冻结
-                $where['bond_state'] = 'frozen';
-                $status['bond_state'] = 'checked';
-                $tmp = $titile . ',' . time();
+                $where['bond_status'] = 'frozen';
+                $status['bond_status'] = 'checked';
+                $tmp = $titile ;//. ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'black': //加入黑名单
                 $where['is_black'] = '0';
                 $status['is_black'] = '1';
-                $tmp = $titile . ',' . time();
+                $tmp = $titile ;//. ',' . time();
                 $isblack = 1;
                 // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\''.'-'.$tmp.'\')'];
                 break;
             case 'unblack': //从黑名单删除
                 $where['is_black'] = '1';
                 $status['is_black'] = '0';
-                $tmp = $titile . ',' . time();
+                $tmp = $titile ;//. ',' . time();
                 $isblack = 2;
                 // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\''.'-'.$tmp.'\')'];
                 break;
@@ -309,7 +323,7 @@ class Shipper extends BaseController
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
         if (in_array($isblack, [1, 2])) {
-            $blackinfo = ['baseid' => $id, 'phone' => input('phone'), 'reason' => ['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')'], 'type' => '0',];
+            $blackinfo = ['user_id' => $id, 'phone' => input('phone'), 'reason' => ['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')'], 'type' => '0',];
             $detail = $shipperLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {

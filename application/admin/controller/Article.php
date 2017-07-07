@@ -6,16 +6,16 @@
  * Time: 14:08
  */
 namespace app\admin\controller;
-
 use service\LogService;
 use service\DataService;
-
+use think\Db;
 class Article extends BaseController{
     protected $table = 'SystemArticle';
     protected $title = '文章管理';
 
     function index(){
-
+        $db = Db::name($this->table);
+        $this->assign('list',   $db->field('*')->select());
         $this->assign('title',$this->title);
         return view();
     }

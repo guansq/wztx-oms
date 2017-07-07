@@ -59,13 +59,38 @@ class Config extends BaseController {
      */
     public function file() {
         $this->assign('alert', [
-            'type'    => 'success',
-            'title'   => '操作提示',
+            'type' => 'success',
+            'title' => '操作提示',
             'content' => '文件引擎参数影响全局文件上传功能，请勿随意修改！'
         ]);
         $this->title = '文件存储配置';
         $this->index();
     }
 
+    /**
+     * 保险费率设置
+     */
+    public function premium() {
+        $this->title = '保险费率设置';
+        $this->index();
+    }
+
+    //保证金设置
+    public function bond() {
+        $this->title = '保证金设置';
+        $this->index();
+    }
+
+    //提现日期设置
+    public function withdraw() {
+        $this->title = '提现日期设置';
+        $this->index();
+    }
+
+    //客服管理
+    public function custommanage() {
+        $this->title = '客服管理';
+        $this->index();
+    }
 
 }
