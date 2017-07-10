@@ -1,0 +1,44 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="{:url()}" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">车长名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" value='{$vo.name|default=""}' required="required" title="请输入车长名称" placeholder="请输入车长名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">起步价</label>
+        <div class="layui-input-block">
+            <input type="text" name="init_price" value='{$vo.init_price|default=""}' required="required" title="请输入起步价" placeholder="请输入起步价" class="layui-input">
+       </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">起步公里数</label>
+        <div class="layui-input-block">
+            <input type="text" name="init_kilometres" value='{$vo.init_kilometres|default=""}' required="required" title="请输入起步公里数" placeholder="请输入起步公里数" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">超出起步公里费</label>
+        <div class="layui-input-block">
+            <input type="text" name="over_metres_price" value='{$vo.over_metres_price|default=""}' required="required" title="请输入超出起步公里费" placeholder="请输入超出起步公里费" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">计重费</label>
+        <div class="layui-input-block">
+            <input type="text" name="weight_price" value='{$vo.weight_price|default=""}' required="required" title="请输入计重费" placeholder="请输入计重费" class="layui-input">
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'/>{/if}
+        <input type='hidden' value='2' name='type'/>
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>

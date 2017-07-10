@@ -4,22 +4,190 @@ namespace app\admin\controller;
 
 use think\Request;
 
-class Order extends BaseController{
+class Order extends BaseController {
     /**
      * 显示资源列表
      *
      * @return \think\Response
      */
-    public function index(){
+    private $stauusLists = [
+        'init' => '初始状态',
+        'hang' => '挂起',
+        'quote' => '报价中',
+        'quoted' => '已报价-未配送',
+        'distribute' => '配送中',
+        'photo' => '拍照完毕',
+        'pay_failed' => '支付失败',
+        'pay_success' => '支付成功',
+        'comment' => '已评论'
+    ];
+
+    public function index() {
+
         return view();
     }
+
+    /**
+     * 得到订单列表
+     */
+
+    public function getOrderList() {
+        $where = [];
+        $get = input('param.');
+        //性别 车牌/姓名 省
+        // 应用搜索条件
+        foreach (['name', 'status', 'tran_type', 'is_insured', 'create_at'] as $key) {
+            //$get[$key] = trim($get[$key]);
+            if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
+                if ($key == 'name') {
+                    $where['a.order_code|c.card_number|org_address_name|dest_address_name'] = ['like', "%{$get[$key]}%"];
+                } elseif ($key == 'is_insured') {
+                    if ($get[$key] == 1) {
+                        $where['a.premium_amount'] = array('gt', 0);
+                    } else {
+                        $where['a.premium_amount'] = array('elt', 0);
+                    }
+                } elseif ($key == 'create_at') {
+                    $where['a.create_at'] = array('between', array(strtotime($get[$key]), strtotime($get[$key]) + 86400));
+                } else {
+                    $where[$key] = $get[$key];
+                }
+            }
+        }
+        $start = input('start') == '' ? 0 : input('start');
+        $length = input('length') == '' ? 10 : input('length');
+        $orderLogic = Model('Order', 'logic');
+        $list = $orderLogic->getListInfo($start, $length, $where);
+        //  var_dump($list);
+        $returnArr = [];
+        foreach ($list as $k => $v) {
+            //$logisticstypes = [0 => '同城/长途物流', 1 => '同城物流', 2 => '长途物流'];
+
+            //  $action = '';
+
+
+            $returnArr[] = [
+                'id' => $v['id'],//id
+                'order_code' => $v['order_code'],//订单号
+                'policy_code' => $v['policy_code'],//保单号
+                'card_number' => $v['card_number'],//车牌
+                'is_ensured' => ($v['premium_amount'] > 0) ? '保险' : '未保险',//货物保险状态
+                'org_address_name' => $v['org_address_name'],//出发地
+                'dest_address_name' => $v['dest_address_name'],//目的地
+                'status' => $this->stauusLists[$v['status']],//状态
+                'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a>
+                                <a class="hang-up" href="javascript: void(0);">挂起</a>
+                                <a class="settle" href="javascript: void(0);">结算</a>
+',
+            ];
+        }
+
+        $total = $orderLogic->getListNum($where);
+        // var_dump($returnArr);
+        $info = ['draw' => time(), 'recordsTotal' => $total, 'recordsFiltered' => $total, 'data' => $returnArr, 'extdata' => $where];
+
+        return json($info);
+    }
+
+    /**
+     *显示详情
+     *
+     * @param  int $id
+     * @return \think\Response
+     */
+    public function showdetail($id) {
+        $id = intval(input('id'));
+        $where = ['id' => $id];
+        $orderLogic = Model('Order', 'logic');
+        $list = $orderLogic->getListOneInfo($where);
+        if (empty($list)) {
+            $this->error('未查询到当前订单信息', '');
+        }
+        $list[0]['statusname'] = $this->stauusLists[$list[0]['status']];
+        $pay_cer_pic = explode('|', $list[0]['pay_cer_pic']);
+        $this->assign('list', $list[0]);
+        //凭证信息
+        $this->assign('pay_cer_pic', $pay_cer_pic);
+        //var_dump($pay_cer_pic);
+        //收货信息
+        $addressdetail = $orderLogic->getAddressInfo(['id'=>$list[0]['dest_address_id']]);
+        $this->assign('dest_address', $addressdetail[0]);
+        //寄件信息
+        $addressdetail = $orderLogic->getAddressInfo(['id'=>$list[0]['org_address_id']]);
+        $this->assign('org_address', $addressdetail[0]);
+        //车辆信息
+        $carinfo = $orderLogic->getCardInfo(['a.id'=>$list[0]['dr_id']]);
+        $this->assign('carinfo', $carinfo[0]);
+        return view('edit');
+    }
+
+    //审核通过
+    public function pass() {
+        $id = input('id');
+        $orderLogic = model('Order', 'logic');
+        $status = ['per_status' => 'pass', 'update_at' => time(),'pay_time'=>time(),'status'=>'pay_success'];
+        $detail = $orderLogic->updateStatus(['id' => $id], $status);
+        // session('user', $user);
+       // LogService::write('司机端:' . $id, '审核通过');
+        if ($detail) {
+            return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+        } else {
+            return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+        }
+        //
+    }
+    //订单挂起
+    public function hang() {
+        $id = input('id');
+        $orderLogic = model('Order', 'logic');
+        $status = ['per_status' => 'hang', 'update_at' => time()];
+        $detail = $orderLogic->updateStatus(['id' => $id], $status);
+        // session('user', $user);
+        // LogService::write('司机端:' . $id, '审核通过');
+        if ($detail) {
+            return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+        } else {
+            return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+        }
+        //
+    }
+
+    public function auth() {
+        $titile = input('title');
+        $id = input('id');
+        $authtype = input('type');
+        $orderLogic = model('Order', 'logic');
+        $status = ['per_status' => 'refuse', 'update_at' => time(),'pay_time'=>time(),'status'=>'pay_failed'];
+        $where = ['id' => $id];
+        if (empty($titile)) {
+            return json(['code' => 4000, 'msg' => '输入文本不能为空', 'data' => []]);
+        }
+        switch ($authtype) {
+            case 'refuse': //拒绝审核
+                $status['per_status'] = 'refuse';
+                $tmp = $titile;// . ',' . time();
+                $where['per_status'] = 'init';
+                $status['per_remark'] = $tmp;
+                break;
+            default:
+                return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+        }
+       // LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time());
+        $detail = $orderLogic->updateStatus($where, $status);
+        if ($detail) {
+            return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+        } else {
+            return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+        }
+    }
+
 
     /**
      * 显示创建资源表单页.
      *
      * @return \think\Response
      */
-    public function create(){
+    public function create() {
         //
     }
 
@@ -29,7 +197,7 @@ class Order extends BaseController{
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function save(Request $request){
+    public function save(Request $request) {
         //
     }
 
@@ -39,7 +207,7 @@ class Order extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id){
+    public function read($id) {
         return view('edit');
     }
 
@@ -49,7 +217,7 @@ class Order extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function edit($id){
+    public function edit($id) {
         //
     }
 
@@ -57,10 +225,10 @@ class Order extends BaseController{
      * 保存更新的资源
      *
      * @param  \think\Request $request
-     * @param  int            $id
+     * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id) {
         //
     }
 
@@ -70,7 +238,7 @@ class Order extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id){
+    public function delete($id) {
         //
     }
 }

@@ -16,7 +16,7 @@
     <div class="con_box">
         <h1 class="h1">车型
             <p class="vehicle">
-                <button type="button" class="btn btn-info" id="add_vehicle">新增</button>
+                <button type="button" class="btn btn-info" data-modal='{:url("$classuri/carstyleadd")}'>新增</button>
                 <button type="button" class="btn btn-info" id="rem_vehicle">选中车型显示</button>
             </p>
         </h1>
@@ -29,20 +29,7 @@
             {/volist}
         </div>
     </div>
-    <form id="addstyle"class="layui-form layui-box" style='padding:25px 30px 20px 0;display: none' action='{:url("$classuri/carstyleadd")}' data-auto="true" method="post">
-        <div class="layui-form-item">
-            <p class="h2 text-center"></p>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">车型名称 </label>
-            <div class="layui-input-block">
-                <input type="text" name="name" value='' required="required" title="请输入车型名称" placeholder="请输入车型名称" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item text-center">
-            <button class="layui-btn" type='submit'>保存数据</button>
-        </div>
-    </form>
+
 </main>
 {/block}
 

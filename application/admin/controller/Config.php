@@ -47,9 +47,11 @@ class Config extends BaseController {
             parent::_list($this->table);
         } else {
             foreach ($this->request->post() as $key => $vo) {
+                $org_config =  sysconf($key);
                 sysconf($key, $vo);
+                LogService::write('配置管理', $key.'从'.$org_config.'修改成'.$vo);
             }
-            LogService::write('系统管理', '修改系统配置参数成功');
+
             $this->success('数据修改成功！', '');
         }
     }

@@ -43,7 +43,7 @@ class LogService {
     public static function write($action = '行为', $content = "内容描述") {
         $request = Request::instance();
         $node = strtolower(join('/', [$request->module(), $request->controller(), $request->action()]));
-        $data = ['ip' => $request->ip(), 'node' => $node, 'username' => session('user.username') . '', 'action' => $action, 'content' => $content];
+        $data = ['ip' => $request->ip(), 'node' => $node, 'username' => session('user.username') . '', 'action' => $action, 'content' => $content,'create_at'=>time(),'update_at'=>time()];
         return self::db()->insert($data) !== false;
     }
 

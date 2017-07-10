@@ -16,7 +16,7 @@
     <div class="con_box">
         <h1 class="h1">车长
             <p class="vehicle">
-                <button type="button" class="btn btn-info" id="add_vehicle">新增</button>
+                <button type="button" class="btn btn-info" id=""  data-modal='{:url("$classuri/carlengthadd")}'   data-title="添加车长">新增</button>
                 <button type="button" class="btn btn-info" id="rem_vehicle">删除</button>
             </p>
         </h1>
@@ -29,16 +29,25 @@
                     <th>起步公里数</th>
                     <th>超出起步公里费</th>
                     <th>计重费</th>
+                    <th>当前状态</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
+                {volist name='list' id='plist'}
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>50.0元/公里</td>
-                    <td>0.1元/公里/公斤</td>
+                    <td>{$plist.name}</td>
+                    <td>{$plist.init_price}</td>
+                    <td>{$plist.init_kilometres}</td>
+                    <td>{$plist.over_metres_price}元/公里</td>
+                    <td>{$plist.weight_price}元/公里/公斤</td>
+                    <td>{if $plist.status eq 0}正常{else /}删除{/if}</td>
+                    <td>  <a  data-modal='{:url("$classuri/carlengthadd")}?id={$plist.id}'   data-title="编辑车长">编辑</a> |
+                        {if $plist.status eq 0} <a   data-update="{$plist.id}"  data-field="update" data-action='{:url("$classuri/carlengthdel")}?id={$plist.id}&status=1'     data-title="">删除</a>{else /}
+                        <a data-update="{$plist.id}"  data-field="update"  data-action='{:url("$classuri/carlengthdel")}?id={$plist.id}&status=0'     data-title="">开启</a>{/if}
+                        </td>
                 </tr>
+                {/volist}
                 </tbody>
             </table>
         </div>
@@ -55,23 +64,8 @@
       });
     })
   });
-  
+
   function initPage(){
-    var table = $('#example').DataTable({
-      //paging: false, 设置是否分页
-      "info": false,  //去除左下角的信息
-      "lengthChange": false, //是否允许用户改变表格每页显示的记录数
-      "ordering": false, //是否允许Datatables开启排序
-      "searching": false,  //是否允许Datatables开启本地搜索
-      language: {
-        "oPaginate": {
-          "sFirst": "首页",
-          "sPrevious": "上页",
-          "sNext": "下页",
-          "sLast": "末页"
-        }
-      }
-    });
     // tr点击选中事件
     $('#example tbody').on( 'click', 'tr', function () {
       $(this).toggleClass('warning');

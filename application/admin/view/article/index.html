@@ -5,7 +5,7 @@
 {/block}
 {block name="button"}
 <div class="nowrap pull-right" style="margin-top:10px">
-	<button data-open='{:url("$classuri/add")}' data-title="添加文章" class='layui-btn layui-btn-small'><i
+	<button data-modal='{:url("$classuri/add")}' data-title="添加文章" class='layui-btn layui-btn-small'><i
 			class='fa fa-plus'></i> 添加文章
 	</button>
 	<button data-update data-field='delete' data-action='{:url("$classuri/del")}'
@@ -40,6 +40,9 @@
 <table class="table table-hover">
 	<thead>
 	<tr>
+		<th class='list-table-check-td'>
+			<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+		</th>
 		<th class='text-center'>标题</th>
 		<th class='text-center'>内容</th>
 		<th class='text-center'>操作</th>
@@ -48,11 +51,14 @@
 	<tbody>
 	{foreach $list as $key=>$vo}
 	<tr>
+		<td class='list-table-check-td'>
+			<input class="list-check-box" value='{$vo.id}' type='checkbox'/>
+		</td>
 		<td class='text-center'>{$vo.title}</td>
 		<td class='text-center'>{$vo.content}</td>
 		<td class='text-center'>
 			{if auth("$classuri/add")}
-			<!--<a class="layui-btn" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>-->
+			<a class="layui-btn" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
 			{/if}
 			{if auth("$classuri/del")}
 			<a class="layui-btn" data-update="{$vo.id}" data-field="delete" data-action='{:url("$classuri/del")}'>删除</a>

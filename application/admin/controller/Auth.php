@@ -48,10 +48,13 @@ class Auth extends BaseController {
      * @return string|array
      */
     public function apply() {
+       // var_dump($this->request->get());
         $auth_id = $this->request->get('id', '0');
+      //  var_dump(strtolower($this->request->get('action', '0')));
         switch (strtolower($this->request->get('action', '0'))) {
             case 'getnode':
                 $nodes = NodeService::getNodes();
+                //var_dump($nodes);
                 $checked = Db::name('SystemAuthNode')->where('auth', $auth_id)->column('node');
                 foreach ($nodes as $key => &$node) {
                     $node['checked'] = in_array($node['node'], $checked);
@@ -134,8 +137,14 @@ class Auth extends BaseController {
     public function del() {
         if (DataService::update($this->table)) {
             $id = $this->request->post('id');
-            Db::name('SystemAuthNode')->where('auth', $id)->delete();
-            $this->success("权限删除成功！", '');
+            $adminuser = Db::name('SystemAdmin')->where('authorize', $id)->select();
+
+            if(empty($adminuser)){
+                Db::name('SystemAuthNode')->where('auth', $id)->delete();
+                $this->success("权限删除成功！", '');
+            }else{
+                $this->error("该权限已有对应用户在使用，修改或者删除属于当前组的用户再试！");
+            }
         }
         $this->error("权限删除失败，请稍候再试！");
     }
