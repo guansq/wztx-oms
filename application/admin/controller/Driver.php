@@ -6,6 +6,7 @@ use service\LogService;
 use think\Request;
 use service\DataService;
 use think\db;
+
 class Driver extends BaseController {
     protected $table = 'DrBaseInfo';
 
@@ -241,28 +242,25 @@ class Driver extends BaseController {
     //车型添加
     public function carstyleadd() {
         //var_dump('1111');
-        if(request()->isPost()) {
+        if (request()->isPost()) {
             $data = input('param.');
             $data['type'] = 1;
             $result = DataService::save('CarStyle', $data);
             $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
             return view();
-        }else{
+        } else {
 //           / var_dump('222');
             return view();
         }
     }
-public function carlengthdel(){
-    $driverLogic = Model('Driver', 'logic');
-    $where = ['id'=>input('id')];
-    $status = ['status' => input('status')];
-    $dealcarstyle = $driverLogic->dealCarStyleList($where, $status);
-    if ($dealcarstyle) {
-        return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
-    } else {
-        return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+    //车长删除
+    public function carlengthdel() {
+        $table = 'CarStyle';
+        if (DataService::update($table)) {
+            $this->success("车长删除成功！", '');
+        }
+        $this->error("车长删除失败，请稍候再试！");
     }
-}
 
     //车型删除
     public function carstyledel() {
@@ -285,32 +283,32 @@ public function carlengthdel(){
     //车长设置
     public function carlength() {
         $db = Db::name('CarStyle');
-        $list =  $db->field('*')->where(['type'=>2])->select();
+        $list = $db->field('*')->where(['type' => 2])->select();
         //var_dump($list);
-        $this->assign('list',$list  );
+        $this->assign('list', $list);
         return view();
     }
+
     //车长设置
     public function carlengthadd() {
-        if(request()->isPost()){
-            $data=input('param.');
+        if (request()->isPost()) {
+            $data = input('param.');
             $result = DataService::save('CarStyle', $data);//Db::name($this->table)->allowField(true)->insert($data);
-          //  LogService::write('Banner管理', '上传Banner成功');
+            //  LogService::write('Banner管理', '上传Banner成功');
             $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
-        }else{
+        } else {
             $id = input('id');
-            if(!empty($id)){
+            if (!empty($id)) {
                 $db = Db::name('CarStyle');
-                $list =  $db->field('*')->where(['type'=>2,'id'=>$id])->select();
-                $this->assign('vo',$list[0]);
-            }else{
-                $this->assign('vo','');
+                $list = $db->field('*')->where(['type' => 2, 'id' => $id])->select();
+                $this->assign('vo', $list[0]);
+            } else {
+                $this->assign('vo', '');
             }
 
             return view();
         }
     }
-
 
 
     /**

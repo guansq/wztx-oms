@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use function MongoDB\BSON\fromJSON;
 use think\Request;
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -13,6 +14,85 @@ class Financial extends BaseController {
      * @return \think\Response
      */
     public function tcStatistics() {
+        $titile = '统计';
+        $legend = ['order_amount'=>'订单量','tran_total'=>'交易总额'];
+        $result = [0=>['date'=>'2017-07-09','order_amount'=>2,'tran_total'=>1000],1=>['date'=>'2017-07-11','order_amount'=>5,'tran_total'=>10],3=>['date'=>'2017-07-12','order_amount'=>8,'tran_total'=>100]];
+        $resultdeal = [];
+        foreach ($result as $key =>$item){
+            $resultdeal[$item['date']] = $item;
+        }
+
+        $datearray = ['2017-07-09', '2017-07-10', '2017-07-11', '2017-07-12', '2017-07-13'];
+        $datakeys = [];
+
+        $legendlist = [];
+        $keylist = [];
+        while (list($key, $value) = each($legend)){
+            $legendlist[] = '"'.$value.'"';
+            $keylist[] = $key;
+           // list($key, $value) = each($legend);
+        }
+        $resultlast = [];
+        foreach ($datearray as $key =>$item){
+            foreach ($keylist as $k =>$vo){
+             //   var_dump(empty($resultdeal[$item]));
+                if(!empty($resultdeal[$item])){
+                    $resultlast[$vo][] = $resultdeal[$item][$vo];
+                }else{
+                    $resultlast[$vo][] = 0;
+                }
+            }
+
+        }
+    //  var_dump(json_encode($resultlast));
+        $resultlastt = []; $resultlasttt = [];
+        foreach ($legend as $key => $item){
+            $resultlasttt[$key]['name'] = $item;
+            $resultlasttt[$key]['type'] = 'line';
+            $resultlasttt[$key]['data'] = $resultlast[$key];
+
+        }
+       // var_dump($resultlasttt);
+        foreach ($resultlasttt as $key =>$item){
+       //     var_dump($item);
+            $resultlastt[] = json_encode( $item);
+        //    var_dump(json_encode( $item));
+        }
+   //    var_dump(json_encode($resultlastt));
+        $option = "{
+      title: {
+        text: '".$titile."',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{c}'
+      },
+      legend: {
+        left: 'left',
+        data: [".implode(",",$legendlist)."]
+      },
+      xAxis: {
+        type: 'category',
+        name: '时间',
+        splitLine: {show: false},
+        data: [".implode(",",$datearray)."] 
+      },
+      grid: {
+        left: '1%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      yAxis: {
+        type: 'value',
+        name: '趋势图'
+      },
+      series: [".implode(',',$resultlastt)."
+      ]
+    };";
+        var_dump($option);
+        $this->assign('option',$option);
         return view();
     }
 

@@ -116,6 +116,7 @@ class DataService {
         $pk = $db->getPk(['table' => $db->getTable()]);
         $db->where(empty($pk) ? 'id' : $pk, 'in', $ids);
         !empty($where) && $db->where($where);
+
         // 删除模式
         if ($field === 'delete') {
             $fields = $db->getTableFields(['table' => $db->getTable()]);

@@ -5,8 +5,7 @@
 {/block}
 {block name="button"}
 <div class="nowrap pull-right" style="margin-top:10px">
-	<a type="button" class="btn btn-info" id=""  data-open='{:url("$classuri/addueditor")}'   data-title="添加文章">添加文章</a>
-
+	<a type="button" class="layui-btn layui-btn-small"   data-open='{:url("$classuri/addueditor")}'   data-title="添加文章"><i class="fa fa-plus"></i>  添加文章</a>
 	<button data-update data-field='delete' data-action='{:url("$classuri/del")}'
 					class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除文章
 	</button>
@@ -59,10 +58,10 @@
 		<td class='text-center'>{$vo.content}</td>
 		<td class='text-center'>
 			{if auth("$classuri/addueditor")}
-			<a class="layui-btn" data-open='{:url("$classuri/addueditor")}?id={$vo.id}'>编辑</a>
+			<a class="" data-open='{:url("$classuri/addueditor")}?id={$vo.id}'>编辑</a>  |
 			{/if}
 			{if auth("$classuri/del")}
-			<a class="layui-btn" data-update="{$vo.id}" data-field="delete" data-action='{:url("$classuri/del")}'>删除</a>
+			<a class="" data-update="{$vo.id}" data-field="delete" data-action='{:url("$classuri/del")}'>删除</a>
 			{/if}
 		</td>
 	</tr>

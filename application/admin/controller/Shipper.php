@@ -113,6 +113,7 @@ class Shipper extends BaseController
                     'sexname' => $sexname,//性别
                     'auth_status' => $auth_statuss[$v['auth_status']],//认证状态
                     'bond_status' => $bond_statuss[$v['bond_status']],//保证金状态
+                    'check' => '<input class="list-check-box" value="'.$v['id'].'" type="checkbox"/>',//id
                     'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Shipper/showdetail', ['type' => 'person', 'id' => $v['id']]) . '" >查看</a>',
                 ];
             }
@@ -145,6 +146,7 @@ class Shipper extends BaseController
                     'number' => $v['identity'],//操作人身份证
                     'auth_status' => $auth_statuss[$v['auth_status']],//认证状态
                     'bond_status' => $bond_statuss[$v['bond_status']],//保证金状态
+                    'check' => '<input class="list-check-box" value="'.$v['id'].'" type="checkbox"/>',//id
                     'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Shipper/showdetail', ['type' => 'company', 'id' => $v['id']]) . '" >查看</a>',
                 ];
             }

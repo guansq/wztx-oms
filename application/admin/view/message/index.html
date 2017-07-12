@@ -1,61 +1,70 @@
 {extend name='extra@admin/content' /}
 
 {block name="style"}
-<link href='https://cdn.bootcss.com/iCheck/1.0.2/skins/minimal/minimal.css' rel='stylesheet'>
+<link href="//cdn.bootcss.com/wangeditor/2.1.20/css/wangEditor.css" rel="stylesheet">
 {/block}
-
 {block name="button"}
-
+<div class="nowrap pull-right" style="margin-top:10px">
+    <a type="button" class="layui-btn layui-btn-small" data-open='{:url("$classuri/addueditor")}' data-title="添加系统消息"><i
+            class="fa fa-plus"></i> 添加系统消息</a>
+    <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
+            class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除系统消息
+    </button>
+</div>
 {/block}
 
 {block name="content"}
-<main class="main">
-    <div class="head_box">
-        <a href="javascript:void(0);">财务管理</a>
-        <span> >> </span>
-        <a href="javascript:void(0);">累计未结算</a>
-    </div>
-    <div class="con_box">
-        <h1 class="h1">累计未结算 <span>（共<b id="totalnum">0</b>条）</span></h1>
-        <div class="operate_box">
-            <form class="form-inline">
-                <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="输入订单号" id="order_code" name="order_code">
-                    <input type="text" class="form-control mr_20" placeholder="保单号" id="policy_code" name="policy_code">
-                    <input type="text" class="form-control mr_20" placeholder="货主/司机用户名" id="name" name="name">
-                    <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="交易时间"
-                           id="create_at" name="create_at">
-                </div>
-                <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
-            </form>
-            <div class="operate_tab">
-                <div class="operate_table">
-                    <table id="example" class="table table-bordered" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th><input class="all" type="checkbox"></th>
-                            <th>订单号</th>
-                            <th>保单号</th>
-                            <th>货主</th>
-                            <th>司机</th>
-                            <th>交易时间</th>
-                            <th>订单金额</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action='{:url("$classuri/index")}' onsubmit="return false" method="get">
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="name" value="{$Think.get.name|default=''}" placeholder="名称"
+                       class="input-sm form-control">
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <select class="form-control " id="tran_type" name="type">
+                <option value="all">客户端类型</option>
+                <option value="0">货主端</option>
+                <option value="1">司机端</option>
+            </select>
+        </div>
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white" id="searchVal"><i class="fa fa-search"></i> 搜索
+                </button>
             </div>
         </div>
     </div>
-</main>
+</form>
+<!-- 表单搜索 结束 -->
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table id="example" class="table table-bordered" width="100%" cellspacing="0">
+        <thead>
+        <tr>
+            <th class='list-table-check-td'>
+                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+            </th>
+            <th class='text-center'>标题</th>
+            <th class='text-center'>客户端</th>
+            <th class='text-center'>内容</th>
+            <th class='text-center'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</form>
 {/block}
 
 {block name="script"}
 <script>
-    require(["jquery.dataTables", "laydate", "icheck"], function () {
+    require(["jquery.dataTables", "icheck", "laydate"], function () {
         require(["dataTables.bootstrap"], function () {
             $(document).ready(function () {
                 initPage();
@@ -65,11 +74,11 @@
     });
     function initPage() {
 
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal',
-            increaseArea: '20%' // optional
-        });
+//        $('input').iCheck({
+//            checkboxClass: 'icheckbox_minimal',
+//            radioClass: 'iradio_minimal',
+//            increaseArea: '20%' // optional
+//        });
 
         //时间日期选择器
         $(".date_time").focus(function () {
@@ -99,6 +108,7 @@
             });
         });
 
+
         var table = $('#example').DataTable({
             //paging: false, 设置是否分页
             "info": false,  //去除左下角的信息
@@ -116,53 +126,51 @@
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": '{:url("Financial/getUnbalancedList")}',
+                "url": '{:url("Message/getMessageList")}',
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
-                    parameter.name = $("#name").val();
-                    parameter.order_code = $("#order_code").val();
-                    parameter.create_at = $("#create_at").val();
-                    parameter.policy_code = $("#policy_code").val();
+                    parameter.name = $("#title").val();
+                    parameter.type = $("#type").val();
                 },
             },
-            "pageLength": 1,
+            "pageLength": 10,
             "columns": [
-                {"data": "id"},
-                {"data": "order_code"},
-                {"data": "policy_code"},
-                {"data": "sp_name"},
-                {"data": "dr_name"},
-                {"data": "create_at_trans"},
-                {"data": "amount"},
+                {"data": "check"},
+                {"data": "title"},
+                {"data": "typename"},
+                {"data": "content"},
                 {"data": "action"},
-            ],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "render": function (data) {
-                        //var url = '{:url(\'Order/detail\')}?id='+data;
-                        return '<input class="check" type="checkbox">';
-                    }
-                }
             ],
             "drawCallback": function (settings) {
                 //console.log(settings.json.recordsFiltered);
                 $("#totalnum").html(settings.json.recordsFiltered);
             },
+            "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                $('td:eq(0)', nRow).addClass('list-table-check-td');
+                $('td:eq(1)', nRow).addClass('text-center');
+                $('td:eq(2)', nRow).addClass('text-center');
+                $('td:eq(3)', nRow).addClass('text-center');
+                $('td:eq(4)', nRow).addClass('text-center');
+            }
         });
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
             table.ajax.reload();
         })
+
         // tr点击选中事件
         $('#example tbody').on('click', 'tr', function () {
             $(this).toggleClass('warning');
         });
 
-
+        //删除
+        $('#remove_btn').click(function () {
+            table.rows('.warning').remove().draw(false);
+        });
     }
+
     function initEvent() {
         var checkAll = $('input.all');  //全选的input
         var checkboxs = $('input.check'); //所有单选的input
@@ -187,3 +195,6 @@
 
 </script>
 {/block}
+
+
+

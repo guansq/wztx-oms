@@ -22,8 +22,8 @@ class Article extends BaseController{
     }
 
     function add(){
-        $url='http://'.$_SERVER['SERVER_NAME'].'/#'.$_SERVER["REQUEST_URI"].'';
-        $url =  dirname($url);
+        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/#' . $_SERVER["REQUEST_URI"] ;
+        $url =  dirname($url).'?'.$_SERVER['QUERY_STRING'];
         $articledetail = '';
 
         if(request()->isPost()){
@@ -44,13 +44,16 @@ class Article extends BaseController{
     }
     function addueditor(){
       //  var_dump(input());
-        $url='http://'.$_SERVER['SERVER_NAME'].'/#'.$_SERVER["REQUEST_URI"].'';
-        $url =  dirname($url);
+        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/#' . $_SERVER["REQUEST_URI"] ;
+        $url =  dirname($url).'?'.$_SERVER['QUERY_STRING'];
         $articledetail = '';
 
         if(request()->isPost()){
             $data=input('param.');
             $data['content'] = $data['editor'];
+            if(empty($data['content'])){
+                $this->error('内容不能为空');
+            }
             if(!isset( $data['id'])){
                 $num = Db::name($this->table)->where(['type'=>$data['type']])->field('*')->count();
                 if($num > 0 ){

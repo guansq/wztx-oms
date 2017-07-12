@@ -29,6 +29,7 @@
           <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 开始时间">
           到
           <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 结束时间">
+          <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
         </div>
       </form>
       <div class="sheet">
@@ -70,7 +71,7 @@
        * issure - 是否显示确认按钮
        */
       laydate({
-        format:"YYYY年MM月DD日 hh:mm:ss",
+        format:"YYYY-MM-DD",
         istime:true,
         isclear:true,
         istoday:true,
@@ -80,49 +81,49 @@
 
     //echarts
     var myChart = echarts.init(document.getElementById('echarts'));
-
-    var option = {
-      title: {
-        text: '供应商质量合格率',
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'item',
-        formatter: '{c}'
-      },
-      legend: {
-        left: 'left',
-        data: [ '订单量','交易总额']
-      },
-      xAxis: {
-        type: 'category',
-        name: '时间',
-        splitLine: {show: false},
-        data: ['2017-01', '2017-02', '2017-03', '2017-04', '2017-05', '2017-06', '2017-07', '2017-08', '2017-09']
-      },
-      grid: {
-        left: '1%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      yAxis: {
-        type: 'value',
-        name: '趋势图'
-      },
-      series: [
-        {
-          name: '订单量',
-          type: 'line',
-          data: [3, 20, 44, 18, 68, 35,60,23,88]
-        },
-        {
-          name: '交易总额',
-          type: 'line',
-          data: [3, 5, 8, 50, 8, 35,6,30,28]
-        },
-      ]
-    };
+      var option = {$option};
+//    var option = {
+//      title: {
+//        text: '供应商质量合格率',
+//        left: 'center'
+//      },
+//      tooltip: {
+//        trigger: 'item',
+//        formatter: '{c}'
+//      },
+//      legend: {
+//        left: 'left',
+//        data: [ '订单量','交易总额']
+//      },
+//      xAxis: {
+//        type: 'category',
+//        name: '时间',
+//        splitLine: {show: false},
+//        data: ['2017-01', '2017-02', '2017-03', '2017-04', '2017-05', '2017-06', '2017-07', '2017-08', '2017-09']
+//      },
+//      grid: {
+//        left: '1%',
+//        right: '4%',
+//        bottom: '3%',
+//        containLabel: true
+//      },
+//      yAxis: {
+//        type: 'value',
+//        name: '趋势图'
+//      },
+//      series: [
+//        {
+//          name: '订单量',
+//          type: 'line',
+//          data: [3, 20, 44, 18, 68, 35,60,23,88]
+//        },
+//        {
+//          name: '交易总额',
+//          type: 'line',
+//          data: [3, 5, 8, 50, 8, 35,6,30,28]
+//        },
+//      ]
+//    };
     myChart.setOption(option);
   }
 </script>

@@ -16,14 +16,19 @@
     <div class="con_box">
         <h1 class="h1">车长
             <p class="vehicle">
-                <button type="button" class="btn btn-info" id=""  data-modal='{:url("$classuri/carlengthadd")}'   data-title="添加车长">新增</button>
-                <button type="button" class="btn btn-info" id="rem_vehicle">删除</button>
+                <button type="button" class="layui-btn layui-btn-small"   data-modal='{:url("$classuri/carlengthadd")}'   data-title="添加车长"><i class="fa fa-plus"></i>  添加车长</button>
+                <button data-update data-field='' data-value="1" data-action='{:url("$classuri/carlengthdel")}'
+                        class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除车长
+                </button>
             </p>
         </h1>
         <div class="velength_table">
             <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                 <thead>
                 <tr>
+                    <th class='list-table-check-td'>
+                        <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+                    </th>
                     <th>车长</th>
                     <th>起步价</th>
                     <th>起步公里数</th>
@@ -36,6 +41,7 @@
                 <tbody>
                 {volist name='list' id='plist'}
                 <tr>
+                    <td><input class="list-check-box" value="{$plist.id}" type="checkbox"/></td>
                     <td>{$plist.name}</td>
                     <td>{$plist.init_price}</td>
                     <td>{$plist.init_kilometres}</td>
@@ -43,8 +49,8 @@
                     <td>{$plist.weight_price}元/公里/公斤</td>
                     <td>{if $plist.status eq 0}正常{else /}删除{/if}</td>
                     <td>  <a  data-modal='{:url("$classuri/carlengthadd")}?id={$plist.id}'   data-title="编辑车长">编辑</a> |
-                        {if $plist.status eq 0} <a   data-update="{$plist.id}"  data-field="update" data-action='{:url("$classuri/carlengthdel")}?id={$plist.id}&status=1'     data-title="">删除</a>{else /}
-                        <a data-update="{$plist.id}"  data-field="update"  data-action='{:url("$classuri/carlengthdel")}?id={$plist.id}&status=0'     data-title="">开启</a>{/if}
+                        {if $plist.status eq 0} <a   data-update="{$plist.id}" data-value="1" data-field="status" data-action='{:url("$classuri/carlengthdel")}'     data-title="">删除</a>{else /}
+                        <a data-update="{$plist.id}"  data-value="0" data-field="status" data-action='{:url("$classuri/carlengthdel")}'     data-title="">开启</a>{/if}
                         </td>
                 </tr>
                 {/volist}
