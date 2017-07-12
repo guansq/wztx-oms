@@ -11,51 +11,35 @@
 {block name="content"}
 <main class="main">
     <div class="head_box">
-        <a href="javascript:void(0);">货主管理</a>
+        <a href="javascript:void(0);">财务管理</a>
         <span> >> </span>
-        <a href="javascript:void(0);">个人货主</a>
+        <a href="javascript:void(0);">累计未结算</a>
     </div>
     <div class="con_box">
-        <h1 class="h1">个人货主 <span>（共<b id="totalnum">0</b>条）</span></h1>
+        <h1 class="h1">累计未结算 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
             <form class="form-inline">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="货主名称" id="name" name="name">
-                    <select class="form-control mr_20" id="sex"  name="sex">
-                        <option value="all">性别</option>
-                        <option value="1">男</option>
-                        <option value="2">女</option>
-                    </select>
-                    <select class="form-control mr_20" id="bond_status"  name="bond_status">
-                        <option value="all">保证金状态</option>
-                        <option value="init">未缴纳</option>
-                        <option value="checked">已缴纳</option>
-                        <option value="frozen">冻结</option>
-                    </select>
-                    <select class="form-control" id="auth_status"  name="auth_status">
-                        <option value="all">认证状态</option>
-                        <option value="refuse">已拒绝</option>
-                        <option value="pass">已通过</option>
-                        <option value="check">认证中</option>
-                        <option value="init">未认证</option>
-                    </select>
+                    <input type="text" class="form-control mr_20" placeholder="输入订单号" id="order_code" name="order_code">
+                    <input type="text" class="form-control mr_20" placeholder="保单号" id="policy_code" name="policy_code">
+                    <input type="text" class="form-control mr_20" placeholder="货主/司机用户名" id="name" name="name">
+                    <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="交易时间"
+                           id="create_at" name="create_at">
                 </div>
                 <button type="button" class="btn btn-primary" id="searchVal">搜索</button>
             </form>
             <div class="operate_tab">
-                <div class="operate_tab_btn">
-                    <button id="remove_btn" type="button" class="btn btn-info">删除</button>
-                </div>
                 <div class="operate_table">
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th><input class="all" type="checkbox"></th>
-                            <th>用户名称</th>
-                            <th>手机号</th>
-                            <th>性别</th>
-                            <th>保证金状态</th>
-                            <th>认证状态</th>
+                            <th>订单号</th>
+                            <th>保单号</th>
+                            <th>货主</th>
+                            <th>司机</th>
+                            <th>交易时间</th>
+                            <th>订单金额</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -67,15 +51,11 @@
         </div>
     </div>
 </main>
-
-
 {/block}
 
 {block name="script"}
-
 <script>
-    var table ;
-    require(["jquery.dataTables", "icheck"], function () {
+    require(["jquery.dataTables", "laydate", "icheck"], function () {
         require(["dataTables.bootstrap"], function () {
             $(document).ready(function () {
                 initPage();
@@ -83,14 +63,43 @@
             });
         })
     });
-
     function initPage() {
+
         $('input').iCheck({
             checkboxClass: 'icheckbox_minimal',
             radioClass: 'iradio_minimal',
-            increaseArea: '10%' // optional
+            increaseArea: '20%' // optional
         });
-        table = $('#example').DataTable({
+
+        //时间日期选择器
+        $(".date_time").focus(function () {
+            /*
+             laydate插件提供显示日期控件的方法
+             laydate(options)
+             * options - 选项,格式为 { key : value }
+             * 选项
+             * format - 日期格式
+             *
+             默认格式为 YYYY-MM-DD hh:mm:ss(标准格式)
+             * 客户端
+             * 服务器端
+             * 数据库
+             * istime - 是否开启时间选择
+             * 默认值为false,不开启
+             * isclear - 是否显示清空按钮
+             * istoday - 是否显示今天按钮
+             * issure - 是否显示确认按钮
+             */
+            laydate({
+                format: "YYYY-MM-DD",
+                istime: true,
+                isclear: true,
+                istoday: true,
+                issure: true
+            });
+        });
+
+        var table = $('#example').DataTable({
             //paging: false, 设置是否分页
             "info": false,  //去除左下角的信息
             "lengthChange": false, //是否允许用户改变表格每页显示的记录数
@@ -107,25 +116,25 @@
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": '{:url("Shipper/getSpList")}',
+                "url": '{:url("Financial/getUnbalancedList")}',
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
-                    parameter.type = 'person';
                     parameter.name = $("#name").val();
-                    parameter.auth_status = $("#auth_status").val();
-                    parameter.bond_status = $("#bond_status").val();
-                    parameter.sex = $("#sex").val();
+                    parameter.order_code = $("#order_code").val();
+                    parameter.create_at = $("#create_at").val();
+                    parameter.policy_code = $("#policy_code").val();
                 },
             },
             "pageLength": 1,
             "columns": [
                 {"data": "id"},
-                {"data": "name"},
-                {"data": "phone"},
-                {"data": "sexname"},
-                {"data": "bond_status"},
-                {"data": "auth_status"},
+                {"data": "order_code"},
+                {"data": "policy_code"},
+                {"data": "sp_name"},
+                {"data": "dr_name"},
+                {"data": "create_at_trans"},
+                {"data": "amount"},
                 {"data": "action"},
             ],
             "columnDefs": [
@@ -142,6 +151,7 @@
                 $("#totalnum").html(settings.json.recordsFiltered);
             },
         });
+
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
             table.ajax.reload();
@@ -151,12 +161,8 @@
             $(this).toggleClass('warning');
         });
 
-        //删除物料
-        $('#remove_btn').click(function () {
-            table.rows('.warning').remove().draw(false);
-        });
-    }
 
+    }
     function initEvent() {
         var checkAll = $('input.all');  //全选的input
         var checkboxs = $('input.check'); //所有单选的input
@@ -179,8 +185,5 @@
         })
     }
 
-
-
 </script>
-
 {/block}

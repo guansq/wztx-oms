@@ -18,6 +18,30 @@ class Recharge extends BaseLogic {
         //  dump($list);die;
         return $list;
     }
+
+
+    /*
+       * 得到订单列表
+       */
+    public function getUnbalancedListInfo($start, $length, $where = []) {
+        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseInfo b', 'a.dr_id=b.id', 'left')->where($where)->limit("$start,$length")
+            ->field('a.*,b.real_name dr_name')->select();
+//echo $this->getLastSql();
+        if ($list) {
+            $list = collection($list)->toArray();
+        }
+        //  dump($list);die;
+        return $list;
+    }
+    /*
+       * 得到订单列表
+       */
+    public function getUnbalancedListNum( $where = []) {
+        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseInfo b', 'a.dr_id=b.id', 'left')->where($where)
+            ->field('a.*,b.real_name')->count();
+//echo $this->getLastSql();
+        return $list;
+    }
     /*
       * 得到充值列表
       */

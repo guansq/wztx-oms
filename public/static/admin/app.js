@@ -42,7 +42,7 @@ require.config({
         'websocket': ['../plugs/socket/websocket'],
         'bootstrap': ['../plugs/bootstrap/js/bootstrap.min'],
         'jquery.ztree': ['../plugs/ztree/jquery.ztree.all.min'],
-        'zeroclipboard': ['../plugs/ueditor/third-party/zeroclipboard/ZeroClipboard.min'],
+        'ZeroClipboard': ['../plugs/ueditor/third-party/zeroclipboard/ZeroClipboard'],
         'jquery.cookies': ['../plugs/jquery/jquery.cookie'],
         'jquery.masonry': ['../plugs/jquery/masonry.min'],
         'jquery.dataTables': ['http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min'],
@@ -69,10 +69,14 @@ require.config({
 });
 
 window.WEB_SOCKET_SWF_LOCATION = baseUrl + "../plugs/socket/WebSocketMain.swf";
+
 window.UEDITOR_HOME_URL = (window.ROOT_URL ? window.ROOT_URL + '/static/' : baseUrl) + 'plugs/ueditor/';
 window.LAYDATE_PATH = baseUrl + '../plugs/layui/laydate/';
 
 // UI框架初始化
+require(['ZeroClipboard'], function (ZeroClipboard) {
+    window['ZeroClipboard'] = ZeroClipboard;
+});
 require(['pace', 'jquery', 'layui', 'bootstrap', 'jquery.cookies'], function () {
     layui.config({dir: baseUrl + '../plugs/layui/'});
     layui.use(['layer', 'form'], function () {

@@ -174,7 +174,7 @@ class Driver extends BaseController {
             case 'refuse': //拒绝审核
                 $status['auth_status'] = 'refuse';
                 $tmp = $titile;// . ',' . time();
-                $where['auth_status'] = 'init';
+                $where['auth_status'] = 'check';
                 $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'frozen': //冻结账户

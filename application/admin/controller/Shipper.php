@@ -89,6 +89,7 @@ class Shipper extends BaseController
             foreach ($list as $k => $v) {
                 //用户名称	手机号	性别	保证金状态	认证状态	操作
                 $auth_statuss = ['init' => '未认证',
+                    'check'=>'认证中',
                     'pass' => '认证通过',
                     'refuse' => '认证失败',
                     'delete' => '后台删除'];
@@ -127,6 +128,7 @@ class Shipper extends BaseController
 
                 //用户名称	手机号	性别	保证金状态	认证状态	操作
                 $auth_statuss = ['init' => '未认证',
+                    'check'=>'认证中',
                     'pass' => '认证通过',
                     'refuse' => '认证失败',
                     'delete' => '后台删除'];
@@ -290,7 +292,7 @@ class Shipper extends BaseController
             case 'refuse': //拒绝审核
                 $status['auth_status'] = 'refuse';
                 $tmp = $titile ;//. ',' . time();
-                $where['auth_status'] = 'init';
+                $where['auth_status'] = 'check';
                 $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'frozen': //冻结账户

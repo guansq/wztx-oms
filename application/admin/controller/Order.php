@@ -62,10 +62,6 @@ class Order extends BaseController {
         $returnArr = [];
         foreach ($list as $k => $v) {
             //$logisticstypes = [0 => '同城/长途物流', 1 => '同城物流', 2 => '长途物流'];
-
-            //  $action = '';
-
-
             $returnArr[] = [
                 'id' => $v['id'],//id
                 'order_code' => $v['order_code'],//订单号
@@ -76,12 +72,10 @@ class Order extends BaseController {
                 'dest_address_name' => $v['dest_address_name'],//目的地
                 'status' => $this->stauusLists[$v['status']],//状态
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a>
-                                <a class="hang-up" href="javascript: void(0);">挂起</a>
+                                <a class="hang-up" href="javascript: void(0);" data-field="status" data-value="hang" data-update="'.$v['id'].'" data-action="' . url('Order/hang', ['id' => $v['id']]) . '">挂起</a>
                                 <a class="settle" href="javascript: void(0);">结算</a>
-',
-            ];
+', ];
         }
-
         $total = $orderLogic->getListNum($where);
         // var_dump($returnArr);
         $info = ['draw' => time(), 'recordsTotal' => $total, 'recordsFiltered' => $total, 'data' => $returnArr, 'extdata' => $where];
@@ -105,6 +99,8 @@ class Order extends BaseController {
         }
         $list[0]['statusname'] = $this->stauusLists[$list[0]['status']];
         $pay_cer_pic = explode('|', $list[0]['pay_cer_pic']);
+        $pay_cer_pic = array_filter($pay_cer_pic);
+
         $this->assign('list', $list[0]);
         //凭证信息
         $this->assign('pay_cer_pic', $pay_cer_pic);
@@ -140,14 +136,16 @@ class Order extends BaseController {
     public function hang() {
         $id = input('id');
         $orderLogic = model('Order', 'logic');
-        $status = ['per_status' => 'hang', 'update_at' => time()];
+        $status = ['status' => 'hang', 'update_at' => time()];
         $detail = $orderLogic->updateStatus(['id' => $id], $status);
         // session('user', $user);
         // LogService::write('司机端:' . $id, '审核通过');
         if ($detail) {
-            return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+            $this->success('更新成功！', '');
+            //return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
-            return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+            $this->success('更新失败！', '');
+          //  return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
         //
     }
@@ -166,7 +164,7 @@ class Order extends BaseController {
             case 'refuse': //拒绝审核
                 $status['per_status'] = 'refuse';
                 $tmp = $titile;// . ',' . time();
-                $where['per_status'] = 'init';
+               // $where['per_status'] = 'init';
                 $status['per_remark'] = $tmp;
                 break;
             default:

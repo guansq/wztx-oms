@@ -14,6 +14,7 @@ class Article extends BaseController{
     protected $title = '文章管理';
 
     function index(){
+
         $db = Db::name($this->table);
         $this->assign('list',   $db->field('*')->select());
         $this->assign('title',$this->title);
@@ -21,28 +22,58 @@ class Article extends BaseController{
     }
 
     function add(){
-        $this->assign('articledetail','');
+        $url='http://'.$_SERVER['SERVER_NAME'].'/#'.$_SERVER["REQUEST_URI"].'';
+        $url =  dirname($url);
+        $articledetail = '';
+
         if(request()->isPost()){
             $data=input('param.');
-            $result = $this->validate($data,'Article');
-            if($result !== true){
-                $this->error($result);
-            }
             $result = DataService::save($this->table, $data);//Db::name($this->table)->allowField(true)->insert($data);
-            LogService::write('Article管理', '上传Article成功');
-            $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
+            //LogService::write('Article管理', '上传Article成功');
+            $result !== false ? $this->success('恭喜，保存成功哦！',  $url) : $this->error('保存失败，请稍候再试！');
+            //return true;
         }else{
+            $id = input('id');
+            if(!empty($id)){
+                $articledetail = Db::name($this->table)->where('id', $id)->select();
+                $articledetail = $articledetail[0];
+            }
+            $this->assign('articledetail',$articledetail);
             return view();
         }
     }
-    function edit(){
-        $id = input('id');
-        if(empty($id)){
-            $this->error('当前文章无法编辑!');
+    function addueditor(){
+      //  var_dump(input());
+        $url='http://'.$_SERVER['SERVER_NAME'].'/#'.$_SERVER["REQUEST_URI"].'';
+        $url =  dirname($url);
+        $articledetail = '';
+
+        if(request()->isPost()){
+            $data=input('param.');
+            $data['content'] = $data['editor'];
+            if(!isset( $data['id'])){
+                $num = Db::name($this->table)->where(['type'=>$data['type']])->field('*')->count();
+                if($num > 0 ){
+                    $this->error('type值必须唯一');
+                }
+            }
+            $result = DataService::save($this->table, $data);//Db::name($this->table)->allowField(true)->insert($data);
+            //LogService::write('Article管理', '上传Article成功');
+            $result !== false ? $this->success('恭喜，保存成功哦！',  $url) : $this->error('保存失败，请稍候再试！');
+            //return true;
+        }else{
+            $id = input('id');
+            if(!empty($id)){
+                $articledetail = Db::name($this->table)->where('id', $id)->select();
+                $articledetail = $articledetail[0];
+            }
+            $this->assign('articledetail',$articledetail);
+            return view();
         }
-        $articledetail = Db::name($this->table)->where('id', $id)->select();
-        $this->assign('articledetail',$articledetail[0]);
-        return view('add');
+    }
+
+    function edit(){
+
     }
     /**
      * 删除文章

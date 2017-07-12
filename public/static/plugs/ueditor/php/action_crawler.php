@@ -24,8 +24,8 @@ if (isset($_POST[$fieldName])) {
 } else {
     $source = $_GET[$fieldName];
 }
-foreach ($source as $local_url) {
-    $item = new Uploader($local_url, $config, "remote");
+foreach ($source as $imgUrl) {
+    $item = new Uploader($imgUrl, $config, "remote");
     $info = $item->getFileInfo();
     array_push($list, array(
         "state" => $info["state"],
@@ -33,7 +33,7 @@ foreach ($source as $local_url) {
         "size" => $info["size"],
         "title" => htmlspecialchars($info["title"]),
         "original" => htmlspecialchars($info["original"]),
-        "source" => htmlspecialchars($local_url)
+        "source" => htmlspecialchars($imgUrl)
     ));
 }
 

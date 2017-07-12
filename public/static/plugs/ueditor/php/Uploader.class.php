@@ -172,16 +172,16 @@ class Uploader
      */
     private function saveRemote()
     {
-        $local_url = htmlspecialchars($this->fileField);
-        $local_url = str_replace("&amp;", "&", $local_url);
+        $imgUrl = htmlspecialchars($this->fileField);
+        $imgUrl = str_replace("&amp;", "&", $imgUrl);
 
         //http开头验证
-        if (strpos($local_url, "http") !== 0) {
+        if (strpos($imgUrl, "http") !== 0) {
             $this->stateInfo = $this->getStateInfo("ERROR_HTTP_LINK");
             return;
         }
 
-        preg_match('/(^https*:\/\/[^:\/]+)/', $local_url, $matches);
+        preg_match('/(^https*:\/\/[^:\/]+)/', $imgUrl, $matches);
         $host_with_protocol = count($matches) > 1 ? $matches[1] : '';
 
         // 判断是否是合法 url
@@ -202,13 +202,13 @@ class Uploader
         }
 
         //获取请求头并检测死链
-        $heads = get_headers($local_url, 1);
+        $heads = get_headers($imgUrl, 1);
         if (!(stristr($heads[0], "200") && stristr($heads[0], "OK"))) {
             $this->stateInfo = $this->getStateInfo("ERROR_DEAD_LINK");
             return;
         }
         //格式验证(扩展名验证和Content-Type验证)
-        $fileType = strtolower(strrchr($local_url, '.'));
+        $fileType = strtolower(strrchr($imgUrl, '.'));
         if (!in_array($fileType, $this->config['allowFiles']) || !isset($heads['Content-Type']) || !stristr($heads['Content-Type'], "image")) {
             $this->stateInfo = $this->getStateInfo("ERROR_HTTP_CONTENTTYPE");
             return;
@@ -221,10 +221,10 @@ class Uploader
                 'follow_location' => false // don't follow redirects
             ))
         );
-        readfile($local_url, false, $context);
+        readfile($imgUrl, false, $context);
         $img = ob_get_contents();
         ob_end_clean();
-        preg_match("/[\/]([^\/]*)[\.]?[^\.\/]*$/", $local_url, $m);
+        preg_match("/[\/]([^\/]*)[\.]?[^\.\/]*$/", $imgUrl, $m);
 
         $this->oriName = $m ? $m[1]:"";
         $this->fileSize = strlen($img);

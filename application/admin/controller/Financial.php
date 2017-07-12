@@ -22,11 +22,55 @@ class Financial extends BaseController {
      * @return \think\Response
      */
     public function rechargeRecord() {
-
+        return view();
+    }
+    //累计未结算
+    public function unbalancedAccount(){
         return view();
     }
 
+    public function getUnbalancedList() {
+        $where = [];
+        $get = input('param.');
+        // 应用搜索条件
+        foreach (['name', 'order_code', 'create_at', 'policy_code'] as $key) {
+            //$get[$key] = trim($get[$key]);
+            if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
+                if ($key == 'name') {
+                    $where['a.company_name|a.real_name|b.real_name'] = ['like', "%{$get[$key]}%"];
+                }  elseif ($key == 'create_at') {
+                    $where['a.create_at'] = array('between', array(strtotime($get[$key]), strtotime($get[$key]) + 86400));
+                } else {
+                    $where[$key] = $get[$key];
+                }
+            }
+        }
+        $where['status'] = ['exp','in ("init")'];
+        $start = input('start') == '' ? 0 : input('start');
+        $length = input('length') == '' ? 10 : input('length');
+        $rechargeLogic = Model('Recharge', 'logic');
+        $list = $rechargeLogic->getUnbalancedListInfo($start, $length, $where);
+        $returnArr = [];
+        foreach ($list as $k => $v) {
+            $sp_name = empty($v['real_name'])?((empty($v['company_name'])?'':$v['company_name'])):$v['real_name'];
+            $returnArr[] = [
+                'id' => $v['id'],//id
+                'order_code' => $v['order_code'],//订单号
+                'policy_code' => $v['policy_code'],//保单号
+                'sp_name' => $sp_name,//货主端姓名
+                'dr_name' => $v['dr_name'],//司机姓名
+                'create_at_trans' => date('Y-m-d',$v['create_at']),//交易时间
+                'amount' => $v['final_price'],//订单金额
+                'action' => '',
+            ];
+        }
 
+        $total = $rechargeLogic->getUnbalancedListNum($where);
+        // var_dump($returnArr);
+        $info = ['draw' => time(), 'recordsTotal' => $total, 'recordsFiltered' => $total, 'data' => $returnArr, 'extdata' => $where];
+
+        return json($info);
+    }
     /**
      * 得到充值记录
      */
