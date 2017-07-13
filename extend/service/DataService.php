@@ -118,15 +118,20 @@ class DataService {
         !empty($where) && $db->where($where);
 
         // 删除模式
+        $fields = $db->getTableFields(['table' => $db->getTable()]);
         if ($field === 'delete') {
-            $fields = $db->getTableFields(['table' => $db->getTable()]);
             if (in_array('is_deleted', $fields)) {
                 return false !== $db->update(['is_deleted' => 1]);
             }
             return false !== $db->delete();
         }
+        $updatewhere = [$field => $value];
+        if (in_array('update_at', $fields)) {
+            $updatewhere['update_at'] =time();
+        }
+
         // 更新模式
-        return false !== $db->update([$field => $value]);
+        return false !== $db->update($updatewhere);
     }
 
 }

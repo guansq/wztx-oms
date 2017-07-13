@@ -26,39 +26,39 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">公司名称</td>
-                        <td class="col-sm-6">{$item.com_short_name}</td>
+                        <td class="col-sm-6">{$item.com_short_name|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">营业执照号</td>
-                        <td class="col-sm-6">{$item.com_buss_num}</td>
+                        <td class="col-sm-6">{$item.com_buss_num|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">法人姓名</td>
-                        <td class="col-sm-6">{$item.law_person}</td>
+                        <td class="col-sm-6">{$item.law_person|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">法人身份证号</td>
-                        <td class="col-sm-6">{$item.com_identity}</td>
+                        <td class="col-sm-6">{$item.com_identity|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">企业联系电话</td>
-                        <td class="col-sm-6">{$item.phone}</td>
+                        <td class="col-sm-6">{$item.phone|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">地址</td>
-                        <td class="col-sm-6">{$item.address}</td>
+                        <td class="col-sm-6">{$item.address|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">开户名称</td>
-                        <td class="col-sm-6">{$item.deposit_name}</td>
+                        <td class="col-sm-6">{$item.deposit_name|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">开户行</td>
-                        <td class="col-sm-6">{$item.bank}</td>
+                        <td class="col-sm-6">{$item.bank|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">结算账号</td>
-                        <td class="col-sm-6">{$item.account}</td>
+                        <td class="col-sm-6">{$item.account|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">保证金金额</td>
@@ -76,17 +76,29 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.com_front_pic) && $item.com_front_pic neq ''}
                     <img src="{$item.com_front_pic}" alt="法人身份证正面照">
+                    {else/}
+                    法人身份证正面照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.com_back_pic) && $item.com_back_pic neq ''}
                     <img src="{$item.com_back_pic}" alt="法人身份证反面照">
+                    {else/}
+                    法人身份证反面照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.buss_pic) && $item.buss_pic neq ''}
                     <img src="{$item.buss_pic}" alt="营业执照">
+                    {else/}
+                    营业执照
+                    {/if}
                 </section>
             </div>
             <div class="datails_tit">
@@ -99,24 +111,36 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">操作人身份证号</td>
-                        <td class="col-sm-6">{$item.person_identity}</td>
+                        <td class="col-sm-6">{$item.person_identity|default=''}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.hold_pic) && $item.hold_pic neq ''}
                     <img src="{$item.hold_pic}" alt="手持身份证照片">
+                    {else/}
+                    手持身份证照片
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.person_front_pic) && $item.person_front_pic neq ''}
                     <img src="{$item.person_front_pic}" alt="身份证正面照">
+                    {else/}
+                    身份证正面照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.person_back_pic) && $item.person_back_pic neq ''}
                     <img src="{$item.person_back_pic}" alt="身份证反面照">
+                    {else/}
+                    身份证反面照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">

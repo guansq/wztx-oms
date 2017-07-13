@@ -26,20 +26,20 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">姓名</td>
-                        <td class="col-sm-6">{$item.real_name}</td>
+                        <td class="col-sm-6">{$item.real_name|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">性别</td>
-                        <td class="col-sm-6">{if condition="$item.sex eq 2"}女{else/}{if  condition="$item.sex eq 1"/}男{else}未知{/if}{/if}
+                        <td class="col-sm-6">{if condition="$item.sex eq 2"}女{elseif condition="$item.sex eq 1"/}男{else}未知{/if}
                         </td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">身份证</td>
-                        <td class="col-sm-6">{$item.identity}</td>
+                        <td class="col-sm-6">{$item.identity|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">手机号</td>
-                        <td class="col-sm-6">{$item.phone}</td>
+                        <td class="col-sm-6">{$item.phone|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">保证金金额</td>
@@ -57,24 +57,36 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.hold_pic) && $item.hold_pic neq ''}
                     <img src="{$item.hold_pic}" alt="手持身份证照片">
+                    {else/}
+                    手持身份证照片
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.front_pic) && $item.front_pic neq ''}
                     <img src="{$item.front_pic}" alt="身份证正面照">
+                    {else/}
+                    身份证正面照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.back_pic) && $item.back_pic neq ''}
                     <img src="{$item.back_pic}" alt="身份证反面照">
+                    {else/}
+                    身份证反面照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_btn">
                     {if condition="$item.auth_status eq 'check'"}
                     <button type="button" class="btn btn-primary" id="pass">通过审核</button>
-                    <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？" >拒绝审核</button>
+                    <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？">拒绝审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>
                     {/if}
                     {if condition="$item.auth_status eq 'pass'"}
@@ -98,7 +110,7 @@
                     {if condition="$item.is_black eq '0'"}
                     <button type="button" class="btn btn-primary" id="black" data-reason="确定加入黑名单？">加入黑名单</button>
                     {else /}
-                    <button type="button" class="btn btn-primary" id="unblack"  data-reason="确定拉回白名单？">拉回白名单</button>
+                    <button type="button" class="btn btn-primary" id="unblack" data-reason="确定拉回白名单？">拉回白名单</button>
                     {/if}
                 </section>
             </div>
@@ -117,24 +129,24 @@
             layer.close(index);
             layer.load();
             $.ajax({
-                'url' : '{:url("Shipper/pass")}',
-                'type' : 'POST',
-                'data' : {
-                    'id':detailid
+                'url': '{:url("Shipper/pass")}',
+                'type': 'POST',
+                'data': {
+                    'id': detailid
                 },
-                'complete' : function(){
+                'complete': function () {
                 },
-                'success' : function(obj){
+                'success': function (obj) {
                     layer.closeAll();
-                    if(obj.code == 2000){
-                        layer.msg('通过审核', function(){
+                    if (obj.code == 2000) {
+                        layer.msg('通过审核', function () {
                             location.reload();
                         });
-                    }else{
+                    } else {
                         layer.alert(obj.msg);
                     }
                 },
-                'error' : function(){
+                'error': function () {
                     layer.closeAll();
                     layer.alert('请求失败');
                 }
@@ -153,27 +165,27 @@
             layer.close(index);
             layer.load();
             $.ajax({
-                'url' : '{:url("Shipper/auth")}',
-                'type' : 'POST',
-                'data' : {
-                    'id':detailid,
-                    'type':type,
-                    'title':value,
-                    'phone':'{$item.phone}'
+                'url': '{:url("Shipper/auth")}',
+                'type': 'POST',
+                'data': {
+                    'id': detailid,
+                    'type': type,
+                    'title': value,
+                    'phone': '{$item.phone}'
                 },
-                'complete' : function(){
+                'complete': function () {
                 },
-                'success' : function(obj){
+                'success': function (obj) {
                     layer.closeAll();
-                    if(obj.code == 2000){
-                        layer.msg('操作成功', function(){
+                    if (obj.code == 2000) {
+                        layer.msg('操作成功', function () {
                             location.reload();
                         });
-                    }else{
+                    } else {
                         layer.alert(obj.msg);
                     }
                 },
-                'error' : function(){
+                'error': function () {
                     layer.closeAll();
                     layer.alert('请求失败');
                 }

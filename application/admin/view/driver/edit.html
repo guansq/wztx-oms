@@ -26,23 +26,23 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">姓名</td>
-                        <td class="col-sm-6">{$item.name}</td>
+                        <td class="col-sm-6">{$item.name|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">性别</td>
-                        <td class="col-sm-6">{$item.sexname}</td>
+                        <td class="col-sm-6">{$item.sexname|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">身份证号</td>
-                        <td class="col-sm-6">{$item.number}</td>
+                        <td class="col-sm-6">{$item.number|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">地址</td>
-                        <td class="col-sm-6">{$item.address}</td>
+                        <td class="col-sm-6">{$item.address|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">物流类型</td>
-                        <td class="col-sm-6">{$item.logisticstype}</td>
+                        <td class="col-sm-6">{$item.logisticstype|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">手机号码</td>
@@ -52,7 +52,11 @@
                 </table>
                 <div class="auth_box">
                     <section class="auth_img">
+                        {if isset($item.personholdpic)  && $item.personholdpic neq ''}
                         <img src="{$item.personholdpic}" alt="手持身份证照">
+                        {else/}
+                        手持身份证照
+                        {/if}
                     </section>
                 </div>
             </div>
@@ -65,12 +69,20 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.personfrontpic)  && $item.personfrontpic neq ''}
                     <img src="{$item.personfrontpic}" alt="身份证正面照">
+                    {else/}
+                    身份证正面照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.personbackpic)  && $item.personbackpic neq ''}
                     <img src="{$item.personbackpic}" alt="身份证反面照">
+                    {else /}
+                    身份证反面照
+                    {/if}
                 </section>
             </div>
         </div>
@@ -85,59 +97,78 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">车型</td>
-                        <td class="col-sm-6">{$item.carstylename}</td>
+                        <td class="col-sm-6">{$item.carstylename|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">车长</td>
-                        <td class="col-sm-6">{$item.carlengthname}</td>
+                        <td class="col-sm-6">{$item.carlengthname|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">载重</td>
-                        <td class="col-sm-6">{$item.weight}</td>
+                        <td class="col-sm-6">{$item.weight|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">可载体积</td>
-                        <td class="col-sm-6">{$item.volume}</td>
+                        <td class="col-sm-6">{$item.volume|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">车牌号</td>
-                        <td class="col-sm-6">{$item.cardnumber}</td>
+                        <td class="col-sm-6">{$item.cardnumber|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">保单截止日期</td>
-                        <td class="col-sm-6">{if $item.policydeadline neq ''}{$item.policydeadline|date='Y-m-d',###}{/if}</td>
+                        <td class="col-sm-6">{if isset($item.policydeadline) && $item.policydeadline neq ''}{$item.policydeadline|date='Y-m-d',###}{/if}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">行驶证截止日期</td>
-                        <td class="col-sm-6">{if $item.licensedeadline neq ''}{$item.licensedeadline|date='Y-m-d',###}{/if}</td>
+                        <td class="col-sm-6">{if  isset($item.policydeadline) &&  $item.licensedeadline neq ''}{$item.licensedeadline|date='Y-m-d',###}{/if}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.indexpic) && $item.indexpic neq ''}
                     <img src="{$item.indexpic}" alt="车头和车牌号码照">
+                    {else /}
+                    车头和车牌号码照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.drivinglicencepic) && $item.drivinglicencepic neq '' }
                     <img src="{$item.drivinglicencepic}" alt="驾驶证照">
+                    {else/}
+                    驾驶证照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.vehiclelicensepic) && $item.vehiclelicensepic neq ''}
                     <img src="{$item.vehiclelicensepic}" alt="行驶证照">
+                    {else/}
+                    行驶证照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.insurancepolicypic) && $item.insurancepolicypic neq ''}
                     <img src="{$item.insurancepolicypic}" alt="保险单照">
+                    {else /}
+                    保险单照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.operationpic) && $item.operationpic neq ''}
                     <img src="{$item.operationpic}" alt="运营证照">
-
+                    {else/}
+                    运营证照
+                    {/if}
                 </section>
             </div>
             <div class="auth_box">

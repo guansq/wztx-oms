@@ -42,10 +42,13 @@
                 </div>
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
+            <span style="color: red">*删除操作谨慎操作（不可逆）</span>
+            <div class="nowrap" style="margin-top:10px;">
+                <button data-update data-field='status' data-value="1" data-action='{:url("$classuri/delete")}'
+                        class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除个人货主
+                </button>
+            </div>
             <div class="operate_tab">
-                <div class="operate_tab_btn">
-                    <button id="remove_btn" type="button" class="btn btn-info">删除</button>
-                </div>
                 <div class="operate_table">
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
@@ -120,7 +123,7 @@
                     parameter.sex = $("#sex").val();
                 },
             },
-            "pageLength": 1,
+            "pageLength": 10,
             "columns": [
                 {"data": "check"},
                 {"data": "name"},

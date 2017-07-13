@@ -23,27 +23,33 @@
                 <div class="form-group mr_20">
                     <input type="text" class="form-control" placeholder="输入用户名" id="name" name="name">
                 </div>
+                <select class="form-control" id="type"  name="type">
+                    <option value="all">选择端口</option>
+                    <option value="0">货主端</option>
+                    <option value="1">司机端</option>
+                </select>
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <div class="operate_tab">
                 <div class="operate_tab_btn">
-                    <button id="remove_btn" type="button" class="btn btn-info mr_20">删除</button>
-                    <button type="button" class="btn btn-info">刷新</button>
+                    <!--<button id="remove_btn" type="button" class="btn btn-info mr_20">删除</button>-->
+                    <!--<button type="button" class="btn btn-info">刷新</button>-->
                 </div>
                 <div class="operate_table">
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th><input class="all" type="checkbox"></th>
+                            <th class='list-table-check-td'>
+                                序号
+                            </th>
                             <th>账户ID</th>
                             <th>账户名称</th>
+                            <th>显示端口</th>
                             <th>分享次数</th>
                             <th>已获得佣金</th>
-                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
-
                         </tbody>
                     </table>
                 </div>
@@ -66,11 +72,11 @@
     });
     function initPage() {
 
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal',
-            increaseArea: '20%' // optional
-        });
+//        $('input').iCheck({
+//            checkboxClass: 'icheckbox_minimal',
+//            radioClass: 'iradio_minimal',
+//            increaseArea: '20%' // optional
+//        });
 
         var table = $('#example').DataTable({
             //paging: false, 设置是否分页
@@ -94,26 +100,21 @@
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
                     parameter.name = $("#name").val();
+                    parameter.type = $("#type").val();
                 },
             },
             "pageLength": 10,
             "columns": [
-                {"data": ""},
+                {"data": "check"},
                 {"data": "accountid"},
                 {"data": "sharename"},
+                {"data": "typename"},
                 {"data": "num"},
                 {"data": "total"},
-                {"data": "action"},
             ],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "render": function (data) {
-                        //var url = '{:url(\'Order/detail\')}?id='+data;
-                        return '<input class="check" type="checkbox">';
-                    }
-                }
-            ],
+            "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                $('td:eq(0)', nRow).addClass('list-table-check-td');
+            },
             "drawCallback": function (settings) {
                 //console.log(settings.json.recordsFiltered);
                 $("#totalnum").html(settings.json.recordsFiltered);

@@ -108,6 +108,7 @@ class Uploader
             return;
         }
 
+
         //创建目录失败
         if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
@@ -147,6 +148,7 @@ class Uploader
             $this->stateInfo = $this->getStateInfo("ERROR_SIZE_EXCEED");
             return;
         }
+
 
         //创建目录失败
         if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {

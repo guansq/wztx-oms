@@ -1,8 +1,10 @@
 <?php
 namespace app\admin\controller;
 use think\Request;
+use service\DataService;
 class OrderComment extends BaseController
 {
+    protected $table = 'Comment';
     /**
      * 显示资源列表
      *
@@ -60,12 +62,17 @@ class OrderComment extends BaseController
             //	订单编号	评论者	发货时效	服务态度	满意度	评论时间	评论信息
             $action = '';
             if (!empty($v['status'])) {
-                $action = '<button type="button" class="btn btn-primary changestatus" onclick="changeStauts(\'0\',\''.$v['id'].'\',\'确定不屏蔽了？\');" data-msg="确定不屏蔽了？" data-status="0" id="'.$v['id'].'">重新显示</button>';
+                $action =   ' <a data-update="'.$v['id'].'"  data-value="0" data-field="status" data-action="' . url('OrderComment/updateStatus', ['id' => $v['id']]) . '"     data-title="">显示</a> ';
+              $commentstatus = '已屏蔽';
+               // $action = '<button type="button" class="btn btn-primary changestatus" onclick="changeStauts(\'0\',\''.$v['id'].'\',\'确定不屏蔽了？\');" data-msg="确定不屏蔽了？" data-status="0" id="'.$v['id'].'">重新显示</button>';
             } else {
-                $action = '<button type="button" class="btn btn-primary changestatus" onclick="changeStauts(\'1\',\''.$v['id'].'\',\'确定屏蔽了？\');" data-msg="确定屏蔽了？"  data-status="1" id="'.$v['id'].'">屏蔽</button>';
+                $action =   ' <a data-update="'.$v['id'].'"  data-value="1" data-field="status" data-action="' . url('OrderComment/updateStatus', ['id' => $v['id']]) . '"     data-title="">屏蔽</a> ';
+                $commentstatus = '显示';
+                // $action = '<button type="button" class="btn btn-primary changestatus" onclick="changeStauts(\'1\',\''.$v['id'].'\',\'确定屏蔽了？\');" data-msg="确定屏蔽了？"  data-status="1" id="'.$v['id'].'">屏蔽</button>';
             }
             $returnArr[] = [
                 'id' => $v['id'],//id
+                'check' => '<input class="list-check-box" value="'.$v['id'].'" type="checkbox"/>',//id
                 'pay_orderid' => $v['pay_orderid'],//订单编号
                 'spbasename' => $v['sp_name'],//评论者
                 'limitship' => $v['limit_ship'] . '星',//发货时效几星
@@ -74,6 +81,7 @@ class OrderComment extends BaseController
                 'posttime' => date('Y-m-d H:i:s', $v['post_time']),//评论时间
                 'content' => $v['content'],//评论信息
                 'status' => $v['status'], //是否屏蔽
+                'commentstatus'=>$commentstatus,
                 'action' => $action
             ];
         }
@@ -86,7 +94,11 @@ class OrderComment extends BaseController
     //更新屏蔽状态
     public function updateStatus()
     {
-        $id = input('id');
+        if (DataService::update($this->table)) {
+            $this->success("评论状态更改成功！", '');
+        }
+        $this->error("评论状态更改失败，请稍候再试！");
+       /* $id = input('id');
         $statu = input('status');
         $orderCommentLogic = model('OrderComment', 'logic');
         $status = ['status' =>$statu, 'update_at' => time()];
@@ -95,7 +107,7 @@ class OrderComment extends BaseController
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
-        }
+        }*/
         //
     }
     /**

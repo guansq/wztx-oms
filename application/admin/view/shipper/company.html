@@ -43,15 +43,20 @@
                 </div>
                 <button type="button" class="btn btn-primary"  id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
+            <span style="color: red">*删除操作谨慎操作（不可逆）</span>
+            <div class="nowrap" style="margin-top:10px;">
+                <button data-update data-field='status' data-value="1" data-action='{:url("$classuri/delete")}'
+                        class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除公司货主
+                </button>
+            </div>
             <div class="operate_tab">
-                <div class="operate_tab_btn">
-                    <button id="remove_btn" type="button" class="btn btn-info">删除</button>
-                </div>
                 <div class="operate_table">
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th><input class="all" type="checkbox"></th>
+                            <th class='list-table-check-td'>
+                                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+                            </th>
                             <th>企业名称</th>
                             <th>企业电话</th>
                             <th>所属省份</th>
@@ -86,14 +91,6 @@
     });
 
     function initPage() {
-
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal',
-            increaseArea: '10%' // optional
-        });
-
-
         var table = $('#example').DataTable({
             //paging: false, 设置是否分页
             "info": false,  //去除左下角的信息
@@ -122,9 +119,9 @@
                     parameter.province = $("#province").val();
                 },
             },
-            "pageLength": 1,
+            "pageLength": 10,
             "columns": [
-                {"data": "id"},
+                {"data": "check"},
                 {"data": "name"},
                 {"data": "phone"},
                 {"data": "province"},
@@ -133,15 +130,9 @@
                 {"data": "auth_status"},
                 {"data": "action"},
             ],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "render": function (data) {
-                        //var url = '{:url(\'Order/detail\')}?id='+data;
-                        return '<input class="check" type="checkbox">';
-                    }
-                }
-            ],
+            "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                $('td:eq(0)', nRow).addClass('list-table-check-td');
+            },
             "drawCallback": function (settings) {
                 //console.log(settings.json.recordsFiltered);
                 $("#totalnum").html(settings.json.recordsFiltered);

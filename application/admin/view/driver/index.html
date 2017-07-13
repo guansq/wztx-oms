@@ -22,7 +22,7 @@
             <form class="form-inline">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control mr_20" placeholder="司机名称/车牌号" id="name" name="name">
-                    <select class="form-control mr_20" id="sex"  name="sex">
+                    <select class="form-control mr_20" id="sex" name="sex">
                         <option value="all">性别</option>
                         <option value="1">男</option>
                         <option value="2">女</option>
@@ -36,15 +36,20 @@
                 </div>
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
+            <span style="color: red">*删除操作谨慎操作（不可逆）</span>
+            <div class="nowrap" style="margin-top:10px;">
+                <button data-update data-field='status' data-value="1" data-action='{:url("$classuri/delete")}'
+                        class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除司机
+                </button>
+            </div>
             <div class="operate_tab">
-                <div class="operate_tab_btn">
-                    <button id="remove_btn" type="button" class="btn btn-info">删除</button>
-                </div>
                 <div class="operate_table">
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th><input class="all" type="checkbox"></th>
+                            <th class='list-table-check-td'>
+                                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+                            </th>
                             <th>姓名</th>
                             <th>手机号</th>
                             <th>性别</th>
@@ -81,12 +86,6 @@
 
     function initPage() {
 
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal',
-            increaseArea: '20%' // optional
-        });
-
         var table = $('#example').DataTable({
             //paging: false, 设置是否分页
             "info": false,  //去除左下角的信息
@@ -115,7 +114,7 @@
             },
             "pageLength": 10,
             "columns": [
-                {"data": "id"},
+                {"data": "check"},
                 {"data": "name"},
                 {"data": "phone"},
                 {"data": "sexname"},
@@ -125,15 +124,9 @@
                 {"data": "cardnumber"},
                 {"data": "action"},
             ],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "render": function (data) {
-                        //var url = '{:url(\'Order/detail\')}?id='+data;
-                        return '<input class="check" type="checkbox">';
-                    }
-                }
-            ],
+            "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                $('td:eq(0)', nRow).addClass('list-table-check-td');
+            },
             "drawCallback": function (settings) {
                 //console.log(settings.json.recordsFiltered);
                 $("#totalnum").html(settings.json.recordsFiltered);

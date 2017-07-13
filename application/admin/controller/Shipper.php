@@ -4,16 +4,15 @@ namespace app\admin\controller;
 
 use service\LogService;
 use think\Request;
+use  think\db;
 
-class Shipper extends BaseController
-{
+class Shipper extends BaseController {
     /**
      * 显示资源列表
      *
      * @return \think\Response
      */
-    public function index()
-    {
+    public function index() {
         if (!empty(input('type')) && in_array(input('type'), ['person', 'company'])) {
             $tpl = input('type');
         } else {
@@ -31,8 +30,7 @@ class Shipper extends BaseController
      * 得到个人和公司货主列表
      */
 
-    public function getSpList()
-    {
+    public function getSpList() {
         $where = [];
         if (empty(input('type')) || !in_array(input('type'), ['person', 'company'])) {
             $info = ['draw' => time(), 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => [], 'extdata' => $where];
@@ -69,13 +67,7 @@ class Shipper extends BaseController
         }
 
         $where['type'] = $type;
-        // 应用搜索条件
-        /* foreach (['main_name', 'name', 'code', 'pur_attr'] as $key) {
-             if (isset($get[$key]) && $get[$key] !== '') {
-                 $where[$key] = ['like',"%{$get[$key]}%"];
-             }
-         }*/
-        //var_dump($where);
+
         $start = input('start') == '' ? 0 : input('start');
         $length = input('length') == '' ? 10 : input('length');
         $shipperLogic = Model('Shipper', 'logic');
@@ -89,7 +81,7 @@ class Shipper extends BaseController
             foreach ($list as $k => $v) {
                 //用户名称	手机号	性别	保证金状态	认证状态	操作
                 $auth_statuss = ['init' => '未认证',
-                    'check'=>'认证中',
+                    'check' => '认证中',
                     'pass' => '认证通过',
                     'refuse' => '认证失败',
                     'delete' => '后台删除'];
@@ -102,7 +94,7 @@ class Shipper extends BaseController
                     $sexname = '未知';
                 } elseif ($v['sex'] === 1) {
                     $sexname = ' 男';
-                }elseif ($v['sex'] === 2) {
+                } elseif ($v['sex'] === 2) {
                     $sexname = '女';
                 }
                 //  $action = '';
@@ -113,15 +105,15 @@ class Shipper extends BaseController
                     'sexname' => $sexname,//性别
                     'auth_status' => $auth_statuss[$v['auth_status']],//认证状态
                     'bond_status' => $bond_statuss[$v['bond_status']],//保证金状态
-                    'check' => '<input class="list-check-box" value="'.$v['id'].'" type="checkbox"/>',//id
+                    'check' => '<input class="list-check-box" value="' . $v['id'] . '" type="checkbox"/>',//id
                     'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Shipper/showdetail', ['type' => 'person', 'id' => $v['id']]) . '" >查看</a>',
                 ];
             }
         } else if (input('type') == 'company') {
             foreach ($list as $k => $v) {
                 $province = '';
-                foreach ($provincelist as $item=>$value){
-                    if(strpos( $v['address'],$value) !== false){
+                foreach ($provincelist as $item => $value) {
+                    if (strpos($v['address'], $value) !== false) {
                         $province = $value;
                         break;
                     }
@@ -129,7 +121,7 @@ class Shipper extends BaseController
 
                 //用户名称	手机号	性别	保证金状态	认证状态	操作
                 $auth_statuss = ['init' => '未认证',
-                    'check'=>'认证中',
+                    'check' => '认证中',
                     'pass' => '认证通过',
                     'refuse' => '认证失败',
                     'delete' => '后台删除'];
@@ -140,13 +132,13 @@ class Shipper extends BaseController
                 //  $action = '';
                 $returnArr[] = [
                     'id' => $v['id'],//id
-                    'name' => $v['com_short_name'],//企业名称
+                    'name' => $v['com_name'],//企业名称
                     'phone' => $v['companyphone'],//企业电话
                     'province' => $province,//省
                     'number' => $v['identity'],//操作人身份证
                     'auth_status' => $auth_statuss[$v['auth_status']],//认证状态
                     'bond_status' => $bond_statuss[$v['bond_status']],//保证金状态
-                    'check' => '<input class="list-check-box" value="'.$v['id'].'" type="checkbox"/>',//id
+                    'check' => '<input class="list-check-box" value="' . $v['id'] . '" type="checkbox"/>',//id
                     'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Shipper/showdetail', ['type' => 'company', 'id' => $v['id']]) . '" >查看</a>',
                 ];
             }
@@ -163,8 +155,7 @@ class Shipper extends BaseController
      *
      * @return \think\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -174,8 +165,7 @@ class Shipper extends BaseController
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function save(Request $request)
-    {
+    public function save(Request $request) {
         //
     }
 
@@ -185,8 +175,7 @@ class Shipper extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id)
-    {
+    public function read($id) {
         return view('edit');
     }
 
@@ -196,8 +185,7 @@ class Shipper extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function showdetail($id)
-    {
+    public function showdetail($id) {
         $where = [];
         $type = input('type');
         $id = intval(input('id'));
@@ -232,8 +220,7 @@ class Shipper extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -244,8 +231,7 @@ class Shipper extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -255,17 +241,40 @@ class Shipper extends BaseController
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id)
-    {
-        //
+    public function delete($id) {
+        $ids = explode(',', input("id", ''));
+        $where["id"] = ['exp', 'in (' . input('id') . ')'];
+        $shipperLogic = Model('Shipper', 'logic');
+        $systemShipperIds = $shipperLogic->getSystemShipperIds($where);
+        $spids = [];
+        foreach ($systemShipperIds as $key => $vo) {
+            $spids[] = $vo['user_id'];
+        }
+        $flag = 0;
+        // 启动事务
+        Db::startTrans();
+        try {
+            $resultSS = $shipperLogic->delSystemShipperIds(["id" => ['exp', 'in (' . implode(',', $spids) . ')']]);
+            $resultSBI = $shipperLogic->delSpBaseInfoIds($where);
+            // 提交事务
+            Db::commit();
+        } catch (\Exception $e) {
+            // 回滚事务
+            $flag = 1;
+            Db::rollback();
+        }
+        if (!$flag) {
+            $this->success('用户信息删除成功', '');
+        } else {
+            $this->error('用户信息删除失败', '');
+        }
     }
 
     //审核通过
-    public function pass()
-    {
+    public function pass() {
         $id = input('id');
         $shipperLogic = model('Shipper', 'logic');
-        $status = ['auth_status' => 'pass', 'update_at' => time()];
+        $status = ['auth_status' => 'pass', 'update_at' => time(), 'pass_time' => time()];
         $detail = $shipperLogic->updateStatus(['id' => $id], $status);
         // session('user', $user);
         LogService::write('货主端:' . $id, '审核通过');
@@ -277,8 +286,7 @@ class Shipper extends BaseController
         //
     }
 
-    public function auth()
-    {
+    public function auth() {
         $titile = input('title');
         $id = input('id');
         $authtype = input('type');
@@ -293,33 +301,35 @@ class Shipper extends BaseController
         switch ($authtype) {
             case 'refuse': //拒绝审核
                 $status['auth_status'] = 'refuse';
-                $tmp = $titile ;//. ',' . time();
+                $tmp = $titile;//. ',' . time();
                 $where['auth_status'] = 'check';
                 $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'frozen': //冻结账户
                 $where['bond_status'] = 'checked';
                 $status['bond_status'] = 'frozen';
-                $tmp = $titile ;//. ',' . time();
+                $status['is_frozen'] = '1';
+                $tmp = $titile;//. ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'unfrozen': //取消冻结
                 $where['bond_status'] = 'frozen';
                 $status['bond_status'] = 'checked';
-                $tmp = $titile ;//. ',' . time();
+                $status['is_frozen'] = '0';
+                $tmp = $titile;//. ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'black': //加入黑名单
                 $where['is_black'] = '0';
                 $status['is_black'] = '1';
-                $tmp = $titile ;//. ',' . time();
+                $tmp = $titile;//. ',' . time();
                 $isblack = 1;
                 // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\''.'-'.$tmp.'\')'];
                 break;
             case 'unblack': //从黑名单删除
                 $where['is_black'] = '1';
                 $status['is_black'] = '0';
-                $tmp = $titile ;//. ',' . time();
+                $tmp = $titile;//. ',' . time();
                 $isblack = 2;
                 // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\''.'-'.$tmp.'\')'];
                 break;
@@ -328,6 +338,7 @@ class Shipper extends BaseController
         }
         if (in_array($isblack, [1, 2])) {
             $blackinfo = ['user_id' => $id, 'phone' => input('phone'), 'reason' => ['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')'], 'type' => '0',];
+            LogService::write('货主端:' . $id, input('phone') . ',' . $tmp . ',' . time());
             $detail = $shipperLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {

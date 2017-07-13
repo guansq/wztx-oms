@@ -16,11 +16,16 @@
     <div class="con_box">
         <h1 class="h1">车型
             <p class="vehicle">
-                <button type="button" class="btn btn-info" data-modal='{:url("$classuri/carstyleadd")}'>新增</button>
-                <button type="button" class="btn btn-info" id="rem_vehicle">选中车型显示</button>
+
+                <button type="button" class="layui-btn layui-btn-small" data-modal='{:url("$classuri/carstyleadd")}'><i
+                        class="fa fa-plus"></i>新增车型</button>
+                <button type="button" class="layui-btn layui-btn-small layui-btn-danger" id="rem_vehicle">选中车型显示</button>
             </p>
         </h1>
-        <div class="ve_con">
+        <div >
+            <span style="color:red">*点击选中车型显示，前端车型列表仅展示选中车型</span>
+        </div>
+        <div class="ve_con" style="min-height: 300px">
             {volist name='carstyle' id='pcarstyle'}
             <span class="ve_type">
                 <input type="checkbox" name="checkname" id="check{$pcarstyle.id}" value="{$pcarstyle.id}" {if $pcarstyle.status eq 0}checked="true"{/if}  >
@@ -28,6 +33,8 @@
             </span>
             {/volist}
         </div>
+
+
     </div>
 
 </main>

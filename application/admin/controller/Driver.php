@@ -62,7 +62,7 @@ class Driver extends BaseController {
             }
             //  $action = '';
             $returnArr[] = [
-                'id' => $v['id'],//id
+                'id' => $v['a_id'],//id
                 'name' => $v['real_name'],//用户名称
                 'phone' => $v['phone'],//手机号
                 'sexname' => $sexname,//性别
@@ -70,7 +70,8 @@ class Driver extends BaseController {
                 'address' => $v['address'],//地址
                 'cardnumber' => $v['card_number'],//车牌
                 'logisticstype' => $logisticstypes[$v['logistic_stype']], //物流
-                'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Driver/showdetail', ['id' => $v['id']]) . '" >查看</a>',
+                'check' => '<input class="list-check-box" value="' . $v['a_id']. '" type="checkbox"/>',//id
+                'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Driver/showdetail', ['id' => $v['a_id']]) . '" >查看</a>',
             ];
         }
 
@@ -147,7 +148,7 @@ class Driver extends BaseController {
     public function pass() {
         $id = input('id');
         $driverLogic = model('Driver', 'logic');
-        $status = ['auth_status' => 'pass', 'update_at' => time()];
+        $status = ['auth_status' => 'pass', 'update_at' => time(), 'pass_time' => time()];
         $detail = $driverLogic->updateStatus(['id' => $id], $status);
         // session('user', $user);
         LogService::write('司机端:' . $id, '审核通过');
@@ -181,12 +182,14 @@ class Driver extends BaseController {
             case 'frozen': //冻结账户
                 $where['bond_status'] = 'checked';
                 $status['bond_status'] = 'frozen';
+                $status['is_frozen'] = '1';
                 $tmp = $titile;// . ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
             case 'unfrozen': //取消冻结
                 $where['bond_status'] = 'frozen';
                 $status['bond_status'] = 'checked';
+                $status['is_frozen'] = '0';
                 $tmp = $titile;// . ',' . time();
                 $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 break;
@@ -245,21 +248,23 @@ class Driver extends BaseController {
         if (request()->isPost()) {
             $data = input('param.');
             $data['type'] = 1;
+            $data['create_at'] = time();
+            $data['update_at'] = time();
             $result = DataService::save('CarStyle', $data);
             $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
             return view();
         } else {
-//           / var_dump('222');
             return view();
         }
     }
+
     //车长删除
     public function carlengthdel() {
         $table = 'CarStyle';
         if (DataService::update($table)) {
-            $this->success("车长删除成功！", '');
+            $this->success("车长状态修改成功！", '');
         }
-        $this->error("车长删除失败，请稍候再试！");
+        $this->error("车长状态修改失败，请稍候再试！");
     }
 
     //车型删除
@@ -293,6 +298,8 @@ class Driver extends BaseController {
     public function carlengthadd() {
         if (request()->isPost()) {
             $data = input('param.');
+            $data['create_at'] = time();
+            $data['update_at'] = time();
             $result = DataService::save('CarStyle', $data);//Db::name($this->table)->allowField(true)->insert($data);
             //  LogService::write('Banner管理', '上传Banner成功');
             $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
@@ -369,6 +376,31 @@ class Driver extends BaseController {
      * @return \think\Response
      */
     public function delete($id) {
-        //
+        $ids = explode(',', input("id", ''));
+        $where["id"] = ['exp', 'in (' . input('id') . ')'];
+        $driverLogic = Model('Driver', 'logic');
+        $systemShipperIds = $driverLogic->getSystemDriverIds($where);
+        $spids = [];
+        foreach ($systemShipperIds as $key => $vo) {
+            $spids[] = $vo['user_id'];
+        }
+        $flag = 0;
+        // 启动事务
+        Db::startTrans();
+        try {
+            $resultSS = $driverLogic->delSystemDriverIds(["id" => ['exp', 'in (' . implode(',', $spids) . ')']]);
+            $resultSBI = $driverLogic->delDrBaseInfoIds($where);
+            // 提交事务
+            Db::commit();
+        } catch (\Exception $e) {
+            // 回滚事务
+            $flag = 1;
+            Db::rollback();
+        }
+        if (!$flag) {
+            $this->success('用户信息删除成功', '');
+        } else {
+            $this->error('用户信息删除失败', '');
+        }
     }
 }
