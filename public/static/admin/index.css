@@ -193,6 +193,9 @@ html,body{
   border: 1px solid #dddddd;
   background: #F2F2F2;
 }
+.auth_box .auth_img img{
+  height: 150px;
+}
 .auth_box .auth_btn{
   width: 300px;
   height: auto;

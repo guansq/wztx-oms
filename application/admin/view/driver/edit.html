@@ -52,7 +52,7 @@
                 </table>
                 <div class="auth_box">
                     <section class="auth_img">
-                        {if isset($item.personholdpic)  && $item.personholdpic neq ''}
+                        {if isset($item.personholdpic) && $item.personholdpic neq ''}
                         <img src="{$item.personholdpic}" alt="手持身份证照">
                         {else/}
                         手持身份证照
@@ -69,7 +69,7 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.personfrontpic)  && $item.personfrontpic neq ''}
+                    {if isset($item.personfrontpic) && $item.personfrontpic neq ''}
                     <img src="{$item.personfrontpic}" alt="身份证正面照">
                     {else/}
                     身份证正面照
@@ -78,7 +78,7 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.personbackpic)  && $item.personbackpic neq ''}
+                    {if isset($item.personbackpic) && $item.personbackpic neq ''}
                     <img src="{$item.personbackpic}" alt="身份证反面照">
                     {else /}
                     身份证反面照
@@ -117,11 +117,15 @@
                     </tr>
                     <tr>
                         <td class="col-sm-6">保单截止日期</td>
-                        <td class="col-sm-6">{if isset($item.policydeadline) && $item.policydeadline neq ''}{$item.policydeadline|date='Y-m-d',###}{/if}</td>
+                        <td class="col-sm-6">{if isset($item.policydeadline) && $item.policydeadline neq
+                            ''}{$item.policydeadline|date='Y-m-d',###}{/if}
+                        </td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">行驶证截止日期</td>
-                        <td class="col-sm-6">{if  isset($item.policydeadline) &&  $item.licensedeadline neq ''}{$item.licensedeadline|date='Y-m-d',###}{/if}</td>
+                        <td class="col-sm-6">{if isset($item.policydeadline) && $item.licensedeadline neq
+                            ''}{$item.licensedeadline|date='Y-m-d',###}{/if}
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -175,7 +179,7 @@
                 <section class="auth_btn">
                     {if condition="$item.auth_status eq 'check' "}
                     <button type="button" class="btn btn-primary" id="pass">通过审核</button>
-                    <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？" >拒绝审核</button>
+                    <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？">拒绝审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>
                     {/if}
                     {if condition="$item.auth_status eq 'pass'"}
@@ -199,7 +203,7 @@
                     {if condition="$item.is_black eq '0'"}
                     <button type="button" class="btn btn-primary" id="black" data-reason="确定加入黑名单？">加入黑名单</button>
                     {else /}
-                    <button type="button" class="btn btn-primary" id="unblack"  data-reason="确定拉回白名单？">拉回白名单</button>
+                    <button type="button" class="btn btn-primary" id="unblack" data-reason="确定拉回白名单？">拉回白名单</button>
                     {/if}
                 </section>
             </div>
@@ -209,7 +213,13 @@
 {/block}
 
 {block name="script"}
-
+<script>
+    //调用示例
+    layer.photos({
+        photos: '.auth_img'
+        , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+    });
+</script>
 <script>
     var detailid = '{$id}';
     $("#pass").click(function () {
@@ -219,24 +229,24 @@
             layer.close(index);
             layer.load();
             $.ajax({
-                'url' : '{:url("Driver/pass")}',
-                'type' : 'POST',
-                'data' : {
-                    'id':detailid
+                'url': '{:url("Driver/pass")}',
+                'type': 'POST',
+                'data': {
+                    'id': detailid
                 },
-                'complete' : function(){
+                'complete': function () {
                 },
-                'success' : function(obj){
+                'success': function (obj) {
                     layer.closeAll();
-                    if(obj.code == 2000){
-                        layer.msg('通过审核', function(){
+                    if (obj.code == 2000) {
+                        layer.msg('通过审核', function () {
                             location.reload();
                         });
-                    }else{
+                    } else {
                         layer.alert(obj.msg);
                     }
                 },
-                'error' : function(){
+                'error': function () {
                     layer.closeAll();
                     layer.alert('请求失败');
                 }
@@ -255,27 +265,27 @@
             layer.close(index);
             layer.load();
             $.ajax({
-                'url' : '{:url("Driver/auth")}',
-                'type' : 'POST',
-                'data' : {
-                    'id':detailid,
-                    'type':type,
-                    'title':value,
-                    'phone':'{$item.phone}'
+                'url': '{:url("Driver/auth")}',
+                'type': 'POST',
+                'data': {
+                    'id': detailid,
+                    'type': type,
+                    'title': value,
+                    'phone': '{$item.phone}'
                 },
-                'complete' : function(){
+                'complete': function () {
                 },
-                'success' : function(obj){
+                'success': function (obj) {
                     layer.closeAll();
-                    if(obj.code == 2000){
-                        layer.msg('操作成功', function(){
+                    if (obj.code == 2000) {
+                        layer.msg('操作成功', function () {
                             location.reload();
                         });
-                    }else{
+                    } else {
                         layer.alert(obj.msg);
                     }
                 },
-                'error' : function(){
+                'error': function () {
                     layer.closeAll();
                     layer.alert('请求失败');
                 }
