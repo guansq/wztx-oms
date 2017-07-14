@@ -73,10 +73,6 @@ class Index extends BaseController {
      * @return View
      */
     public function main() {
-
-
-
-
         $_version = Db::query('select version() as ver');
         $version = array_pop($_version);
         $this->assign('mysql_ver', $version['ver']);

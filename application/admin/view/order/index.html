@@ -21,7 +21,8 @@
         <div class="operate_box">
             <form class="form-inline">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地"  id="name" name="name">
+                    <input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地" id="name"
+                           name="name">
                     <select class="form-control mr_20" id="status" name="status">
                         <option value="all">订单状态</option>
                         <option value="init">初始状态</option>
@@ -44,16 +45,25 @@
                         <option value="1">有</option>
                         <option value="0">无</option>
                     </select>
-                    <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="订单时间" id="create_at" name="create_at">
+                    <select class="form-control mr_20" id="is_clear" name="is_clear">
+                        <option value="all">是否结算</option>
+                        <option value="1">已结算</option>
+                        <option value="0">未结算</option>
+                    </select>
+                    <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="订单时间"
+                           id="create_at" name="create_at">
                 </div>
-                <button type="button" class="btn btn-primary"  id="searchVal"><i class="fa fa-search"></i> 搜索</button>
+                <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
+            <div >
+                <span style="color:red">*注:暂时<br>仅评论订单或者支付成功订单，才可以结算<br> 仅初始，报价中，报价完成订单，才可以挂起(已发货订单暂不支持挂起)</span>
+            </div>
             <div class="operate_tab">
                 <div class="operate_table">
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th><input class="all" type="checkbox"></th>
+                            <th>序号</th>
                             <th>订单编号</th>
                             <th>保单号</th>
                             <th>车牌号</th>
@@ -61,12 +71,14 @@
                             <th>出发地</th>
                             <th>目的地</th>
                             <th>状态</th>
+                            <th>结算状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input class="check" type="checkbox"></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -80,7 +92,6 @@
                                 <a class="settle" href="javascript: void(0);">结算</a>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -102,13 +113,6 @@
         })
     });
     function initPage() {
-
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal',
-            increaseArea: '20%' // optional
-        });
-
         //时间日期选择器
         $(".date_time").focus(function () {
             /*
@@ -164,11 +168,12 @@
                     parameter.tran_type = $("#tran_type").val();
                     parameter.is_insured = $("#is_insured").val();
                     parameter.create_at = $("#create_at").val();
+                    parameter.is_clear = $("#is_clear").val();
                 },
             },
             "pageLength": 10,
             "columns": [
-                {"data": "id"},
+                {"data": "num"},
                 {"data": "order_code"},
                 {"data": "policy_code"},
                 {"data": "card_number"},
@@ -176,16 +181,8 @@
                 {"data": "org_address_name"},
                 {"data": "dest_address_name"},
                 {"data": "status"},
+                {"data": "clearstauts"},
                 {"data": "action"},
-            ],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "render": function (data) {
-                        //var url = '{:url(\'Order/detail\')}?id='+data;
-                        return '<input class="check" type="checkbox">';
-                    }
-                }
             ],
             "drawCallback": function (settings) {
                 //console.log(settings.json.recordsFiltered);

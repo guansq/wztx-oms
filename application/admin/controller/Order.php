@@ -11,6 +11,7 @@ class Order extends BaseController {
      * @return \think\Response
      */
     private $stauusLists = [
+        ''=>'',
         'init' => '初始状态',
         'hang' => '挂起',
         'quote' => '报价中',
@@ -36,7 +37,7 @@ class Order extends BaseController {
         $get = input('param.');
         //性别 车牌/姓名 省
         // 应用搜索条件
-        foreach (['name', 'status', 'tran_type', 'is_insured', 'create_at'] as $key) {
+        foreach (['name', 'status', 'tran_type', 'is_insured', 'create_at','is_clear'] as $key) {
             //$get[$key] = trim($get[$key]);
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
@@ -60,21 +61,24 @@ class Order extends BaseController {
         $list = $orderLogic->getListInfo($start, $length, $where);
         //  var_dump($list);
         $returnArr = [];
+        $num = 0;
         foreach ($list as $k => $v) {
             //$logisticstypes = [0 => '同城/长途物流', 1 => '同城物流', 2 => '长途物流'];
             $returnArr[] = [
                 'id' => $v['id'],//id
+                'num' => ++$num,
                 'order_code' => $v['order_code'],//订单号
                 'policy_code' => $v['policy_code'],//保单号
                 'card_number' => $v['card_number'],//车牌
                 'is_ensured' => ($v['premium_amount'] > 0) ? '保险' : '未保险',//货物保险状态
-                'org_address_name' => $v['org_address_name'],//出发地
-                'dest_address_name' => $v['dest_address_name'],//目的地
+                'org_address_name' => $v['org_address_name'].$v['org_address_detail'],//出发地
+                'dest_address_name' => $v['dest_address_name'].$v['dest_address_detail'],//目的地
                 'status' => $this->stauusLists[$v['status']],//状态
+                'clearstauts'=>(empty($v['is_clear'])?'未结算':'结算'),
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a>
-                                <a class="hang-up" href="javascript: void(0);" data-field="status" data-value="hang" data-update="'.$v['id'].'" data-action="' . url('Order/hang', ['id' => $v['id']]) . '">挂起</a>
-                                <a class="settle" href="javascript: void(0);">结算</a>
-', ];
+                                <a class="hang-up" href="javascript: void(0);" data-field="status" data-value="hang" data-update="' . $v['id'] . '" data-action="' . url('Order/hang', ['id' => $v['id']]) . '">挂起</a>
+                                <a class="settle" href="javascript: void(0);"  data-field="is_clear" data-value="1" data-update="' . $v['id'] . '" data-action="' . url('Order/clear', ['id' => $v['id']]) . '">结算</a>
+',];
         }
         $total = $orderLogic->getListNum($where);
         // var_dump($returnArr);
@@ -105,15 +109,16 @@ class Order extends BaseController {
         //凭证信息
         $this->assign('pay_cer_pic', $pay_cer_pic);
         //var_dump($pay_cer_pic);
-        //收货信息
-        $addressdetail = $orderLogic->getAddressInfo(['id'=>$list[0]['dest_address_id']]);
-        $this->assign('dest_address', $addressdetail[0]);
-        //寄件信息
-        $addressdetail = $orderLogic->getAddressInfo(['id'=>$list[0]['org_address_id']]);
-        $this->assign('org_address', $addressdetail[0]);
+//        //收货信息
+//        $addressdetail = $orderLogic->getAddressInfo(['id' => $list[0]['dest_address_id']]);
+//        $this->assign('dest_address', $addressdetail[0]);
+//        //寄件信息
+//        $addressdetail = $orderLogic->getAddressInfo(['id' => $list[0]['org_address_id']]);
+//        $this->assign('org_address', $addressdetail[0]);
         //车辆信息
-        $carinfo = $orderLogic->getCardInfo(['a.id'=>$list[0]['dr_id']]);
-        $this->assign('carinfo', $carinfo[0]);
+        $carinfo = $orderLogic->getCardInfo(['a.id' => $list[0]['dr_id']]);
+
+        $this->assign('carinfo',empty($carinfo[0])?'':$carinfo[0] );
         return view('edit');
     }
 
@@ -121,10 +126,10 @@ class Order extends BaseController {
     public function pass() {
         $id = input('id');
         $orderLogic = model('Order', 'logic');
-        $status = ['per_status' => 'pass', 'update_at' => time(),'pay_time'=>time(),'status'=>'pay_success'];
+        $status = ['per_status' => 'pass', 'update_at' => time(), 'pay_time' => time(), 'status' => 'pay_success'];
         $detail = $orderLogic->updateStatus(['id' => $id], $status);
         // session('user', $user);
-       // LogService::write('司机端:' . $id, '审核通过');
+        // LogService::write('司机端:' . $id, '审核通过');
         if ($detail) {
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
@@ -132,20 +137,51 @@ class Order extends BaseController {
         }
         //
     }
+
     //订单挂起
     public function hang() {
         $id = input('id');
         $orderLogic = model('Order', 'logic');
         $status = ['status' => 'hang', 'update_at' => time()];
-        $detail = $orderLogic->updateStatus(['id' => $id], $status);
+        $detail = $orderLogic->updateStatus(['id' => $id,'status'=>['exp','in ("init","quote","quoted")']], $status);
         // session('user', $user);
         // LogService::write('司机端:' . $id, '审核通过');
         if ($detail) {
             $this->success('更新成功！', '');
             //return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
-            $this->success('更新失败！', '');
-          //  return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+            $this->error('更新失败！', '');
+            //  return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
+        }
+        //
+    }
+    //订单结算
+    public function clear() {
+        $id = input('id');
+        $orderLogic = model('Order', 'logic');
+        //状态为支付成功，或者评论的时候更新结算状态,计算结算金额,更新base表里面总的金额
+        $status = ['is_clear' => '1', 'update_at' => time(),'clear_price'=>['exp','0.01*final_price']];
+        $where = ['id' => $id,'status'=>['exp','in ("pay_success","comment")'],'is_clear' => '0'];
+        $detail = $orderLogic->updateStatus($where, $status);
+        // session('user', $user);
+        // LogService::write('司机端:' . $id, '审核通过');
+        if ($detail) {
+            $list = $orderLogic->getListOneInfo( ['id' => $id]);
+            if (empty($list)) {
+                $this->error('未查询到当前订单信息', '');
+            }
+            $final_price = $list[0]['final_price'];
+            $dr_id =  $list[0]['dr_id'];
+            $clear_price =$final_price*0.01;
+            $driverLogic = model('Driver', 'logic');
+            $status = ['cash'=>['exp','cash+'.$clear_price], 'update_at' => time()];
+            $detail = $driverLogic->updateStatus(['id' => $dr_id], $status);
+          //  $detail = $orderLogic->updateStatus( ['id' => $id,'is_clear' => '1'], $status);
+            $this->success('更新成功！', '');
+            //return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+        } else {
+            $this->error('更新失败！', '');
+            //  return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
         //
     }
@@ -155,7 +191,7 @@ class Order extends BaseController {
         $id = input('id');
         $authtype = input('type');
         $orderLogic = model('Order', 'logic');
-        $status = ['per_status' => 'refuse', 'update_at' => time(),'pay_time'=>time(),'status'=>'pay_failed'];
+        $status = ['per_status' => 'refuse', 'update_at' => time(), 'pay_time' => time(), 'status' => 'pay_failed'];
         $where = ['id' => $id];
         if (empty($titile)) {
             return json(['code' => 4000, 'msg' => '输入文本不能为空', 'data' => []]);
@@ -164,13 +200,13 @@ class Order extends BaseController {
             case 'refuse': //拒绝审核
                 $status['per_status'] = 'refuse';
                 $tmp = $titile;// . ',' . time();
-               // $where['per_status'] = 'init';
+                // $where['per_status'] = 'init';
                 $status['per_remark'] = $tmp;
                 break;
             default:
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
-       // LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time());
+        // LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time());
         $detail = $orderLogic->updateStatus($where, $status);
         if ($detail) {
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);

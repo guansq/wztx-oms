@@ -30,7 +30,7 @@ class Financial extends BaseController {
         while (list($key, $value) = each($legend)){
             $legendlist[] = '"'.$value.'"';
             $keylist[] = $key;
-           // list($key, $value) = each($legend);
+            // list($key, $value) = each($legend);
         }
         $resultlast = [];
         foreach ($datearray as $key =>$item){
@@ -179,6 +179,7 @@ class Financial extends BaseController {
         $rechargeLogic = Model('Recharge', 'logic');
         $listAll = $rechargeLogic->getListInfo($start, $length, $where);
         $returnArr = [];
+        $num = 0;
         foreach ($listAll as $k => $v) {
             $types = [0 => '个人货主端', 1 => '公司货主', 2 => '司机端'];
             $payways = [0 => '', 1 => '支付宝', 2 => '微信'];
@@ -188,13 +189,14 @@ class Financial extends BaseController {
 
             $returnArr[] = [
                 'id' => $v['id'],//id
+                'num'=> ++$num,
                 'phone' => $v['phone'],//手机号
                 'name' => $v['name'],//真实姓名
                 'type' => $types[$v['type']],//用户身份
                 'paytime' => empty($v['pay_time']) ? '' : date('Y-m-d', $v['pay_time']),//充值时间
                 'payway' => $payways[$v['pay_way']],//充值路径
-                'amount' => $v['real_amount'],//充值金额 实际支付金额
-                'balance' => $v['balance'],// 账户余额
+                'amount' => number_format($v['real_amount'],2),//充值金额 实际支付金额
+                'balance' => number_format($v['balance'],2),// 账户余额
                 'status' => $paystatus[$v['pay_status']],//状态
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Financial/showdetail', ['id' => $v['id']]) . '" >查看</a>',
             ];
@@ -284,7 +286,7 @@ class Financial extends BaseController {
                 ->setCellValue('B' . $num, $v['phone'])
                 ->setCellValue('C' . $num, $v['name'])
                 ->setCellValue('D' . $num, $types[$v['type']])
-                ->setCellValue('E' . $num, date('Y-m-d', $v['pay_time']))
+                ->setCellValue('E' . $num,empty( $v['pay_time'])?'': date('Y-m-d', $v['pay_time']))
                 ->setCellValue('F' . $num, $payways[$v['pay_way']])
                 ->setCellValue('G' . $num, $v['real_amount'])
                 ->setCellValue('H' . $num, $v['balance'])
