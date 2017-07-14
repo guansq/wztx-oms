@@ -1,0 +1,66 @@
+
+{block name="style"}
+<link href="//cdn.bootcss.com/wangeditor/2.1.20/css/wangEditor.css" rel="stylesheet">
+{/block}
+<style type="text/css">
+  #editor-trigger {
+    height: 300px;
+    /*max-height: 500px;*/
+  }
+  .container {
+    width: 100%;
+    margin: auto auto;
+    position: relative;
+  }
+</style>
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="{:url()}" data-auto="true" method="post">
+
+  <div class="layui-form-item">
+    <p class="h2 text-center"></p>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">文章标题 </label>
+    <div class="layui-input-block">
+      <input type="text" name="title" value='{$articledetail.title|default=""}' required="required" title="请输入文章标题" placeholder="请输入文章标题" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">文章标识 </label>
+    <div class="layui-input-block">
+      <input type="text" name="type" value='{$articledetail.type|default=""}'{if condition="$articledetail eq ''"}{else /}disabled="disabled"{/if} required="required" title="请输入文章标识" placeholder="请输入文章标识" class="layui-input">
+    </div>
+  </div>
+
+  <div id="editor-container" class="container">
+    <!--<div id="editor-trigger" name="content"><p>请输入内容</p></div>-->
+    <textarea id="editor-trigger" name="content" style="display:none;">
+        <p>{$articledetail.title|default="请输入内容..."}</p>
+    </textarea>
+  </div>
+
+
+  <div class="hr-line-dashed"></div>
+
+  <div class="layui-form-item text-center">
+    {if isset($articledetail['id'])}<input type='hidden' value='{$articledetail.id}' name='id'/>{/if}
+    <button class="layui-btn" type='submit'>保存数据</button>
+    <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+  </div>
+
+
+</form>
+
+<script type="text/javascript">
+
+    require(["wangEditor"],function(){
+        var editor = new wangEditor('editor-trigger');
+        // 配置上传图片的地址
+        editor.config.uploadImgUrl = '/plugs/uploadbyjs';
+        editor.create();
+    });
+
+
+
+</script>
