@@ -211,6 +211,26 @@ function randomStr($len = 4){
     }
     return $outputstr;
 }
+// 返回数组
+if(!function_exists('resultArray')){
+    function resultArray($result = 0, $msg = '', $data = []){
+        $code = $result;
+        if(is_array($result)){
+            $code = $result['code'];
+            $msg = $result['msg'];
+            $data = $result['result'];
+        }
+        if(empty($data)){
+            $data = new stdClass();
+        }
+        $info = [
+            'code' => $code,
+            'msg' => empty($msg) ? getCodeMsg($code) : $msg,
+            'result' => $data
+        ];
+        return $info;
+    }
+}
 
 /**
  * 随机生成四位字符

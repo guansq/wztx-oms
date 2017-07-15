@@ -1,0 +1,233 @@
+{extend name='extra@admin/content' /}
+
+{block name="style"}
+
+{/block}
+
+{block name="button"}
+
+{/block}
+
+{block name="content"}
+<main class="main">
+    <div class="head_box">
+        <a href="javascript:void(0);">财务管理</a>
+        <span> >> </span>
+        <a href="javascript:void(0);">交易统计</a>
+    </div>
+    <div class="con_box">
+        <h1 class="h1">交易统计</h1>
+        <div >
+            <span style="color:red">*注:暂时<br>支付时间在所选时间之内<br> 提供所选时间段30天之内的数据</span>
+        </div>
+        <div class="operate_box">
+            <form class="form-inline">
+                <div class="form-group mr_20">
+                    <select class="form-control mr_20" name="type" id="type">
+                        <option value="today">今日</option>
+                        <option value="7days">最近7日</option>
+                        <option value="15days">最近15日</option>
+                        <option value="30days">最近30日</option>
+                    </select>
+                    <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 开始时间" name="begintime" id="begintime">
+                    到
+                    <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 结束时间" name="endtime" id="endtime">
+                    <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索
+                    </button>
+                </div>
+            </form>
+            <div class="sheet">
+                <div id="echartsnum" class="echarts_box"></div>
+                <div id="echartssum" class="echarts_box"></div>
+            </div>
+        </div>
+    </div>
+</main>
+{/block}
+
+{block name="script"}
+<script>
+    require(["echarts", "laydate"], function (echarts) {
+
+        $(document).ready(function () {
+            initPage(echarts);
+        });
+
+
+    });
+    function initPage(echarts) {
+        //时间日期选择器
+        $(".date_time").focus(function () {
+            /*
+             laydate插件提供显示日期控件的方法
+             laydate(options)
+             * options - 选项,格式为 { key : value }
+             * 选项
+             * format - 日期格式
+             *
+             默认格式为 YYYY-MM-DD hh:mm:ss(标准格式)
+             * 客户端
+             * 服务器端
+             * 数据库
+             * istime - 是否开启时间选择
+             * 默认值为false,不开启
+             * isclear - 是否显示清空按钮
+             * istoday - 是否显示今天按钮
+             * issure - 是否显示确认按钮
+             */
+            laydate({
+                format: "YYYY-MM-DD",
+                istime: true,
+                isclear: true,
+                istoday: true,
+                issure: true
+            });
+        });
+
+        //echarts
+        var myChartnum = echarts.init(document.getElementById('echartsnum'));
+        var optionnum = {
+            title: {
+                text: '订单量统计数据',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{c}'
+            },
+            legend: {
+                left: 'left',
+                data: ['订单量']
+            },
+            xAxis: {
+                type: 'category',
+                name: '时间',
+                splitLine: {show: false},
+                data: [{$data_show}]
+            },
+            grid: {
+                left: '1%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            yAxis: {
+                type: 'value',
+                name: '趋势图'
+            },
+            series: [
+                {
+                    name: '订单量',
+                    type: 'line',
+                    data: [{$order_amount}]
+                },
+            ]
+        };
+       myChartnum.setOption(optionnum);
+        var myChartsum = echarts.init(document.getElementById('echartssum'));
+        optionsum = {
+            title: {
+                text: '交易总额统计数据',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{c}'
+            },
+            legend: {
+                left: 'left',
+                data: ['交易总额']
+            },
+            xAxis: {
+                type: 'category',
+                name: '时间',
+                splitLine: {show: false},
+                data: [{$data_show}]
+            },
+            grid: {
+                left: '1%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            yAxis: {
+                type: 'value',
+                name: '趋势图'
+            },
+            series: [
+                {
+                    name: '交易总额',
+                    type: 'line',
+                    data: [{$tran_total}]
+                },
+            ]
+        };
+        myChartsum.setOption(optionsum);
+        $("#searchVal").click(function () {
+            $.ajax({
+                'url': '{:url("Financial/getOptions")}',
+                'type': 'POST',
+                'data': {
+                    'type': $("#type").val(),
+                    'begintime': $("#begintime").val(),
+                    'endtime': $("#endtime").val(),
+                },
+                'complete': function () {
+                },
+                'success': function (data) {
+                    if(data.is_show == 2){
+                        myChartnum.setOption({
+                            xAxis: {
+                                data:data.data_show
+                            },
+                            series: [{
+                                // 根据名字对应到相应的系列
+                                name: '订单量',
+                                data: ['暂无数据']
+                            }]
+                        });
+                        myChartsum.setOption({
+                            xAxis: {
+                                data: data.data_show
+                            },
+                            series: [{
+                                // 根据名字对应到相应的系列
+                                name: '交易总额',
+                                data: ['暂无数据']
+                            }]
+                        });
+                    }
+                    // 填入数据
+                    myChartnum.setOption({
+                        xAxis: {
+                            data:data.data_show
+                        },
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: '订单量',
+                            data: data.order_amount
+                        }]
+                    });
+                    myChartsum.setOption({
+                        xAxis: {
+                            data: data.data_show
+                        },
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: '交易总额',
+                            data: data.tran_total
+                        }]
+                    });
+                },
+                'error': function () {
+                    layer.closeAll();
+                    layer.alert('请求失败');
+                }
+            });
+            
+        })
+        
+
+    }
+</script>
+{/block}

@@ -15,7 +15,7 @@
 namespace app\admin\logic;
 
 use think\Model;
-
+use service\HttpService;
 /**
  */
 class BaseLogic extends Model{
@@ -78,5 +78,15 @@ class BaseLogic extends Model{
      */
     function getSupName($sup_code){
         return model('supplier_info')->where('code',$sup_code)->value('name');
+    }
+    //发送短信文本消息
+    public function sendText($moblie,$text){
+        $url = "http://pushmsg.ruitukeji.com/SendSms/sendText";
+        if(empty($moblie) || empty($text)){
+            returnJson('4001','手机号码或者发送文本信息为空');
+        }
+        $data = ["mobile"=>$moblie,"text"=>$text,"rt_appkey"=>"WZTX"];
+        $return_data = HttpService::post($url, $data);
+        return $return_data;
     }
 }

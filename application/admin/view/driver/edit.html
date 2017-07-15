@@ -97,11 +97,11 @@
                     <tbody>
                     <tr>
                         <td class="col-sm-6">车型</td>
-                        <td class="col-sm-6">{$item.carstylename|default=''}</td>
+                        <td class="col-sm-6">{$item.car_type|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">车长</td>
-                        <td class="col-sm-6">{$item.carlengthname|default=''}</td>
+                        <td class="col-sm-6">{$item.car_length|default=''}</td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">载重</td>
@@ -113,18 +113,47 @@
                     </tr>
                     <tr>
                         <td class="col-sm-6">车牌号</td>
-                        <td class="col-sm-6">{$item.cardnumber|default=''}</td>
+                        <td class="col-sm-6">{$item.card_number|default=''}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-sm-6">营运证开始日期</td>
+                        <td class="col-sm-6">{if isset($item.operation_startline) && $item.operation_startline neq  ''}{$item.operation_startline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">营运证截止日期</td>
+                        <td class="col-sm-6">{if isset($item.operation_deadline) && $item.operation_deadline neq  ''}{$item.operation_deadline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">保单开始日期</td>
+                        <td class="col-sm-6">{if isset($item.policy_startline) && $item.policy_startline neq  ''}{$item.policy_startline|date='Y-m-d',###}{/if}
+                        </td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">保单截止日期</td>
-                        <td class="col-sm-6">{if isset($item.policydeadline) && $item.policydeadline neq
-                            ''}{$item.policydeadline|date='Y-m-d',###}{/if}
+                        <td class="col-sm-6">{if isset($item.policy_deadline) && $item.policy_deadline neq  ''}{$item.policy_deadline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">行驶证开始日期</td>
+                        <td class="col-sm-6">{if isset($item.license_startline) && $item.license_startline neq ''}{$item.license_startline|date='Y-m-d',###}{/if}
                         </td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">行驶证截止日期</td>
-                        <td class="col-sm-6">{if isset($item.policydeadline) && $item.licensedeadline neq
-                            ''}{$item.licensedeadline|date='Y-m-d',###}{/if}
+                        <td class="col-sm-6">{if isset($item.license_deadline) && $item.license_deadline neq ''}{$item.license_deadline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">驾驶证开始日期</td>
+                        <td class="col-sm-6">{if isset($item.driving_startline) && $item.driving_startline neq ''}{$item.driving_startline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">驾驶证截止日期</td>
+                        <td class="col-sm-6">{if isset($item.driving_deadline) && $item.driving_deadline neq ''}{$item.driving_deadline|date='Y-m-d',###}{/if}
                         </td>
                     </tr>
                     </tbody>
@@ -132,8 +161,8 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.indexpic) && $item.indexpic neq ''}
-                    <img src="{$item.indexpic}" alt="车头和车牌号码照">
+                    {if isset($item.index_pic) && $item.index_pic neq ''}
+                    <img src="{$item.index_pic}" alt="车头和车牌号码照">
                     {else /}
                     车头和车牌号码照
                     {/if}
@@ -141,8 +170,8 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.drivinglicencepic) && $item.drivinglicencepic neq '' }
-                    <img src="{$item.drivinglicencepic}" alt="驾驶证照">
+                    {if isset($item.driving_licence_pic) && $item.driving_licence_pic neq '' }
+                    <img src="{$item.driving_licence_pic}" alt="驾驶证照">
                     {else/}
                     驾驶证照
                     {/if}
@@ -150,8 +179,8 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.vehiclelicensepic) && $item.vehiclelicensepic neq ''}
-                    <img src="{$item.vehiclelicensepic}" alt="行驶证照">
+                    {if isset($item.vehicle_license_pic) && $item.vehicle_license_pic neq ''}
+                    <img src="{$item.vehicle_license_pic}" alt="行驶证照">
                     {else/}
                     行驶证照
                     {/if}
@@ -159,8 +188,8 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.insurancepolicypic) && $item.insurancepolicypic neq ''}
-                    <img src="{$item.insurancepolicypic}" alt="保险单照">
+                    {if isset($item.policy_pic) && $item.policy_pic neq ''}
+                    <img src="{$item.policy_pic}" alt="保险单照">
                     {else /}
                     保险单照
                     {/if}
@@ -168,8 +197,8 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.operationpic) && $item.operationpic neq ''}
-                    <img src="{$item.operationpic}" alt="运营证照">
+                    {if isset($item.operation_pic) && $item.operation_pic neq ''}
+                    <img src="{$item.operation_pic}" alt="运营证照">
                     {else/}
                     运营证照
                     {/if}
@@ -182,7 +211,7 @@
                     <button type="button" class="btn btn-primary" id="refuse" data-reason="确定拒绝审核？">拒绝审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">冻结账户</button>
                     {/if}
-                    {if condition="$item.auth_status eq 'pass'"}
+                    {if  condition="$item.auth_status eq 'pass'"}
                     <button type="button" class="btn btn-primary">已经通过审核</button>
                     <button type="button" class="btn btn-primary" disabled="disabled">拒绝审核</button>
                     {if condition="$item.bond_status eq 'checked'"}

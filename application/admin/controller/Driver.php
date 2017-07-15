@@ -69,8 +69,8 @@ class Driver extends BaseController {
                 'number' => $v['identity'],//身份证号
                 'address' => $v['address'],//地址
                 'cardnumber' => $v['card_number'],//车牌
-                'logisticstype' => $logisticstypes[$v['logistic_stype']], //物流
-                'check' => '<input class="list-check-box" value="' . $v['a_id']. '" type="checkbox"/>',//id
+                'logisticstype' => $logisticstypes[$v['logistics_type']], //物流
+                'check' => '<input class="list-check-box" value="' . $v['a_id'] . '" type="checkbox"/>',//id
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Driver/showdetail', ['id' => $v['a_id']]) . '" >查看</a>',
             ];
         }
@@ -112,32 +112,27 @@ class Driver extends BaseController {
         $returnArr['number'] = $item[0]['identity'];
         $returnArr['address'] = $item[0]['address'];
         $logisticstypes = [0 => '同城/长途物流', 1 => '同城物流', 2 => '长途物流'];
-        $returnArr['logisticstype'] = $logisticstypes[$item[0]['logistic_stype']];
+        $returnArr['logisticstype'] = $logisticstypes[$item[0]['logistics_type']];
         $returnArr['personholdpic'] = $item[0]['hold_pic'];
         $returnArr['personbackpic'] = $item[0]['back_pic'];
         $returnArr['personfrontpic'] = $item[0]['front_pic'];
 
         $carauth = $driverLogic->getCarinfoAuth($item[0]['id']);
         if (!empty($carauth)) {
-            $carstyle = $driverLogic->getCarList();
+            foreach ($carauth[0] as $key =>$v){
+                $returnArr[$key] = $v;
+            }
+           // var_dump($carauth);
+            /*$carstyle = $driverLogic->getCarList();
             $carstylearray = [];
             foreach ($carstyle as $key => $item) {
                 $carstylearray[$item['id']] = array('name' => $item['name'], 'type' => $item['type']);
             }
             $returnArr['carlengthname'] = $carstylearray[$carauth[0]['car_style_length_id']]['name'];
-            $returnArr['carstylename'] = $carstylearray[$carauth[0]['car_style_type_id']]['name'];
-            $returnArr['weight'] = $carauth[0]['weight'];
-            $returnArr['volume'] = $carauth[0]['volume'];
-            $returnArr['cardnumber'] = $carauth[0]['card_number'];
-            $returnArr['policydeadline'] = $carauth[0]['policy_deadline'];
-            $returnArr['licensedeadline'] = $carauth[0]['license_deadline'];
-            $returnArr['indexpic'] = $carauth[0]['index_pic'];
-            $returnArr['vehiclelicensepic'] = $carauth[0]['vehicle_license_pic'];
-            $returnArr['drivinglicencepic'] = $carauth[0]['driving_licence_pic'];
-            $returnArr['insurancepolicypic'] = $carauth[0]['insurance_policy_pic'];
-            $returnArr['operationpic'] = $carauth[0]['operation_pic'];
+            $returnArr['carstylename'] = $carstylearray[$carauth[0]['car_style_type_id']]['name'];*/
+            //$returnArr[] = $carauth[0];
         }
-        //var_dump($returnArr);
+        // var_dump($returnArr);
         $this->assign('id', $id);
         $this->assign('item', $returnArr);
 
@@ -315,6 +310,27 @@ class Driver extends BaseController {
 
             return view();
         }
+    }
+
+    //重新认证
+    public function reauth() {
+        $driverLogic = Model('Driver', 'logic');
+        // 应用搜索条件
+        $time_now = time();
+        $where['policy_deadline|license_deadline|operation_deadline|driving_deadline'] = array('elt', $time_now);
+        $wheredrids = $driverLogic->getReauthListIds($where);
+        $dr_id = [];
+        if(!empty($wheredrids)){
+            foreach ($wheredrids as $wheredrid =>$item) {
+                $dr_id[] = $item['dr_id'];
+            }
+            $status = ['auth_status' => 'reauth', 'pass_time' => '', 'update_at' => time()];
+            $result = $driverLogic->updateStatus(['id'=>['exp','in ('.implode(',',$dr_id).')']], $status);
+            return $result;
+        }else{
+            return false;
+        }
+
     }
 
 

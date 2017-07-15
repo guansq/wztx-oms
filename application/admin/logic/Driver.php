@@ -108,4 +108,12 @@ class Driver extends BaseLogic {
         $list = Db::name('SystemUserDriver')->where($where)->delete();
         return $list;
     }
+    //获取截止日期超出当前时间的货主id
+    public function  getReauthListIds($where=[]){
+        $list = Db::name('DrCarinfoAuth')->where($where)->field(['dr_id'])->select();
+        if ($list) {
+            $list = collection($list)->toArray();
+        }
+        return $list;
+    }
 }

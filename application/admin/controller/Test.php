@@ -15,6 +15,9 @@ use think\Request;
 class Test extends BaseController{
     public $url="http://oss.ruitukeji.com/index/uploadFiles";
     function index(){
+//        $sendsmsLogic = Model('SendSms', 'logic');
+//        $list = $sendsmsLogic->sendText('18094330821','验证成功');
+//        var_dump($list);
         return view();
     }
 
@@ -34,6 +37,14 @@ class Test extends BaseController{
         // 获取表单上传文件 image可以改名，但要保证一致。
         $file = request()->file('image');
 
+        if(empty($file)){
+            returnJson(4001);
+        }
+        $rule = ['size' => 1024*1024*5, 'ext' => 'jpg,gif,png,jpeg'];
+        //validateFile($file, $rule);
+        $logic = model('File', 'logic');
+        returnJson($logic->uploadImg($file));
+        die();
         $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads','test.jpg');
      //   var_dump($info);
         //var_dump($file->getPathname());
