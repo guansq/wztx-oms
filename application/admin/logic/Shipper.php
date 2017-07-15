@@ -11,11 +11,11 @@ class Shipper extends BaseLogic {
     public function getListInfo($start, $length, $where = []) {
         if (empty($where) || empty($where['type'])) {
             $list = Db::name('SpBaseInfo')
-                ->where($where)->limit("$start,$length")->field('*')->select();
+                ->where($where)->limit("$start,$length")->field('*')->order('create_at desc')->select();
         } else {
             $list = Db::name('SpBaseInfo')->alias('a')->join('SpCompanyAuth b', 'a.id=b.sp_id', 'left')
                 ->where($where)->limit("$start,$length")
-                ->field('a.*,b.com_name,b.phone companyphone,b.address')->select();
+                ->field('a.*,b.com_name,b.phone companyphone,b.address,a.phone moblie')->order('a.create_at desc')->select();
         }
         if ($list) {
             $list = collection($list)->toArray();

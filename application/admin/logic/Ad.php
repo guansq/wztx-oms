@@ -13,7 +13,7 @@ class Ad extends BaseLogic
     public function getListInfo($start, $length, $where = [])
     {
         $list = Db::name('Advertisement')->where($where)->limit("$start,$length")
-            ->field('*')->select();
+            ->field('*')->order('create_at desc')->select();
       //  echo $this->getLastSql();
 
         if ($list) {

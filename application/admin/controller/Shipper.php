@@ -134,6 +134,7 @@ class Shipper extends BaseController {
                     'id' => $v['id'],//id
                     'name' => $v['com_name'],//企业名称
                     'phone' => $v['companyphone'],//企业电话
+                    'moblie' => $v['moblie'],//电话
                     'province' => $province,//省
                     'number' => $v['identity'],//操作人身份证
                     'auth_status' => $auth_statuss[$v['auth_status']],//认证状态

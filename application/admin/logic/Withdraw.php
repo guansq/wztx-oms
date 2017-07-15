@@ -10,7 +10,7 @@ class Withdraw extends BaseLogic {
        * 得到提现列表
        */
     public function getListInfo($start, $length, $where = []) {
-        $list = Db::name('Withdraw')->field('*')->limit("$start,$length")->where($where)->select();
+        $list = Db::name('Withdraw')->field('*')->limit("$start,$length")->where($where)->order('create_at desc')->select();
         //echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();

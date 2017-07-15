@@ -11,7 +11,7 @@ class Order extends BaseLogic {
        */
     public function getListInfo($start, $length, $where = []) {
         $list = Db::name('TransportOrder')->alias('a')->join('DrCarinfoAuth c', 'a.dr_id=c.dr_id', 'left')->where($where)->limit("$start,$length")
-            ->field('a.*,c.card_number')->select();
+            ->field('a.*,c.card_number')->order('a.create_at desc')->select();
 //echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();

@@ -12,7 +12,7 @@ class OrderComment extends BaseLogic
     public function getListInfo($start, $length, $where = [])
     {
         $list = Db::name('Comment')->where($where)->limit("$start,$length")
-            ->field('*')->select();
+            ->field('*')->order('create_at desc')->select();
 
         if ($list) {
             $list = collection($list)->toArray();

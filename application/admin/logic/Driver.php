@@ -11,7 +11,7 @@ class Driver extends BaseLogic {
     public function getListInfo($start, $length, $where = []) {
         $list = Db::name('DrBaseInfo')->alias('a')
             ->join('DrCarinfoAuth b', 'a.id=b.dr_id', 'left')->where($where)->limit("$start,$length")
-            ->field('*,a.id a_id')->select();
+            ->field('*,a.id a_id')->order('a.create_at desc')->select();
 
         if ($list) {
             $list = collection($list)->toArray();
