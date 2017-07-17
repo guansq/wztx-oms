@@ -12,13 +12,6 @@ class OrderComment extends BaseController
      */
     public function index()
     {
-//        $where =[];
-//        $start = input('start') == '' ? 0 : input('start');
-//        $length = input('length') == '' ? 10 : input('length');
-//        $orderCommentLogic = Model('OrderComment', 'logic');
-//        $list = $orderCommentLogic->getListInfo($start, $length, $where);
-        //$name = $orderCommentLogic->getSpName('3');
-        //var_dump($name);
         return view();
     }
 
@@ -95,20 +88,11 @@ class OrderComment extends BaseController
     public function updateStatus()
     {
         if (DataService::update($this->table)) {
+            LogService::write('评论状态', '评论状态更改成功'. input("post.id", ''));
             $this->success("评论状态更改成功！", '');
         }
+        LogService::write('评论状态', '评论状态更改失败'. input("post.id", ''));
         $this->error("评论状态更改失败，请稍候再试！");
-       /* $id = input('id');
-        $statu = input('status');
-        $orderCommentLogic = model('OrderComment', 'logic');
-        $status = ['status' =>$statu, 'update_at' => time()];
-        $detail = $orderCommentLogic->updateStatus(['id' => $id],$status);
-        if ($detail) {
-            return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
-        } else {
-            return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
-        }*/
-        //
     }
     /**
      * 显示创建资源表单页.

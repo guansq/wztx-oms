@@ -93,6 +93,8 @@ class Withdraw extends BaseController{
     //处理结果
     public function dealresult()
     {
+
+        //后期添加提现具体操作
         $id = input('id');
         $withdrawLogic = Model('Withdraw', 'logic');
         $result = ['status' =>input('status'),'remark'=>input('remark'), 'update_at' => time()];

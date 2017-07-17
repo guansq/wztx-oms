@@ -9,7 +9,7 @@
 namespace app\admin\logic;
 
 use service\HttpService;
-
+use CURLFile;
 class File extends BaseLogic{
 
     public $url = 'http://oss.ruitukeji.com/index/uploadFiles';
@@ -27,11 +27,13 @@ class File extends BaseLogic{
 
         $return_data = HttpService::post($this->url, $data);
         if(empty($return_data)){
-            return resultArray(6001);
+            return resultArray(4001);
         }
+        var_dump($return_data);
         $ossRet = json_decode($return_data,true);
+        var_dump($ossRet);
         if(empty($ossRet) || $ossRet['code'] !=2000){
-            return resultArray(6001,'',$ossRet);
+            return resultArray(4001,'',$ossRet);
         }
         return resultArray($ossRet);
     }

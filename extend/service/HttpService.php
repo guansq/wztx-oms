@@ -14,6 +14,7 @@
 
 namespace service;
 
+use CURLFile;
 use think\Config;
 
 /**
@@ -24,39 +25,6 @@ use think\Config;
  * @date 2017/03/22 15:32
  */
 class HttpService {
-
-    /**
-     * HTTP GET 请求
-     * @param string $url 请求的URL地址
-     * @param array $data GET参数
-     * @param int $second 设置超时时间（默认30秒）
-     * @param array $header 请求Header信息
-     * @return bool|string
-     */
-    public static function curl($url, $data = array(), $second = 600, $header = []) {
-        set_time_limit ($second);
-        if (!empty($data)) {
-            $url .= (stripos($url, '?') === FALSE ? '?' : '&');
-            $url .= (is_array($data) ? http_build_query($data) : $data);
-        }
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_TIMEOUT, $second);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        if (!empty($header)) {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-        }
-        self::_setSsl($curl, $url);
-        //echo $url;die;
-        $content = curl_exec($curl);
-        //$status = curl_getinfo($curl);
-        //var_dump(curl_error($curl));
-        //dump($content);die;
-        //curl_close($curl);
-        return $content;
-        //echo 'test';die;
-    }
-
 
     /**
      * HTTP GET 请求
@@ -158,7 +126,9 @@ class HttpService {
      */
     private static function _getFileMine($filename) {
         $mimes = Config::get('mines');
+
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
         if (isset($mimes[$ext])) {
             return is_array($mimes[$ext]) ? $mimes[$ext][0] : $mimes[$ext];
         } else {

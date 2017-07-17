@@ -265,8 +265,10 @@ class Shipper extends BaseController {
             Db::rollback();
         }
         if (!$flag) {
+            LogService::write('删除司机端基本信息表和系统表成功',implode(',',$spids));
             $this->success('用户信息删除成功', '');
         } else {
+            LogService::write('删除司机端基本信息表和系统表失败',implode(',',$spids));
             $this->error('用户信息删除失败', '');
         }
     }
@@ -277,11 +279,12 @@ class Shipper extends BaseController {
         $shipperLogic = model('Shipper', 'logic');
         $status = ['auth_status' => 'pass', 'update_at' => time(), 'pass_time' => time()];
         $detail = $shipperLogic->updateStatus(['id' => $id], $status);
-        // session('user', $user);
-        LogService::write('货主端:' . $id, '审核通过');
+
         if ($detail) {
+            LogService::write('货主端:' . $id, '审核通过');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write('货主端:' . $id, '更新失败');
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
         //
@@ -339,10 +342,10 @@ class Shipper extends BaseController {
         }
         if (in_array($isblack, [1, 2])) {
             $blackinfo = ['user_id' => $id, 'phone' => input('phone'), 'reason' => ['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')'], 'type' => '0',];
-            LogService::write('货主端:' . $id, input('phone') . ',' . $tmp . ',' . time());
             $detail = $shipperLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {
+                LogService::write('货主端:' . $id, input('phone') . ',修改黑名单记录表更新失败,' . time().','.$isblack);
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
             }
         }

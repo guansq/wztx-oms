@@ -145,11 +145,11 @@ class Driver extends BaseController {
         $driverLogic = model('Driver', 'logic');
         $status = ['auth_status' => 'pass', 'update_at' => time(), 'pass_time' => time()];
         $detail = $driverLogic->updateStatus(['id' => $id], $status);
-        // session('user', $user);
-        LogService::write('司机端:' . $id, '审核通过');
         if ($detail) {
+            LogService::write('司机端:' . $id, '审核通过');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write('司机端:' . $id, '更新失败');
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
         //
@@ -210,15 +210,17 @@ class Driver extends BaseController {
             $detail = $driverLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {
+                LogService::write('司机端:' . $id, input('phone') . ',' . $tmp . ',' . time().','.$authtype.',更新失败');
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
             }
         }
-        LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time());
-        // 'contract' => ['exp', 'concat(IFNULL(contract,\'\'),\''.','.$src.'\')']
+
         $detail = $driverLogic->updateStatus($where, $status);
         if ($detail) {
+            LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time().'更新成功');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time().'更新失败');
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
     }
@@ -246,23 +248,31 @@ class Driver extends BaseController {
             $data['create_at'] = time();
             $data['update_at'] = time();
             $result = DataService::save('CarStyle', $data);
-            $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
+            if($result !== false ){
+                LogService::write('车型添加成功' ,implode(',',input('param.')));
+                $this->success('恭喜，保存成功哦！', '');
+            }else{
+                LogService::write('车型添加失败' ,implode(',',input('param.')));
+                $this->error('保存失败，请稍候再试！', '');
+            }
             return view();
         } else {
             return view();
         }
     }
 
-    //车长删除
+    //车长状态修改
     public function carlengthdel() {
         $table = 'CarStyle';
         if (DataService::update($table)) {
+            LogService::write('车长状态修改','车长状态修改成功'.input("post.id", ''));
             $this->success("车长状态修改成功！", '');
         }
+        LogService::write('车长状态修改','车长状态修改失败'.input("post.id", ''));
         $this->error("车长状态修改失败，请稍候再试！");
     }
 
-    //车型删除
+    //车型状态修改
     public function carstyledel() {
         $data = input('param.');
         $data['status'] = 1;
@@ -273,9 +283,12 @@ class Driver extends BaseController {
         $where = ['id' => ['exp', ' IN (' . $allid . ')'], 'type' => 1];
         $dealcarstyle = $driverLogic->dealCarStyleList(['type' => 1], ['status' => 1]);
         $dealcarstyle = $driverLogic->dealCarStyleList($where, ['status' => 0]);
+
         if ($dealcarstyle) {
+            LogService::write('车型状态修改','车型状态修改成功'.$allid);
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write('车型状态修改','车型状态修改失败'.$allid);
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
     }
@@ -284,7 +297,6 @@ class Driver extends BaseController {
     public function carlength() {
         $db = Db::name('CarStyle');
         $list = $db->field('*')->where(['type' => 2])->select();
-        //var_dump($list);
         $this->assign('list', $list);
         return view();
     }
@@ -295,9 +307,14 @@ class Driver extends BaseController {
             $data = input('param.');
             $data['create_at'] = time();
             $data['update_at'] = time();
-            $result = DataService::save('CarStyle', $data);//Db::name($this->table)->allowField(true)->insert($data);
-            //  LogService::write('Banner管理', '上传Banner成功');
-            $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
+            $result = DataService::save('CarStyle', $data);
+            if($result !== false){
+                LogService::write('车长设置添加',implode(',',input('param.')).'恭喜，保存成功哦！');
+                $this->success('恭喜，保存成功哦！', '');
+            }else{
+                LogService::write('车长设置添加',implode(',',input('param.')).'保存失败');
+                $this->error('保存失败，请稍候再试！');
+            }
         } else {
             $id = input('id');
             if (!empty($id)) {
@@ -324,6 +341,7 @@ class Driver extends BaseController {
             foreach ($wheredrids as $wheredrid =>$item) {
                 $dr_id[] = $item['dr_id'];
             }
+            LogService::write('司机端重新认证-系统',implode(',',$dr_id));
             $status = ['auth_status' => 'reauth', 'pass_time' => '', 'update_at' => time()];
             $result = $driverLogic->updateStatus(['id'=>['exp','in ('.implode(',',$dr_id).')']], $status);
             return $result;
@@ -391,20 +409,21 @@ class Driver extends BaseController {
      * @param  int $id
      * @return \think\Response
      */
+    //删除司机端基本信息表和系统表
     public function delete($id) {
         $ids = explode(',', input("id", ''));
         $where["id"] = ['exp', 'in (' . input('id') . ')'];
         $driverLogic = Model('Driver', 'logic');
         $systemShipperIds = $driverLogic->getSystemDriverIds($where);
-        $spids = [];
+        $drids = [];
         foreach ($systemShipperIds as $key => $vo) {
-            $spids[] = $vo['user_id'];
+            $drids[] = $vo['user_id'];
         }
         $flag = 0;
         // 启动事务
         Db::startTrans();
         try {
-            $resultSS = $driverLogic->delSystemDriverIds(["id" => ['exp', 'in (' . implode(',', $spids) . ')']]);
+            $resultSS = $driverLogic->delSystemDriverIds(["id" => ['exp', 'in (' . implode(',', $drids) . ')']]);
             $resultSBI = $driverLogic->delDrBaseInfoIds($where);
             // 提交事务
             Db::commit();
@@ -414,8 +433,10 @@ class Driver extends BaseController {
             Db::rollback();
         }
         if (!$flag) {
+            LogService::write('删除司机端基本信息表和系统表成功',implode(',',$drids));
             $this->success('用户信息删除成功', '');
         } else {
+            LogService::write('删除司机端基本信息表和系统表失败',implode(',',$drids));
             $this->error('用户信息删除失败', '');
         }
     }

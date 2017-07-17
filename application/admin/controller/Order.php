@@ -128,11 +128,11 @@ class Order extends BaseController {
         $orderLogic = model('Order', 'logic');
         $status = ['per_status' => 'pass', 'update_at' => time(), 'pay_time' => time(), 'status' => 'pay_success'];
         $detail = $orderLogic->updateStatus(['id' => $id], $status);
-        // session('user', $user);
-        // LogService::write('司机端:' . $id, '审核通过');
         if ($detail) {
+            LogService::write('订单:' . $id, '凭证审核通过');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write('订单:' . $id, '凭证审核更新失败');
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
         //
@@ -144,16 +144,13 @@ class Order extends BaseController {
         $orderLogic = model('Order', 'logic');
         $status = ['status' => 'hang', 'update_at' => time()];
         $detail = $orderLogic->updateStatus(['id' => $id,'status'=>['exp','in ("init","quote","quoted")']], $status);
-        // session('user', $user);
-        // LogService::write('司机端:' . $id, '审核通过');
         if ($detail) {
+            LogService::write('订单:' . $id, '订单挂起成功');
             $this->success('更新成功！', '');
-            //return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write('订单:' . $id, '订单挂起失败');
             $this->error('更新失败！', '');
-            //  return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
-        //
     }
     //订单结算
     public function clear() {
@@ -163,8 +160,6 @@ class Order extends BaseController {
         $status = ['is_clear' => '1', 'update_at' => time(),'clear_price'=>['exp','0.01*final_price']];
         $where = ['id' => $id,'status'=>['exp','in ("pay_success","comment")'],'is_clear' => '0'];
         $detail = $orderLogic->updateStatus($where, $status);
-        // session('user', $user);
-        // LogService::write('司机端:' . $id, '审核通过');
         if ($detail) {
             $list = $orderLogic->getListOneInfo( ['id' => $id]);
             if (empty($list)) {
@@ -176,14 +171,17 @@ class Order extends BaseController {
             $driverLogic = model('Driver', 'logic');
             $status = ['cash'=>['exp','cash+'.$clear_price], 'update_at' => time()];
             $detail = $driverLogic->updateStatus(['id' => $dr_id], $status);
-          //  $detail = $orderLogic->updateStatus( ['id' => $id,'is_clear' => '1'], $status);
-            $this->success('更新成功！', '');
-            //return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+            if($detail){
+                LogService::write('订单:' . $id, '订单结算成功');
+                $this->success('更新成功！', '');
+            }else{
+                LogService::write('订单:' . $id, '订单状态更改成功，基本信息表剩余金额更新失败');
+                $this->error('更新失败！', '');
+            }
         } else {
+            LogService::write('订单:' . $id, '订单结算失败');
             $this->error('更新失败！', '');
-            //  return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
-        //
     }
 
     public function auth() {
@@ -206,11 +204,13 @@ class Order extends BaseController {
             default:
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
-        // LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time());
+
         $detail = $orderLogic->updateStatus($where, $status);
         if ($detail) {
+            LogService::write('订单页面:' . $id, $authtype . ',' . $titile . ',' . time().'更新成功');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write('订单页面:' . $id, $authtype . ',' . $titile . ',' . time().'更新失败');
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
     }

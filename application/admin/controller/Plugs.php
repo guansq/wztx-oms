@@ -192,4 +192,10 @@ class Plugs extends BaseController {
         return view();
     }
 
+    //ueditor
+    public  function uploadSource(\think\File $file){
+        var_dump($file);
+        var_dump(input('file'));
+        var_dump($_FILES);
+    }
 }

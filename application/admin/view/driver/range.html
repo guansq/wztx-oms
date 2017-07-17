@@ -17,7 +17,7 @@
                     <div class="form-group" style="margin: 0 0 15px 0;">
                         <label class="col-sm-3 control-label">司机可抢单范围 ：&nbsp;</label>
                         <div class="col-sm-5">
-                            <input type="text" class="form-control" name="grab_range" placeholder="" value="{:sysconf('grab_range')}" >
+                            <input type="number" class="form-control" name="grab_range" placeholder="" value="{:sysconf('grab_range')}" onkeyup="if(this.value>50){ this.value = 50;}" required="required" >
                         </div>
                         <label class="col-sm-2 control-label">公里&nbsp;</label>
                     </div>

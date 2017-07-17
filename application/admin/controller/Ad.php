@@ -110,7 +110,7 @@ class Ad extends BaseController {
             $adLogic = Model('Ad', 'logic');
             $item = $adLogic->updateStatus($changewhere, $changestatus);
             $result = DataService::save($this->table, $data);//Db::name($this->table)->allowField(true)->insert($data);
-            // LogService::write('Banner管理', '上传Banner成功');
+            LogService::write('广告管理', '上传广告成功');
             $result !== false ? $this->success('恭喜，保存成功哦！', '') : $this->error('保存失败，请稍候再试！');
         }
     }
@@ -212,7 +212,7 @@ class Ad extends BaseController {
         }
         $status = ['status' => $istatus, 'update_at' => time()];
         $detail = $adLogic->updateStatus(['id' => $id], $status);
-        //LogService::write('司机端:' . $id, '审核通过');
+        LogService::write('广告管理:' . $id, '修改状态'.implode(',',$status).'-'.implode(',',$changewhere));
         if ($detail) {
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {

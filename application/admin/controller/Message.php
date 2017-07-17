@@ -96,9 +96,13 @@ class Message extends BaseController {
                 $this->error('内容不能为空');
             }
             $result = DataService::save($this->table, $data);//Db::name($this->table)->allowField(true)->insert($data);
-            //LogService::write('Article管理', '上传Article成功');
-            $result !== false ? $this->success('恭喜，保存成功哦！', $url) : $this->error('保存失败，请稍候再试！');
-            //return true;
+            if($result !== false ){
+                LogService::write('消息管理', '上传消息成功');
+                $this->success('恭喜，保存成功哦！', $url);
+            }else{
+                LogService::write('消息管理', '上传消息失败');
+                $this->error('保存失败，请稍候再试！');
+            }
         } else {
             $id = input('id');
             if (!empty($id)) {
@@ -118,11 +122,12 @@ class Message extends BaseController {
      * 删除系统消息
      */
     public function del() {
-
         if (DataService::update($this->table)) {
-            $this->success("系统消息删除成功！", '');
+            LogService::write('文章删除', '文章删除成功'. input("post.id", ''));
+            $this->success("文章删除成功！", '');
         }
-        $this->error("系统消息删除失败，请稍候再试！");
+        LogService::write('文章删除', '文章删除失败'. input("post.id", ''));
+        $this->error("文章删除失败，请稍候再试！");
     }
 
 }

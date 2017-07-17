@@ -29,7 +29,7 @@ class Article extends BaseController{
         if(request()->isPost()){
             $data=input('param.');
             $result = DataService::save($this->table, $data);//Db::name($this->table)->allowField(true)->insert($data);
-            //LogService::write('Article管理', '上传Article成功');
+            LogService::write('Article管理', '上传Article成功');
             $result !== false ? $this->success('恭喜，保存成功哦！',  $url) : $this->error('保存失败，请稍候再试！');
             //return true;
         }else{
@@ -47,7 +47,8 @@ class Article extends BaseController{
         $url = 'http://' . $_SERVER['SERVER_NAME'] . '/#' . $_SERVER["REQUEST_URI"] ;
         $url =  dirname($url).'?'.$_SERVER['QUERY_STRING'];
         $articledetail = '';
-
+        $this->assign('uploadurl',url('admin/plugs/uploadSource'));
+        $this->assign('title',$this->title);
         if(request()->isPost()){
             $data=input('param.');
             $data['content'] = $data['editor'];
@@ -61,7 +62,7 @@ class Article extends BaseController{
                 }
             }
             $result = DataService::save($this->table, $data);//Db::name($this->table)->allowField(true)->insert($data);
-            //LogService::write('Article管理', '上传Article成功');
+            LogService::write('Article管理', '上传Article成功');
             $result !== false ? $this->success('恭喜，保存成功哦！',  $url) : $this->error('保存失败，请稍候再试！');
             //return true;
         }else{
@@ -84,8 +85,10 @@ class Article extends BaseController{
     public function del() {
 
         if (DataService::update($this->table)) {
+            LogService::write('文章删除', '文章删除成功'. input("post.id", ''));
             $this->success("文章删除成功！", '');
         }
+        LogService::write('文章删除', '文章删除失败'. input("post.id", ''));
         $this->error("文章删除失败，请稍候再试！");
     }
 

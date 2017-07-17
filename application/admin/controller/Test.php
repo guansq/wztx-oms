@@ -43,12 +43,9 @@ class Test extends BaseController{
         $rule = ['size' => 1024*1024*5, 'ext' => 'jpg,gif,png,jpeg'];
         //validateFile($file, $rule);
         $logic = model('File', 'logic');
-        returnJson($logic->uploadImg($file));
+        var_dump($logic->uploadImg($file));
         die();
         $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads','test.jpg');
-     //   var_dump($info);
-        //var_dump($file->getPathname());
-      //  die();
         $data = [
             'rt_appkey'=>'wztx',
             'file'=>'@'.$info->getPathname(),

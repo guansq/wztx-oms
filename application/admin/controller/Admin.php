@@ -91,8 +91,10 @@ class Admin extends BaseController {
             $this->error('两次输入的密码不一致！');
         }
         if (DataService::save($this->table, ['id' => $data['id'], 'password' => md5($data['password'])], 'id')) {
+            LogService::write('用户密码修改:' .  $data['id'], '密码修改成功');
             $this->success('密码修改成功，下次请使用新密码登录！', '');
         }
+        LogService::write('用户密码修改:' .  $data['id'], '密码修改失败');
         $this->error('密码修改失败，请稍候再试！');
     }
 
@@ -124,8 +126,10 @@ class Admin extends BaseController {
             $this->error('系统超级账号禁止删除！');
         }
         if (DataService::update($this->table)) {
+            LogService::write('用户删除:' . $this->request->post('id'), '用户删除成功');
             $this->success("用户删除成功！", '');
         }
+        LogService::write('用户删除:' . $this->request->post('id'), '用户删除失败');
         $this->error("用户删除失败，请稍候再试！");
     }
 
@@ -137,8 +141,10 @@ class Admin extends BaseController {
             $this->error('系统超级账号禁止操作！');
         }
         if (DataService::update($this->table)) {
+            LogService::write('用户禁用:' . $this->request->post('id'), '用户禁用成功');
             $this->success("用户禁用成功！", '');
         }
+        LogService::write('用户禁用:' . $this->request->post('id'), '用户禁用失败');
         $this->error("用户禁用失败，请稍候再试！");
     }
 
