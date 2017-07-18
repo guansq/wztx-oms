@@ -19,7 +19,7 @@ use service\FileService;
 use Qiniu\Auth as qinn;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
-use think\File;
+//use think\File;
 //use think\Log;
 /**
  * 插件助手控制器
