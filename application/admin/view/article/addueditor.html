@@ -44,7 +44,7 @@
     $(document).ready(function(){
         var ue = UE.getEditor('editor');
         ue.ready(function(){ //编辑器初始化完成再赋值
-            var test = "{$articledetail.content|default=''}";
+            var test = '{$articledetail.content|default=""}';
            // console.log(test);
             ue.setContent(test);  //赋值给UEditor
         });
