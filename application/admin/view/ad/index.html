@@ -2,6 +2,10 @@
 
 {block name="style"}
 <link href='https://cdn.bootcss.com/iCheck/1.0.2/skins/minimal/minimal.css' rel='stylesheet'>
+<style>
+    .ibox{margin-bottom:0px;height: 100%}
+    .ibox-content{height: 100%}
+</style>
 {/block}
 
 {block name="button"}
@@ -43,8 +47,8 @@
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th><input class="all" type="checkbox"></th>
                             <th>序号</th>
+                            <th>位置</th>
                             <th>广告显示端口</th>
                             <th>上传图片</th>
                             <th>添加链接</th>
@@ -63,7 +67,7 @@
         </div>
     </div>
 </main>
-<div class="bomb_box" style="">
+<div class="bomb_box" >
     <div class="add_carousel">
         <form class="" style='' action='{:url("$classuri/add")}' data-auto="true" method="post">
             <table class="table table-bordered">
@@ -152,11 +156,6 @@
 
     function initPage() {
 
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal',
-            increaseArea: '20%' // optional
-        });
 
         //时间日期选择器
         $(".date_time").focus(function () {
@@ -214,7 +213,7 @@
             },
             "pageLength": 10,
             "columns": [
-                {"data": "id"},
+                {"data": "num"},
                 {"data": "position"},
                 {"data": "port"},
                 {"data": "src"},
@@ -223,15 +222,6 @@
                 {"data": "endtime"},
                 {"data":"status"},
                 {"data": "action"},
-            ],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "render": function (data) {
-                        //var url = '{:url(\'Order/detail\')}?id='+data;
-                        return '<input class="check" type="checkbox" id="check' + data + '" name="checkname" value="' + data + '">';
-                    }
-                }
             ],
             "drawCallback": function (settings) {
                 //console.log(settings.json.recordsFiltered);

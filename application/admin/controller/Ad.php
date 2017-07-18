@@ -140,17 +140,20 @@ class Ad extends BaseController {
         $adLogic = Model('Ad', 'logic');
         $list = $adLogic->getListInfo($start, $length, $where);
         $returnArr = [];
+        $num = 0;
         foreach ($list as $k => $v) {
+            $num = $num + 1;
             $portname = '';
             if ($v['port'] == 0) {
                 $portname = '货主端';
             } elseif ($v['port'] == 1) {
                 $portname = '司机端';
             }
-            $statusname =  ($v['status'] == 1) ? '启用' : '禁用'; //显示状态
+            $statusname = ($v['status'] == 1) ? '启用' : '禁用'; //显示状态
             //  $action = '';
             $returnArr[] = [
                 'id' => $v['id'],//id
+                'num' => $num,
                 'position' => $v['position'],//序号
                 'port' => $portname,//广告显示端口
                 'src' => $v['src'],//上传图片
@@ -158,8 +161,8 @@ class Ad extends BaseController {
                 'begintime' => empty($v['begintime']) ? '' : date('Y-m-d', $v['begintime']),//开始时间
                 'endtime' => empty($v['endtime']) ? '' : date('Y-m-d', $v['endtime']),//结束时间
                 'status' => ($v['status'] == 1) ? '不显示' : '显示', //显示状态
-                'action' => '   <button id="edit'.$v['id'].'" type="button" class="btn btn-info mr_20 edit" data-flag="'.$v['id'].'" >修改</button>
-                    <button type="button" class="btn btn-info status" value="'.$v['status'].'" id="status'.$v['id'].'" data-flag="'.$v['id'].'" data-port="'.$v['port'].'"data-position="'.$v['position'].'">'.$statusname.'</button>',
+                'action' => '   <button id="edit' . $v['id'] . '" type="button" class="btn btn-info mr_20 edit" data-flag="' . $v['id'] . '" >修改</button>
+                    <button type="button" class="btn btn-info status" value="' . $v['status'] . '" id="status' . $v['id'] . '" data-flag="' . $v['id'] . '" data-port="' . $v['port'] . '"data-position="' . $v['position'] . '">' . $statusname . '</button>',
 
                 //  'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Driver/showdetail', ['id' => $v['id']]) . '" >查看</a>',
             ];
@@ -196,23 +199,22 @@ class Ad extends BaseController {
     }
 
     //修改状态
-    public function updateStatus()
-    {
+    public function updateStatus() {
         $id = input('id');
         $adLogic = Model('Ad', 'logic');
         $istatus = input('status');
-        $istatus  =empty($istatus)?'1':'0';
-        if($istatus == 0){
+        $istatus = empty($istatus) ? '1' : '0';
+        if ($istatus == 0) {
             $changewhere = [];
             $changewhere['port'] = input('port');
-            $changewhere['position'] =input('position');
+            $changewhere['position'] = input('position');
             $changestatus['status'] = 1;
             $changestatus['update_at'] = time();
             $item = $adLogic->updateStatus($changewhere, $changestatus);
         }
         $status = ['status' => $istatus, 'update_at' => time()];
         $detail = $adLogic->updateStatus(['id' => $id], $status);
-        LogService::write('广告管理:' . $id, '修改状态'.implode(',',$status).'-'.implode(',',$changewhere));
+        LogService::write('广告管理:' . $id, '修改状态' . implode(',', $status) . '-' . implode(',', $changewhere));
         if ($detail) {
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
