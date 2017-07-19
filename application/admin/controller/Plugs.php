@@ -17,6 +17,7 @@ namespace app\admin\controller;
 use controller\BasicAdmin;
 use service\FileService;
 use Qiniu\Auth as qinn;
+use service\LogService;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 //use think\File;

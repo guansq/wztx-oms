@@ -6,7 +6,7 @@
  * Time: 10:55
  */
 namespace app\admin\controller;
-
+use service\LogService;
 class File extends BaseController{
     /**
      * @api      {POST} /file/uploadImg  上传图片done

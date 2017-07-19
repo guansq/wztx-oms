@@ -16,7 +16,7 @@ namespace app\admin\controller;
 
 use service\DataService;
 use think\Db;
-
+use service\LogService;
 /**
  * 系统日志管理
  * Class User

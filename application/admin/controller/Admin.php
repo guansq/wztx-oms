@@ -17,6 +17,7 @@ namespace app\admin\controller;
 use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
+use service\LogService;
 
 /**
  * 系统用户管理控制器

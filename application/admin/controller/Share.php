@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 
 use think\Request;
-
+use service\LogService;
 class Share extends BaseController {
     /**
      * 分享设置

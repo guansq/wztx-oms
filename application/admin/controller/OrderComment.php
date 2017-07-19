@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 use think\Request;
 use service\DataService;
+use service\LogService;
 class OrderComment extends BaseController
 {
     protected $table = 'Comment';
