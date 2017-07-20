@@ -10,7 +10,7 @@ class Order extends BaseLogic {
        * 得到订单列表
        */
     public function getListInfo($start, $length, $where = []) {
-        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseinfo b', 'a.dr_id=b.id', 'left')->join('DrCarinfoAuth c', 'b.car_id=c.id', 'left')->where($where)->limit("$start,$length")
+        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseInfo b', 'a.dr_id=b.id', 'left')->join('DrCarinfoAuth c', 'b.car_id=c.id', 'left')->where($where)->limit("$start,$length")
             ->field('a.*,c.card_number')->order('a.create_at desc')->select();
 //echo $this->getLastSql();
         if ($list) {
@@ -76,7 +76,7 @@ class Order extends BaseLogic {
 
     //获得筛选总条数
     public function getListNum($where = []) {
-        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseinfo b', 'a.dr_id=b.id', 'left')->join('DrCarinfoAuth c', 'b.car_id=c.id', 'left')->where($where)
+        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseInfo b', 'a.dr_id=b.id', 'left')->join('DrCarinfoAuth c', 'b.car_id=c.id', 'left')->where($where)
             ->field('a.*,c.card_number')->order('a.create_at desc')->count();
         return $list;
     }
