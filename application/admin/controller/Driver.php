@@ -117,7 +117,7 @@ class Driver extends BaseController {
         $returnArr['personbackpic'] = $item[0]['back_pic'];
         $returnArr['personfrontpic'] = $item[0]['front_pic'];
 
-        $carauth = $driverLogic->getCarinfoAuth($item[0]['id']);
+        $carauth = $driverLogic->getCarinfoAuth($item[0]['car_id']);
         if (!empty($carauth)) {
             foreach ($carauth[0] as $key =>$v){
                 $returnArr[$key] = $v;

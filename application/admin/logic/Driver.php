@@ -10,7 +10,7 @@ class Driver extends BaseLogic {
      */
     public function getListInfo($start, $length, $where = []) {
         $list = Db::name('DrBaseInfo')->alias('a')
-            ->join('DrCarinfoAuth b', 'a.id=b.dr_id', 'left')->where($where)->limit("$start,$length")
+            ->join('DrCarinfoAuth b', 'a.car_id=b.id', 'left')->where($where)->limit("$start,$length")
             ->field('*,a.id a_id')->order('a.create_at desc')->select();
 
         if ($list) {
@@ -42,7 +42,7 @@ class Driver extends BaseLogic {
 
     //获得筛选总条数
     public function getListNum($where = []) {
-        $list = Db::name('DrBaseInfo')->alias('a')->join('DrCarinfoAuth b', 'a.id=b.dr_id', 'left')->where($where)
+        $list = Db::name('DrBaseInfo')->alias('a')->join('DrCarinfoAuth b', 'a.car_id=b.id', 'left')->where($where)
             ->field('*')->count();
         return $list;
     }
@@ -62,7 +62,7 @@ class Driver extends BaseLogic {
      * 得到司机端基本信息
      */
     public function getCarinfoAuth($id) {
-        $list = Db::name('DrCarinfoAuth')->where(['dr_id' => $id])->field('*')->select();
+        $list = Db::name('DrCarinfoAuth')->where(['id' => $id])->field('*')->select();
         if ($list) {
             $list = collection($list)->toArray();
         }
