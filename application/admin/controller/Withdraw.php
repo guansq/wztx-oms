@@ -45,7 +45,7 @@ class Withdraw extends BaseController{
 
         $returnArr = [];
         foreach ($listAll as $k => $v) {
-            $types = [0 => '个人货主端', 1 => '公司货主', 2 => '司机端'];
+            $types = ['person' => '个人货主端', 'company' => '公司货主', 'driver' => '司机端'];
             $results = [0=>'未处理',1=>'0处理成功',2=>'已拒绝'];
 
             //  $action = '';
