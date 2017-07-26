@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                     <td class="col-sm-4">银行名称：</td>
-                    <td class="col-sm-8">{$item.deposit_name}</td>
+                    <td class="col-sm-8">{$item.bank}</td>
                 </tr>
                 <tr>
                     <td class="col-sm-4">银行帐号：</td>
@@ -53,11 +53,7 @@
                 <tr>
                     <td class="col-sm-4">处理结果：</td>
                     <td class="col-sm-8">
-                        <select class="form-control" id="status" name="status" style="width: 40%">
-                            <option value="0" {if $item.status eq 0}selected{/if}>未处理</option>
-                            <option value="1" {if $item.status eq 1}selected{/if}>处理成功</option>
-                            <option value="2" {if $item.status eq 2}selected{/if}>已拒绝</option>
-                        </select>
+                        {$item.statusinfo}
                     </td>
                 </tr>
                 <tr>
@@ -67,8 +63,8 @@
                 </tbody>
             </table>
             <div class="money_btn">
-                <button type="button" class="btn btn-primary mr_20" id="dealresult" >确定</button>
-                <!--<button type="button" class="btn btn-primary">取消</button>-->
+                <button type="button" class="btn btn-primary mr_20" id="agree" data-msg="确定要同意提现申请？">同意</button>
+                <button type="button" class="btn btn-primary" id="refuse"  data-msg="确定要拒绝提现申请？" >拒绝</button>
             </div>
         </div>
     </div>
@@ -78,10 +74,9 @@
 {block name="script"}
 <script>
     var detailid = '{$id}';
-    $("#dealresult").click(function () {
-        var result = $("#status").val();
-        var text = $("#status").find("option:selected").text();
-        var titile = '确定要状态改为'+text+'?';
+    $("#agree ,#refuse").click(function () {
+        var result = $(this).attr('id');
+        var titile = $(this).attr('data-msg');
         layer.confirm(titile, {
             btn: ['确定', '取消']
         }, function (index) {

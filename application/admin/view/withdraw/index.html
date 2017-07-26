@@ -34,9 +34,11 @@
                     <!--</select>-->
                     <select class="form-control" id="status" name="status">
                         <option value="all">状态</option>
-                        <option value="0">未处理</option>
-                        <option value="1">处理成功</option>
-                        <option value="2">已拒绝</option>
+                        <option value="init">未处理</option>
+                        <option value="agree">后台同意</option>
+                        <option value="refuse">已拒绝</option>
+                        <option value="pay_success">银行返回成功</option>
+                        <option value="pay_fail">银行返回失败</option>
                     </select>
                 </div>
                 <button type="button" class="btn btn-primary" id="searchVal">搜索</button>

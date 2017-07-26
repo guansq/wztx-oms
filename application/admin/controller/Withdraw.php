@@ -46,14 +46,14 @@ class Withdraw extends BaseController{
         $returnArr = [];
         foreach ($listAll as $k => $v) {
             $types = ['person' => '个人货主端', 'company' => '公司货主', 'driver' => '司机端'];
-            $results = [0=>'未处理',1=>'0处理成功',2=>'已拒绝'];
+            $results = [  'init'=>'未处理','agree'=>'后台同意','refuse'=>'已拒绝','pay_success'=>'银行返回成功','pay_fail'=>'银行返回失败'];
 
             //  $action = '';
             $returnArr[] = [
                 'id' => $v['id'],//id
                 'orderno' => $v['withdraw_code'],//订单号
                 'name' => $v['real_name'],//真实姓名
-                'type' =>$types[ $v['type']],//真实姓名
+                'type' =>$types[$v['type']],//真实姓名
                 'phone' => $v['phone'],//手机号
                 'applytime' => date('Y-m-d',$v['create_at']) ,//申请时间
                 'amount' => $v['amount'],//申请金额
@@ -85,6 +85,9 @@ class Withdraw extends BaseController{
             $this->error('未查询到当前用户信息', '');
         }
         $returnArr = $item[0];
+        $results = [  'init'=>'未处理','agree'=>'后台同意','refuse'=>'已拒绝','pay_success'=>'银行返回成功','pay_fail'=>'银行返回失败'];
+
+        $returnArr['statusinfo'] = $results[$returnArr['status']];
         $this->assign('id', $id);
         $this->assign('item', $returnArr);
         return view('edit');
@@ -93,20 +96,21 @@ class Withdraw extends BaseController{
     //处理结果
     public function dealresult()
     {
-
+        if(!in_array(input('status'),['agree','refuse'])){
+            return json(['code' => 4000, 'msg' => '更新失败', 'data' => ['msg'=>'状态不合法']]);
+        }
         //后期添加提现具体操作
         $id = input('id');
         $withdrawLogic = Model('Withdraw', 'logic');
         $result = ['status' =>input('status'),'remark'=>input('remark'), 'update_at' => time()];
         $detail = $withdrawLogic->updateStatus(['id' => $id], $result);
-        // session('user', $user);
-       // LogService::write('货主端:' . $id, '审核通过');
         if ($detail) {
+            LogService::write(input('status').'--' . $id, '通过提现');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
+            LogService::write(input('status').'--' . $id, '提现失败');
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
-        //
     }
 
 

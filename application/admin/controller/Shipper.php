@@ -265,10 +265,10 @@ class Shipper extends BaseController {
             Db::rollback();
         }
         if (!$flag) {
-            LogService::write('删除司机端基本信息表和系统表成功',implode(',',$spids));
+            LogService::write('删除司机端基本信息表和系统表成功', implode(',', $spids));
             $this->success('用户信息删除成功', '');
         } else {
-            LogService::write('删除司机端基本信息表和系统表失败',implode(',',$spids));
+            LogService::write('删除司机端基本信息表和系统表失败', implode(',', $spids));
             $this->error('用户信息删除失败', '');
         }
     }
@@ -307,21 +307,24 @@ class Shipper extends BaseController {
                 $status['auth_status'] = 'refuse';
                 $tmp = $titile;//. ',' . time();
                 $where['auth_status'] = 'check';
-                $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
+                // $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
+                $status['auth_info'] = $tmp;
                 break;
             case 'frozen': //冻结账户
                 $where['bond_status'] = 'checked';
                 $status['bond_status'] = 'frozen';
                 $status['is_frozen'] = '1';
                 $tmp = $titile;//. ',' . time();
-                $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
+               // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
+                $status['frozen_info'] = $tmp;
                 break;
             case 'unfrozen': //取消冻结
                 $where['bond_status'] = 'frozen';
                 $status['bond_status'] = 'checked';
                 $status['is_frozen'] = '0';
                 $tmp = $titile;//. ',' . time();
-                $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
+               // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
+                $status['frozen_info'] = $tmp;
                 break;
             case 'black': //加入黑名单
                 $where['is_black'] = '0';
@@ -345,7 +348,7 @@ class Shipper extends BaseController {
             $detail = $shipperLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {
-                LogService::write('货主端:' . $id, input('phone') . ',修改黑名单记录表更新失败,' . time().','.$isblack);
+                LogService::write('货主端:' . $id, input('phone') . ',修改黑名单记录表更新失败,' . time() . ',' . $isblack);
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
             }
         }
