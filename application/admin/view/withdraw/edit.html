@@ -63,8 +63,10 @@
                 </tbody>
             </table>
             <div class="money_btn">
+                {if condition ="$item.statusinfo  eq 'init'"}
                 <button type="button" class="btn btn-primary mr_20" id="agree" data-msg="确定要同意提现申请？">同意</button>
                 <button type="button" class="btn btn-primary" id="refuse"  data-msg="确定要拒绝提现申请？" >拒绝</button>
+                {/if}
             </div>
         </div>
     </div>

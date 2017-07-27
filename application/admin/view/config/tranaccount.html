@@ -8,27 +8,20 @@
 <main class="main">
 
     <div class="con_box">
-        <h1 class="h1">保证金设置</h1>
+        <h1 class="h1">转账账户管理</h1>
         <div class="operate_box">
             <div class="commission">
                 <form class="form-horizontal" onsubmit="return false;" action="{:url('Config/index')}" data-auto="true"
                       method="post">
                     <div class="form-group" style="margin: 0 0 15px 0;">
-                        <label class="col-sm-3 control-label">个人货主保证金&nbsp;:&nbsp;</label>
-                        <div class="col-sm-8">
-                            <input type="number" class="form-control" name="bond_person_amount" placeholder=""
-                                   style="float:left; width: 80%" value="{:sysconf('bond_person_amount')}">
+                        <label class="col-sm-2 control-label">转账账户&nbsp;:&nbsp;</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="tran_account" placeholder=""
+                                   style="float:left; width: 80%" value="{:sysconf('tran_account')}">
                         </div>
 
                     </div>
-                    <div class="form-group" style="margin: 0 0 15px 0;">
-                        <label class="col-sm-3 control-label">公司货主保证金&nbsp;:&nbsp;</label>
-                        <div class="col-sm-8">
-                            <input type="number" class="form-control" name="bond_company_amount" placeholder=""
-                                   style="float:left; width: 80%" value="{:sysconf('bond_company_amount')}">
-                        </div>
 
-                    </div>
                     <div class="form-group custom_btn">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-6">

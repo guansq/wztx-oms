@@ -176,7 +176,7 @@ class Driver extends BaseController {
                 $status['auth_info'] = $tmp;
                 break;
             case 'frozen': //冻结账户
-                $where['bond_status'] = 'checked';
+                $where['bond_status'] = 'init';
                 $status['bond_status'] = 'frozen';
                 $status['is_frozen'] = '1';
                 $tmp = $titile;// . ',' . time();
@@ -185,7 +185,7 @@ class Driver extends BaseController {
                 break;
             case 'unfrozen': //取消冻结
                 $where['bond_status'] = 'frozen';
-                $status['bond_status'] = 'checked';
+                $status['bond_status'] = 'init';
                 $status['is_frozen'] = '0';
                 $tmp = $titile;// . ',' . time();
               //  $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];

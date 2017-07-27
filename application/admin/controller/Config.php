@@ -97,5 +97,14 @@ class Config extends BaseController {
         $this->title = '客服管理';
         $this->index();
     }
-
+    //限额管理
+    public function limitamount() {
+        $this->title = '转账限额';
+        $this->index();
+    }
+    //转账账户管理
+    public function tranaccount() {
+        $this->title = '转账账户';
+        $this->index();
+    }
 }
