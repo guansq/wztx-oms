@@ -135,18 +135,25 @@ class Auth extends BaseController {
      * 权限删除
      */
     public function del() {
-        if (DataService::update($this->table)) {
-            $id = $this->request->post('id');
-            $adminuser = Db::name('SystemAdmin')->where('authorize', $id)->select();
-
+        $ids = explode(',', input("post.id", ''));
+        $successid = '';
+        $failid = '';
+        foreach ($ids as $k => $v){
+            $adminuser = Db::name('SystemAdmin')->where('authorize', $v)->select();
             if(empty($adminuser)){
-                Db::name('SystemAuthNode')->where('auth', $id)->delete();
-                $this->success("权限删除成功！", '');
+                Db::name('SystemAuthNode')->where('auth', $v)->delete();
+                $successid .= $v;
             }else{
-                $this->error("该权限已有对应用户在使用，修改或者删除属于当前组的用户再试！");
+                $failid .= $v;
             }
         }
-        $this->error("权限删除失败，请稍候再试！");
+        if(empty($failid)){
+            if(DataService::update($this->table)){
+                $this->success("权限删除成功！", '');
+            }
+            $this->error("权限删除失败，请稍候再试！");
+        }
+        $this->error("所选权限已有对应用户在使用，修改或者删除属于当前组的用户再试！");
     }
 
 }
