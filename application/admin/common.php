@@ -130,7 +130,7 @@ function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
     $skArr = explode('_',config('app_access_key'));
     $sendData['sign'] = $desClass->strEnc($arrOrder,$skArr[0],$skArr[1],$skArr[2]);//签名
     $result = HttpService::post(getenv('APP_API_HOME').'push',http_build_query($sendData));
-    //dump($result);
+    // dump($result);
 }
 /*
  * 得到司机推送token

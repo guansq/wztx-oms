@@ -11,6 +11,7 @@ namespace app\admin\controller;
 use service\LogService;
 use service\DataService;
 use think\Db;
+use think\Url;
 
 class Message extends BaseController {
     protected $table = 'Message';
@@ -87,9 +88,7 @@ class Message extends BaseController {
     }
 
     function addmessage() {
-        //  var_dump(input());
-        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/#' . $_SERVER["REQUEST_URI"];
-        $url = dirname($url) . '?' . $_SERVER['QUERY_STRING'];
+        $url = str_replace($_SERVER['SERVER_NAME'] . '/',$_SERVER['SERVER_NAME'] . '/#/',Url::build('Message/index')) . '?' . $_SERVER['QUERY_STRING'];
         $articledetail = '';
 
         if (request()->isPost()) {
