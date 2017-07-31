@@ -89,6 +89,7 @@ class Message extends BaseController {
 
     function addmessage() {
         $url = str_replace($_SERVER['SERVER_NAME'] . '/',$_SERVER['SERVER_NAME'] . '/#/',Url::build('Message/index')) . '?' . $_SERVER['QUERY_STRING'];
+        $url = preg_replace('s=[^\s]*&','',$url);
         $articledetail = '';
 
         if (request()->isPost()) {
