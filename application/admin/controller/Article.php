@@ -44,8 +44,11 @@ class Article extends BaseController{
     }
     function addueditor(){
       //  var_dump(input());
-        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/#' . $_SERVER["REQUEST_URI"] ;
-        $url =  dirname($url).'?'.$_SERVER['QUERY_STRING'];
+        $url = str_replace($_SERVER['SERVER_NAME'] . '/',$_SERVER['SERVER_NAME'] . '/#/',Url::build('Article/index')) . '?' . $_SERVER['QUERY_STRING'];
+        $url = preg_replace('/s=[^\s]*&/','',$url);
+
+//        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/#' . $_SERVER["REQUEST_URI"] ;
+//        $url =  dirname($url).'?'.$_SERVER['QUERY_STRING'];
         $articledetail = '';
         $this->assign('uploadurl',url('admin/plugs/uploadSource'));
         $this->assign('title',$this->title);

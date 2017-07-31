@@ -115,10 +115,13 @@ class Message extends BaseController {
                 if (empty($data['id'])) {
                     //推送消息
                     //发送推送消息
-                    //$push_token = getPushToken($quoteInfo['dr_id']);//得到推送token
-                    $push_token = '190e35f7e07278f1ca6';
-                    if (!empty($push_token)) {
-                        pushInfo($push_token, $data['title'], $data['content'], 'wztx_shipper');//推送给
+                    if($data['type'] == 0){
+                        $re_key = 'wztx_shipper';
+                    }else   if($data['type'] == 1){
+                        $re_key = 'wztx_driver';
+                    }
+                    if(in_array($re_key,['wztx_shipper','wztx_driver'])){
+                        pushInfo('', $data['title'], $data['content'], 'wztx_shipper');//推送给
                     }
                 }
                 LogService::write('消息管理', '上传消息成功');
