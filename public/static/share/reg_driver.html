@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type"/>
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
+  <meta content="telephone=no, address=no" name="format-detection"/>
+  <!--IOS私有属性，可以添加到主屏幕-->
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="csrf-token" content="WrH4No5hr30bTJgefuj7YnxjP0WsssMx3SyQv7Rh"/>
+  <meta name="format-detection" content="telephone=no">
+  <title>注册司机账户</title>
+  <!--让IE8，IE9，支持Html5和Css3-->
+  <!--[if lte IE 8]>
+  <script src="/lib/common/mediaqueries/selectivity-full.min.js"></script>
+  <![endif]-->
+  <!--[if lt IE 9]>
+  <script src="lib/common/mediaqueries/css3-mediaqueries.js"></script>
+  <script src="lib/common/mediaqueries/html5shiv.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="lib/common/reset.css">
+  <link rel="stylesheet" href="css/reg.css">
+</head>
+<body>
+<div class="reg_box">
+  <form id="reg_form">
+    <div class="input_box">
+      <label for="tel">手机号</label>
+      <input type="text" id="tel" placeholder="请输入手机号码">
+    </div>
+    <div class="input_box">
+      <label for="identifying">验证码</label>
+      <input class="w35" type="text" id="identifying" placeholder="请输入验证码">
+      <input type="button" class="get_ident" value="获取验证码">
+    </div>
+    <div class="input_box">
+      <label for="psw">密码</label>
+      <input type="password" id="psw" placeholder="请输入6-20位密码">
+    </div>
+    <div class="input_box">
+      <label for="referral">推荐码</label>
+      <input type="text" id="referral" placeholder="请输入推荐码（可选）">
+    </div>
+    <p class="input_p">
+      点击注册，即表示您同意
+      <a href="#">《物载天下服务协议》</a>
+    </p>
+    <div class="reg_btn">
+      <button class="driver">注册司机账户</button>
+    </div>
+  </form>
+</div>
+</body>
+<script src="//cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+<script src="lib/jquery.md5.js"></script>
+<script src="js/reg_driver.js"></script>
+</html>
+
+
+
+
+
+
+

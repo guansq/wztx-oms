@@ -1,0 +1,42 @@
+{block name="style"}
+
+{/block}
+{block name="content"}
+<form class="layui-form layui-box form-inline" style='padding:25px 30px 20px 0' action="{:url()}" data-auto="true"
+      method="post">
+    <div class="layui-form-item">
+        <p class="h2 text-center"></p>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章标题 </label>
+        <div class="layui-input-block">
+            <input type="text" name="title" value="{$articledetail.title|default=''}" required="required"
+                   title="请输入文章标题" placeholder="请输入文章标题" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">客户端类型 </label>
+        <select class="form-control" id="type" name="type">
+            <option value="all">客户端类型</option>
+            <option value="0" {if isset($articledetail.type) && $articledetail.type eq 0}selected{/if} >货主端</option>
+            <option value="1"{if isset($articledetail.type) && $articledetail.type eq 1}selected{/if}>司机端</option>
+        </select>
+        <span style="color: red">*谨慎添加操作（会给对应的客户端所有用户发信息）</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">消息内容 </label>
+        <textarea name="editor" style="min-width: 700px;min-height: 400px;resize:none">{$articledetail.content|default=""}</textarea>
+    </div>
+
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {if isset($articledetail['id'])}<input type='hidden' value='{$articledetail.id}' name='id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+    </div>
+</form>
+{/block}
+{block name="script"}
+
+{/block}
