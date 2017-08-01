@@ -20,12 +20,12 @@
     <div class="row">
         <div class="col-xs-3">
             <div class="form-group">
-                <input type="text" name="name" value="{$Think.get.name|default=''}" placeholder="名称"
+                <input type="text" name="title" id="title" value="{$Think.get.name|default=''}" placeholder="名称"
                        class="input-sm form-control">
             </div>
         </div>
         <div class="col-xs-3">
-            <select class="form-control " id="tran_type" name="type">
+            <select class="form-control " id="type" name="type">
                 <option value="all">客户端类型</option>
                 <option value="0">货主端</option>
                 <option value="1">司机端</option>
@@ -34,7 +34,7 @@
 
         <div class="col-xs-1">
             <div class="form-group">
-                <button type="submit" class="btn btn-sm btn-white" id="searchVal"><i class="fa fa-search"></i> 搜索
+                <button type="button" class="btn btn-sm btn-white" id="searchVal"><i class="fa fa-search"></i> 搜索
                 </button>
             </div>
         </div>
@@ -131,7 +131,7 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
-                    parameter.name = $("#title").val();
+                    parameter.title = $("#title").val();
                     parameter.type = $("#type").val();
                 },
             },

@@ -25,16 +25,22 @@ class Message extends BaseController {
     public function getMessageList() {
         $where = [];
         $get = input('param.');
+        // var_dump($get);
         // 应用搜索条件
         foreach (['title', 'type'] as $key) {
             //$get[$key] = trim($get[$key]);
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
-                $where[$key] = $get[$key];
+                if ($key == 'title') {
+                    $where['title'] = ['like', "%{$get[$key]}%"];
+                }else{
+                    $where[$key] = $get[$key];
+                }
             }
         }
         $start = input('start') == '' ? 0 : input('start');
         $length = input('length') == '' ? 10 : input('length');
         $where['push_type'] = 'all';
+        // var_dump($where);
         $list = Db::name($this->table)->field('*')->where($where)->limit($start, $length)->select();
         //  var_dump($list);
         $returnArr = [];
@@ -162,7 +168,7 @@ class Message extends BaseController {
      */
     public function show() {
         $ids = explode(',', input("post.id", ''));
-        if (Db::name($this->table)->where('id', 'in', $ids)->update(['delete_at' => 'NULL', 'update_at' => time()])) {
+        if (Db::name($this->table)->where('id', 'in', $ids)->update(['delete_at' =>null, 'update_at' => time()])) {
             LogService::write('文章显示', '文章显示' . input("post.id", ''));
             $this->success("文章显示成功！", '');
         }
