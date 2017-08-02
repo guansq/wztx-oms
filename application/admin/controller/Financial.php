@@ -215,27 +215,30 @@ class Financial extends BaseController {
         $listAll = $rechargeLogic->getListInfo($start, $length, $where);
         $returnArr = [];
         $num = 0;
-        foreach ($listAll as $k => $v) {
-            $types = ['person' => '个人货主端', 'company' => '公司货主', 'driver' => '司机端'];
-            $payways = [0 => '', 1 => '支付宝', 2 => '微信'];
-            $paystatus = [0 => '未支付', 1 => '支付成功', 2 => '支付失败'];
-            //  $action = '';
-            //手机号码	真实姓名	用户身份	充值时间	充值路径	充值金额	账户余额
+        if (!empty($listAll)) {
+            foreach ($listAll as $k => $v) {
+                $types = ['person' => '个人货主端', 'company' => '公司货主', 'driver' => '司机端'];
+                $payways = [0 => '', 1 => '支付宝', 2 => '微信'];
+                $paystatus = [0 => '未支付', 1 => '支付成功', 2 => '支付失败'];
+                //  $action = '';
+                //手机号码	真实姓名	用户身份	充值时间	充值路径	充值金额	账户余额
 
-            $returnArr[] = [
-                'id' => $v['id'],//id
-                'num' => ++$num,
-                'phone' => $v['phone'],//手机号
-                'name' => $v['name'],//真实姓名
-                'type' => $types[$v['type']],//用户身份
-                'paytime' => empty($v['pay_time']) ? '' : date('Y-m-d', $v['pay_time']),//充值时间
-                'payway' => $payways[$v['pay_way']],//充值路径
-                'amount' => number_format($v['real_amount'], 2),//充值金额 实际支付金额
-                'balance' => number_format($v['balance'], 2),// 账户余额
-                'status' => $paystatus[$v['pay_status']],//状态
-                'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Financial/showdetail', ['id' => $v['id']]) . '" >查看</a>',
-            ];
+                $returnArr[] = [
+                    'id' => $v['id'],//id
+                    'num' => ++$num,
+                    'phone' => $v['phone'],//手机号
+                    'name' => $v['name'],//真实姓名
+                    'type' => $types[$v['type']],//用户身份
+                    'paytime' => empty($v['pay_time']) ? '' : date('Y-m-d', $v['pay_time']),//充值时间
+                    'payway' => $payways[$v['pay_way']],//充值路径
+                    'amount' => number_format($v['real_amount'], 2),//充值金额 实际支付金额
+                    'balance' => number_format($v['balance'], 2),// 账户余额
+                    'status' => $paystatus[$v['pay_status']],//状态
+                    'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Financial/showdetail', ['id' => $v['id']]) . '" >查看</a>',
+                ];
+            }
         }
+
         // var_dump($returnArr);
         $total = $rechargeLogic->getListNum($where);
         // var_dump($returnArr);

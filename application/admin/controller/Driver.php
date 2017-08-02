@@ -334,22 +334,24 @@ class Driver extends BaseController {
 
     //重新认证
     public function reauth() {
+
         $driverLogic = Model('Driver', 'logic');
         // 应用搜索条件
         $time_now = time();
         $where['policy_deadline|license_deadline|operation_deadline|driving_deadline'] = array('elt', $time_now);
         $wheredrids = $driverLogic->getReauthListIds($where);
         $dr_id = [];
+
         if(!empty($wheredrids)){
             foreach ($wheredrids as $wheredrid =>$item) {
                 $dr_id[] = $item['dr_id'];
             }
             LogService::write('司机端重新认证-系统',implode(',',$dr_id));
-            $status = ['auth_status' => 'reauth', 'pass_time' => '', 'update_at' => time()];
+            $status = ['auth_status' => 'init', 'pass_time' => '', 'update_at' => time()];
             $result = $driverLogic->updateStatus(['id'=>['exp','in ('.implode(',',$dr_id).')']], $status);
-            return $result;
+            echo  $result;
         }else{
-            return false;
+            echo 'no change';
         }
 
     }
