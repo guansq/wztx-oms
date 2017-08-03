@@ -87,8 +87,12 @@ class Ad extends BaseController {
             if (empty($data['addbegintime']) || empty($data['addendtime']) || $data['addport'] == 'all' || empty($data['src'] || empty($data['typepost']))) {
                 $this->error('保存失败，缺少关键信息');
             }
+
             $data['begintime'] = strtotime($data['addbegintime']);
             $data['endtime'] = strtotime($data['addendtime']);
+            if($data['begintime'] >= $data['endtime']){
+                $this->error('结束时间需大于开始时间');
+            }
             $data['status'] = 0;
             //  $data['src'] = strtotime($data['imgadd']);
             $data['port'] = $data['addport'];
@@ -204,8 +208,8 @@ class Ad extends BaseController {
         $adLogic = Model('Ad', 'logic');
         $istatus = input('status');
         $istatus = empty($istatus) ? '1' : '0';
+        $changewhere = [];
         if ($istatus == 0) {
-            $changewhere = [];
             $changewhere['port'] = input('port');
             $changewhere['position'] = input('position');
             $changestatus['status'] = 1;

@@ -23,7 +23,7 @@
     <div class="con_box">
         <h1 class="h1">广告列表 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline" >
                 <div class="form-group mr_20">
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 开始时间"
                            id="begintime" name="begintime">
@@ -126,7 +126,7 @@
                     <td class="td1 col-sm-3">链接地址：</td>
                     <td class="col-sm-8">
                         <input type="text" class="form-control" placeholder="链接地址http://|https://开头" id="url" name="url"
-                               required="required" pattern="^(http://|https://)" value="http://">
+                               required="required" pattern="^(http://|https://)" value="http://"  autocomplete="off" >
                     </td>
                 </tr>
                 </tbody>
@@ -134,7 +134,8 @@
             <div class="sure_btn">
                 <input type="hidden" value="" name="typepost" id="typepost">
                 <input type="hidden" value="" name="idpost" id="idpost">
-                <button type="submit" class="btn btn-primary" id="addAd">确定</button>
+                <button type="submit" class="btn btn-primary" id="addAd" style="width: 100px">确定</button>
+                <button class="btn btn-primary" type='button' data-confirm="确定要取消编辑吗？"id="cancel"   style="width: 100px">取消</button>
             </div>
         </form>
     </div>
@@ -328,13 +329,16 @@
             $(".bomb_box").css("display", "block");
             $("#typepost").val('add');
         });
+        $("#cancel").click(function (e) {
+            $(".bomb_box").css("display", "none");
+        });
 
 
         $(document).mouseup(function (e) {
-            var _con = $('.add_carousel');
-            if (!_con.is(e.target) && _con.has(e.target).length === 0) {
-                $(".bomb_box").css("display", "none");
-            }
+//            var _con = $('.add_carousel');
+//            if (!_con.is(e.target) && _con.has(e.target).length === 0) {
+//                $(".bomb_box").css("display", "none");
+//            }
         });
 
         var checkAll = $('input.all');  //全选的input

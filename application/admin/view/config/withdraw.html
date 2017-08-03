@@ -128,7 +128,9 @@
                 withdraw_endtime: $("#withdraw_endtime").val(),
             },
             function (obj) {
-               location.reload();
+                layer.msg('修改成功', function () {
+                    location.reload();
+                });
             }
         );
     }
