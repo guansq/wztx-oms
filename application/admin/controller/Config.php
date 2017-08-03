@@ -59,6 +59,22 @@ class Config extends BaseController {
         }
     }
 
+    public function change() {
+        if (!$this->request->isPost()) {
+           // parent::_list($this->table);
+        } else {
+            foreach ($this->request->post() as $key => $vo) {
+                $org_config =  sysconf($key);
+                sysconf($key, $vo);
+                if(in_array($key,['storage_qiniu_secret_key'])){
+                    $vo = '';
+                }
+                LogService::write('配置管理', $key.'从'.$org_config.'修改成'.$vo);
+            }
+            return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
+        }
+    }
+
     /**
      * 文件存储配置
      */

@@ -11,15 +11,21 @@
         <h1 class="h1">保险费率设置</h1>
         <div class="operate_box">
             <div class="commission">
-                <form class="form-horizontal" onsubmit="return false;" action="{:url('Config/index')}" data-auto="true"
+                <form class="form-horizontal" onsubmit="return check();"
                       method="post">
                     <div class="form-group" style="margin: 0 0 15px 0;">
                         <label class="col-sm-2 control-label">保险费率&nbsp;:&nbsp;</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="premium_rate" placeholder=""
+                            <input type="text" class="form-control" name="premium_rate" id="premium_rate" placeholder=""
                                    style="float:left; width: 80%" value="{:sysconf('premium_rate')}"  onkeyup="if(isNaN(value))execCommand('undo')"  >%
                         </div>
 
+                    </div>
+                    <div class="form-group custom_btn">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-6">
+                            <span id="showmsg"></span>
+                        </div>
                     </div>
                     <div class="form-group custom_btn">
                         <label class="col-sm-2 control-label"></label>
@@ -36,5 +42,39 @@
 {/block}
 
 {block name="script"}
-
+<script>
+    $('#premium_rate').blur(function () {
+        var pattern_amount = /(^[0-9]+(.[0-9]{1,})?$)/;
+        var flag = 0;
+        if(!(pattern_amount.test($("#premium_rate").val()) && pattern_amount.test($("#premium_rate").val()))){
+            $("#showmsg").html('数字不符合要求');
+            flag = 1;
+        }else{
+            $("#showmsg").html('');
+        }
+    });
+    function check() {
+        var pattern_amount = /(^[0-9]+(.[0-9]{1,})?$)/;
+        var flag = 0;
+        if(!(pattern_amount.test($("#premium_rate").val()) && pattern_amount.test($("#premium_rate").val()))){
+            $("#showmsg").html('数字不符合要求');
+            flag = 1;
+        }else{
+            $("#showmsg").html('');
+        }
+        $("#showmsg").css({"color": "red"});
+        if (!$("#showmsg").html() == '') {
+            return false;
+        }
+        $.post(
+            "{:url('Config/change')}",
+            {
+                premium_rate: $("#premium_rate").val(),
+            },
+            function (obj) {
+                location.reload();
+            }
+        );
+    }
+</script>
 {/block}

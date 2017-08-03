@@ -12,25 +12,29 @@
         <h1 class="h1">提现日期设置</h1>
         <div class="operate_box">
             <div class="commission">
-                <form class="form-horizontal" onsubmit="return false;" action="{:url('Config/index')}" data-auto=""
+                <form class="form-horizontal" onsubmit="return check();"
                       method="post" id="form1" data-listen="">
                     <div class="form-group" style="margin: 0 0 15px 0;">
-                        <label class="col-sm-4 control-label ">账户余额可提现开始日期&nbsp;:&nbsp;</label>
+                        <label class="col-sm-4 control-label ">账户余额可提现开始:&nbsp;</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control " id="withdraw_begintime" name="withdraw_begintime" required
+                            <input type="text" class="form-control " id="withdraw_begintime" name="withdraw_begintime"
+                                   required
                                    placeholder=""
                                    style="float:left; width: 80%" value="{:sysconf('withdraw_begintime')}" min="1"
-                                   max="30"  onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 30 ) this.value=1"  >号
+                                   max="30"
+                                   onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 30 ) this.value=1">号
                         </div>
 
                     </div>
                     <div class="form-group" style="margin: 0 0 15px 0;">
-                        <label class="col-sm-4 control-label ">账户余额可提现结束日期&nbsp;:&nbsp;</label>
+                        <label class="col-sm-4 control-label ">账户余额可提现结束:&nbsp;</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control " id="withdraw_endtime" name="withdraw_endtime" required
+                            <input type="text" class="form-control " id="withdraw_endtime" name="withdraw_endtime"
+                                   required
                                    placeholder=""
                                    style="float:left; width: 80%" value="{:sysconf('withdraw_endtime')}" min="1"
-                                   max="30"  onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 30 ) this.value=30;"  >号
+                                   max="30"
+                                   onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 30 ) this.value=30;">号
                         </div>
 
                     </div>
@@ -38,6 +42,11 @@
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-6">
                             <span id="showmsg"></span>
+                        </div>
+                    </div>
+                    <div class="form-group custom_btn">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-6">
                             <button type="submit" class="btn btn-primary">确定</button>
                         </div>
                     </div>
@@ -93,51 +102,35 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#form1").bind("submit", function(){
-            alert('11111');
-            $flag = 0;
-            if (withdraw_begintime < 1 || withdraw_begintime > 30) {
-                $("#showmsg").html('开始时间必须在1-30之间');
-                $flag = 1;
-            }
-            if (withdraw_endtime < 1 || withdraw_endtime > 30) {
-                $("#showmsg").html('结束时间必须在1-30之间');
-                $flag = 1;
-            }
-
-            if(withdraw_begintime > withdraw_endtime){
-                $("#showmsg").html('开始时间必须小于结束时间');
-                $flag = 1;
-            }
-            if($flag = 1){
-                $("#showmsg").css({"color": "red"});
-                return false;
-            }
-            return true;
-        })
-    })
-    function check() {
-        $flag = 0;
-        if (withdraw_begintime < 1 || withdraw_begintime > 30) {
-            $("#showmsg").html('开始时间必须在1-30之间');
-            $flag = 1;
-        }
-        if (withdraw_endtime < 1 || withdraw_endtime > 30) {
-            $("#showmsg").html('结束时间必须在1-30之间');
-            $flag = 1;
-        }
-
-        if(withdraw_begintime > withdraw_endtime){
+    $('#withdraw_begintime,#withdraw_endtime').blur(function () {
+        if ($("#withdraw_begintime").val() - $("#withdraw_endtime").val() > 0) {
             $("#showmsg").html('开始时间必须小于结束时间');
-            $flag = 1;
+        } else {
+            $("#showmsg").html('');
         }
-        if($flag = 1){
-            $("#showmsg").css({"color": "red"});
+        $("#showmsg").css({"color": "red"});
+    });
+
+    function check() {
+        if ($("#withdraw_begintime").val() - $("#withdraw_endtime").val() > 0) {
+            $("#showmsg").html('开始时间必须小于结束时间');
+        } else {
+            $("#showmsg").html('');
+        }
+        $("#showmsg").css({"color": "red"});
+        if (!$("#showmsg").html() == '') {
             return false;
         }
-        return true;
+        $.post(
+            "{:url('Config/change')}",
+            {
+                withdraw_begintime: $("#withdraw_begintime").val(),
+                withdraw_endtime: $("#withdraw_endtime").val(),
+            },
+            function (obj) {
+               location.reload();
+            }
+        );
     }
-
 </script>
 {/block}

@@ -13,15 +13,20 @@
         <h1 class="h1">抢单范围设置</h1>
         <div class="operate_box">
             <div class="commission">
-                <form class="form-horizontal" onsubmit="return false;" action="{:url('Config/index')}" data-auto="true" method="post">
+                <form class="form-horizontal" onsubmit="return check();"  method="post">
                     <div class="form-group" style="margin: 0 0 15px 0;">
                         <label class="col-sm-3 control-label">司机可抢单范围 ：&nbsp;</label>
                         <div class="col-sm-5">
-                            <input type="number" class="form-control" name="grab_range" placeholder="" value="{:sysconf('grab_range')}" onkeyup="if(this.value>50){ this.value = 50;}" required="required" >
+                            <input type="text" class="form-control" name="grab_range" id="grab_range"placeholder="" value="{:sysconf('grab_range')}" onkeyup="if(isNaN(value))execCommand('undo'); if(this.value>50){ this.value = 50;}" required="required" >
                         </div>
                         <label class="col-sm-2 control-label">公里&nbsp;</label>
                     </div>
-
+                    <div class="form-group custom_btn">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-6">
+                            <span id="showmsg"></span>
+                        </div>
+                    </div>
                     <div class="form-group custom_btn">
                         <label class="col-sm-3 control-label"></label>
                         <div class="col-sm-5">
@@ -37,5 +42,40 @@
 {/block}
 
 {block name="script"}
-
+<script>
+    $('#grab_range').blur(function () {
+        var pattern_amount = /(^[0-9]+(.[0-9]{1,})?$)/;
+        var flag = 0;
+        if(!(pattern_amount.test($("#grab_range").val()) )){
+            $("#showmsg").html('数字不符合要求');
+            flag = 1;
+        }else{
+            $("#showmsg").html('');
+        }
+        $("#showmsg").css({"color": "red"});
+    });
+    function check() {
+        var pattern_amount = /(^[0-9]+(.[0-9]{1,})?$)/;
+        var flag = 0;
+        if(!(pattern_amount.test($("#grab_range").val()) )){
+            $("#showmsg").html('数字不符合要求');
+            flag = 1;
+        }else{
+            $("#showmsg").html('');
+        }
+        $("#showmsg").css({"color": "red"});
+        if (!$("#showmsg").html() == '') {
+            return false;
+        }
+        $.post(
+            "{:url('Config/change')}",
+            {
+                grab_range: $("#grab_range").val(),
+            },
+            function (obj) {
+                location.reload();
+            }
+        );
+    }
+</script>
 {/block}
