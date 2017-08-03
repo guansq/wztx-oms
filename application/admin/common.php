@@ -21,44 +21,6 @@ function auth($node) {
 }
 
 /*
- * 得到技术评分
- */
-function getTechScore($code){
-    return '80分';
-}
-
-/*
- * 供应商资质评分
- */
-function getQualiScore($code){
-    return '70分';
-}
-
-/*
- * 供应风险
- */
-function getSupplyRisk($code){
-    return '极小';
-}
-/*
- * 信用等级
- */
-function getQualiLevel($code){
-    return '优秀';
-}
-
-/*
- * 得到项目号
- */
-function getProNo($pr_code){
-    $prLogic = model('RequireOrder','logic');
-    $where = [
-        'pr_code' => $pr_code,
-    ];
-    return $prLogic->getProNo($where);
-}
-
-/*
  * 发送信息 $basetype =0 为发送信息给货主 $basetype =1 为发送信息给司机
  */
 function sendMsg($sendeeId,$title,$content,$basetype=0,$type='single',$pri=3){
@@ -68,6 +30,7 @@ function sendMsg($sendeeId,$title,$content,$basetype=0,$type='single',$pri=3){
         'type' => $basetype,
         'publish_time' => time(),
         'pri' => $pri,
+        'push_type'=>$type,
         'create_at' => time(),
         'update_at' => time()
     ];
@@ -130,13 +93,19 @@ function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
     $skArr = explode('_',config('app_access_key'));
     $sendData['sign'] = $desClass->strEnc($arrOrder,$skArr[0],$skArr[1],$skArr[2]);//签名
     $result = HttpService::post(getenv('APP_API_HOME').'push',http_build_query($sendData));
-    // dump($result);
+    //dump($result);
 }
 /*
  * 得到司机推送token
  */
-function getPushToken($id){
+function getDrPushToken($id){
     return Db::name('system_user_driver')->where("id",$id)->value('push_token');
+}
+/*
+ * 得到货主token
+ */
+function getSpPushToken($id){
+    return Db::name('system_user_shipper')->where("id",$id)->value('push_token');
 }
 
 /*

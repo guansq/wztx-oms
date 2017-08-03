@@ -36,10 +36,7 @@ class Order extends BaseLogic {
        * 得到通过id获取订单详情
        */
     public function getListOneInfo($where = []) {
-        $list = Db::name('TransportOrder')->alias('a')->where($where)->field('a.*')->select();
-        if ($list) {
-            $list = collection($list)->toArray();
-        }
+        $list = Db::name('TransportOrder')->alias('a')->where($where)->field('a.*')->find();
         return $list;
     }
 

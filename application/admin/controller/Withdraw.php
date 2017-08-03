@@ -84,7 +84,7 @@ class Withdraw extends BaseController{
         if (empty($item)) {
             $this->error('未查询到当前用户信息', '');
         }
-        $returnArr = $item[0];
+        $returnArr = $item;
         $results = [  'init'=>'未处理','agree'=>'后台同意','refuse'=>'已拒绝','pay_success'=>'银行返回成功','pay_fail'=>'银行返回失败'];
 
         $returnArr['statusinfo'] = $results[$returnArr['status']];
@@ -106,6 +106,16 @@ class Withdraw extends BaseController{
         $detail = $withdrawLogic->updateStatus(['id' => $id], $result);
         if ($detail) {
             LogService::write(input('status').'--' . $id, '通过提现');
+            $item = $withdrawLogic->getListItem($id);
+            if(!empty($item)){
+                $push_token = getDrPushToken($item['base_id']);
+                if(!empty($push_token) ){
+                    $titlepush = '通过提现审核';
+                    $contentpush = '通过提现审核';
+                    sendMsg($id,$titlepush,$contentpush,1);
+                    pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
+                }
+            }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
             LogService::write(input('status').'--' . $id, '提现失败');

@@ -101,11 +101,11 @@ class Order extends BaseController {
         if (empty($list)) {
             $this->error('未查询到当前订单信息', '');
         }
-        $list[0]['statusname'] = $this->stauusLists[$list[0]['status']];
-        $pay_cer_pic = explode('|', $list[0]['pay_cer_pic']);
+        $list['statusname'] = $this->stauusLists[$list['status']];
+        $pay_cer_pic = explode('|', $list['pay_cer_pic']);
         $pay_cer_pic = array_filter($pay_cer_pic);
 
-        $this->assign('list', $list[0]);
+        $this->assign('list', $list);
         //凭证信息
         $this->assign('pay_cer_pic', $pay_cer_pic);
         //var_dump($pay_cer_pic);
@@ -165,14 +165,21 @@ class Order extends BaseController {
             if (empty($list)) {
                 $this->error('未查询到当前订单信息', '');
             }
-            $final_price = $list[0]['final_price'];
-            $dr_id =  $list[0]['dr_id'];
+            $final_price = $list['final_price'];
+            $dr_id =  $list['dr_id'];
             $clear_price =$final_price*0.01;
             $driverLogic = model('Driver', 'logic');
             $status = ['cash'=>['exp','cash+'.$clear_price], 'update_at' => time()];
             $detail = $driverLogic->updateStatus(['id' => $dr_id], $status);
             if($detail){
                 LogService::write('订单:' . $id, '订单结算成功');
+                $push_token = getDrPushToken($dr_id);
+                if(!empty($push_token)){
+                    $titlepush = '有一笔订单结算成功';
+                    $contentpush = '订单:'.$list['order_code'].'，结算金额:'.$clear_price;
+                    sendMsg($id,$titlepush,$contentpush,1);
+                    pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
+                }
                 $this->success('更新成功！', '');
             }else{
                 LogService::write('订单:' . $id, '订单状态更改成功，基本信息表剩余金额更新失败');

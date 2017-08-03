@@ -147,6 +147,13 @@ class Driver extends BaseController {
         $detail = $driverLogic->updateStatus(['id' => $id], $status);
         if ($detail) {
             LogService::write('司机端:' . $id, '审核通过');
+            $push_token = getDrPushToken($id);
+            if(!empty($push_token)){
+                $titlepush = '认证信息审核通过';
+                $contentpush = '您的认证信息审核通过';
+                sendMsg($id,$titlepush,$contentpush,1);
+                pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
+            }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
             LogService::write('司机端:' . $id, '更新失败');
@@ -172,6 +179,8 @@ class Driver extends BaseController {
                 $status['auth_status'] = 'refuse';
                 $tmp = $titile;// . ',' . time();
                 $where['auth_status'] = 'check';
+                $titlepush = '认证信息审核被拒绝';
+                $contentpush = '您的认证信息审核被拒绝,拒绝原因:'.$titile;
               //  $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['auth_info'] = $tmp;
                 break;
@@ -180,6 +189,8 @@ class Driver extends BaseController {
                 $status['bond_status'] = 'frozen';
                 $status['is_frozen'] = '1';
                 $tmp = $titile;// . ',' . time();
+                $titlepush = '账户信息被冻结';
+                $contentpush = '您的账户信息被冻结,冻结原因:'.$titile;
               //  $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['frozen_info'] = $tmp;
                 break;
@@ -188,6 +199,8 @@ class Driver extends BaseController {
                 $status['bond_status'] = 'init';
                 $status['is_frozen'] = '0';
                 $tmp = $titile;// . ',' . time();
+                $titlepush = '账户信息取消冻结';
+                $contentpush = '您的账户信息取消冻结,取消冻结:'.$titile;
               //  $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['frozen_info'] = $tmp;
                 break;
@@ -221,6 +234,11 @@ class Driver extends BaseController {
         $detail = $driverLogic->updateStatus($where, $status);
         if ($detail) {
             LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time().'更新成功');
+            $push_token = getDrPushToken($id);
+            if(!empty($push_token) && !empty($titlepush) && !empty($contentpush)){
+                sendMsg($id,$titlepush,$contentpush,0);
+                pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
+            }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
             LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time().'更新失败');

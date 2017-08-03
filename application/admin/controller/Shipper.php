@@ -281,6 +281,15 @@ class Shipper extends BaseController {
         $detail = $shipperLogic->updateStatus(['id' => $id], $status);
 
         if ($detail) {
+            $push_token = getSpPushToken($id);
+            if(!empty($push_token)){
+                //发送订单信息给货主
+                $titlepush = '认证信息审核通过';
+                $contentpush = '您的认证信息审核通过';
+                sendMsg($id,$titlepush,$contentpush,0);
+                pushInfo($push_token,$titlepush,$contentpush,'wztx_shipper');//推送给
+            }
+
             LogService::write('货主端:' . $id, '审核通过');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
@@ -306,6 +315,8 @@ class Shipper extends BaseController {
             case 'refuse': //拒绝审核
                 $status['auth_status'] = 'refuse';
                 $tmp = $titile;//. ',' . time();
+                $titlepush = '认证信息审核被拒绝';
+                $contentpush = '您的认证信息审核被拒绝,拒绝原因:'.$titile;
                 $where['auth_status'] = 'check';
                 // $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['auth_info'] = $tmp;
@@ -315,6 +326,8 @@ class Shipper extends BaseController {
                 $status['bond_status'] = 'frozen';
                 $status['is_frozen'] = '1';
                 $tmp = $titile;//. ',' . time();
+                $titlepush = '账户信息被冻结';
+                $contentpush = '您的账户信息被冻结,冻结原因:'.$titile;
                // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['frozen_info'] = $tmp;
                 break;
@@ -323,6 +336,8 @@ class Shipper extends BaseController {
                 $status['bond_status'] = 'checked';
                 $status['is_frozen'] = '0';
                 $tmp = $titile;//. ',' . time();
+                $titlepush = '账户信息取消冻结';
+                $contentpush = '您的账户信息取消冻结,取消冻结:'.$titile;
                // $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['frozen_info'] = $tmp;
                 break;
@@ -356,6 +371,11 @@ class Shipper extends BaseController {
         // 'contract' => ['exp', 'concat(IFNULL(contract,\'\'),\''.','.$src.'\')']
         $detail = $shipperLogic->updateStatus($where, $status);
         if ($detail) {
+            $push_token = getSpPushToken($id);
+            if(!empty($push_token) && !empty($titlepush) && !empty($contentpush)){
+                sendMsg($id,$titlepush,$contentpush,0);
+                pushInfo($push_token,$titlepush,$contentpush,'wztx_shipper');//推送给
+            }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);

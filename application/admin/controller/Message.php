@@ -127,7 +127,7 @@ class Message extends BaseController {
                         $re_key = 'wztx_driver';
                     }
                     if(in_array($re_key,['wztx_shipper','wztx_driver'])){
-                     //   pushInfo('', $data['title'], $data['content'], 'wztx_shipper');//推送给
+                        pushInfo('', $data['title'], $data['content'], 'wztx_shipper');//推送给
                     }
                 }
                 LogService::write('消息管理', '上传消息成功');

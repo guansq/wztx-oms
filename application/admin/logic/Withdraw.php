@@ -23,13 +23,8 @@ class Withdraw extends BaseLogic {
        * 详情页面
        */
     public function getListItem($where = []) {
-
-        $list = Db::name('Withdraw')->where($where)->field('*')->select();
+        $list = Db::name('Withdraw')->where($where)->field('*')->find();
         // echo $this->getLastSql();
-        if ($list) {
-            $list = collection($list)->toArray();
-        }
-        //  dump($list);die;
         return $list;
     }
 
