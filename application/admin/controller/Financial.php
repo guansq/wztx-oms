@@ -313,7 +313,7 @@ class Financial extends BaseController {
         $listAll = $rechargeLogic->getListInfos($where);
         $returnArr = [];
         foreach ($listAll as $k => $v) {
-            $types = [0 => '个人货主端', 1 => '公司货主', 2 => '司机端'];
+            $types = ['person' => '个人货主端', 'company' => '公司货主', 'driver' => '司机端'];
             $payways = [0 => '', 1 => '支付宝', 2 => '微信'];
             $paystatus = [0 => '未支付', 1 => '支付成功', 2 => '支付失败'];
             //  $action = '';

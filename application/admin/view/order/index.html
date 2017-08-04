@@ -22,10 +22,9 @@
             <form class="form-inline">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地" id="name"
-                           name="name">
+                           name="name"  autocomplete="off">
                     <select class="form-control mr_20" id="status" name="status">
                         <option value="all">订单状态</option>
-                        <option value="init">初始状态</option>
                         <option value="hang">挂起</option>
                         <option value="quote">报价中</option>
                         <option value="quoted">已报价-未配送</option>
@@ -65,7 +64,7 @@
                         <tr>
                             <th>序号</th>
                             <th>订单编号</th>
-                            <th>保单号</th>
+                            <!--<th>保单号</th>-->
                             <th>车牌号</th>
                             <th>货物保险状态</th>
                             <th>出发地</th>
@@ -79,7 +78,7 @@
                         <tr>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <!--<td></td>-->
                             <td></td>
                             <td></td>
                             <td></td>
@@ -178,7 +177,7 @@
             "columns": [
                 {"data": "num"},
                 {"data": "order_code"},
-                {"data": "policy_code"},
+//                {"data": "policy_code"},
                 {"data": "card_number"},
                 {"data": "is_ensured"},
                 {"data": "org_address_name"},

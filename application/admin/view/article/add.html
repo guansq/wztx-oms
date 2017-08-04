@@ -23,13 +23,13 @@
   <div class="layui-form-item">
     <label class="layui-form-label">文章标题 </label>
     <div class="layui-input-block">
-      <input type="text" name="title" value='{$articledetail.title|default=""}' required="required" title="请输入文章标题" placeholder="请输入文章标题" class="layui-input">
+      <input type="text" name="title"  autocomplete="off" value='{$articledetail.title|default=""}' required="required" title="请输入文章标题" placeholder="请输入文章标题" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">文章标识 </label>
     <div class="layui-input-block">
-      <input type="text" name="type" value='{$articledetail.type|default=""}'{if condition="$articledetail eq ''"}{else /}disabled="disabled"{/if} required="required" title="请输入文章标识" placeholder="请输入文章标识" class="layui-input">
+      <input type="text" name="type"  autocomplete="off" value='{$articledetail.type|default=""}'{if condition="$articledetail eq ''"}{else /}disabled="disabled"{/if} required="required" title="请输入文章标识" placeholder="请输入文章标识" class="layui-input">
     </div>
   </div>
 
