@@ -33,6 +33,13 @@
                         <option value="{$pprovince}">{$pprovince}</option>
                         {/volist}
                     </select>
+                    <select class="form-control" id="auth_status"  name="auth_status">
+                        <option value="all">认证状态</option>
+                        <option value="refuse">已拒绝</option>
+                        <option value="pass">已通过</option>
+                        <option value="check">认证中</option>
+                        <option value="init">未认证</option>
+                    </select>
                 </div>
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
@@ -57,6 +64,7 @@
                             <th>地址</th>
                             <th>物流类型</th>
                             <th>车牌号</th>
+                            <th>认证状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -113,6 +121,8 @@
                     parameter.name = $("#name").val();
                     parameter.province = $("#province").val();
                     parameter.sex = $("#sex").val();
+                    parameter.auth_status = $("#auth_status").val();
+
                 },
             },
             "pageLength": 10,
@@ -125,6 +135,7 @@
                 {"data": "address"},
                 {"data": "logisticstype"},
                 {"data": "cardnumber"},
+                {"data": "auth_status"},
                 {"data": "action"},
             ],
             "fnCreatedRow": function (nRow, aData, iDataIndex) {

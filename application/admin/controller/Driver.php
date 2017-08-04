@@ -33,7 +33,12 @@ class Driver extends BaseController {
         $get = input('param.');
         //性别 车牌/姓名 省
         // 应用搜索条件
-        foreach (['name', 'sex', 'province'] as $key) {
+        $auth_statuss = ['init' => '未认证',
+            'check' => '认证中',
+            'pass' => '认证通过',
+            'refuse' => '认证失败',
+            'delete' => '后台删除'];
+        foreach (['name', 'sex', 'province', 'auth_status'] as $key) {
             $get[$key] = trim($get[$key]);
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'province') {
@@ -68,6 +73,7 @@ class Driver extends BaseController {
                 'sexname' => $sexname,//性别
                 'number' => $v['identity'],//身份证号
                 'address' => $v['address'],//地址
+                'auth_status' => $auth_statuss[$v['auth_status']],//认证状态
                 'cardnumber' => $v['card_number'],//车牌
                 'logisticstype' => $logisticstypes[$v['logistics_type']], //物流
                 'check' => '<input class="list-check-box" value="' . $v['a_id'] . '" type="checkbox"/>',//id
