@@ -32,7 +32,7 @@ class Message extends BaseController {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'title') {
                     $where['title'] = ['like', "%{$get[$key]}%"];
-                }else{
+                } else {
                     $where[$key] = $get[$key];
                 }
             }
@@ -94,8 +94,8 @@ class Message extends BaseController {
     }
 
     function addmessage() {
-        $url = str_replace($_SERVER['SERVER_NAME'] . '/',$_SERVER['SERVER_NAME'] . '/#/',Url::build('Message/index')) . '?' . $_SERVER['QUERY_STRING'];
-        $url = preg_replace('/s=[^\s]*&/','',$url);
+        $url = str_replace($_SERVER['SERVER_NAME'] . '/', $_SERVER['SERVER_NAME'] . '/#/', Url::build('Message/index')) . '?' . $_SERVER['QUERY_STRING'];
+        $url = preg_replace('/s=[^\s]*&/', '', $url);
         $articledetail = '';
 
         if (request()->isPost()) {
@@ -121,12 +121,65 @@ class Message extends BaseController {
                 if (empty($data['id'])) {
                     //推送消息
                     //发送推送消息
-                    if($data['type'] == 0){
+                    if ($data['type'] == 0) {
                         $re_key = 'wztx_shipper';
-                    }else   if($data['type'] == 1){
+                    } else if ($data['type'] == 1) {
                         $re_key = 'wztx_driver';
                     }
-                    if(in_array($re_key,['wztx_shipper','wztx_driver'])){
+                    if (in_array($re_key, ['wztx_shipper', 'wztx_driver'])) {
+                        pushInfo('', $data['title'], $data['content'], 'wztx_shipper');//推送给
+                    }
+                }
+                LogService::write('消息管理', '上传消息成功');
+                $this->success('恭喜，保存成功哦！', $url);
+            } else {
+                LogService::write('消息管理', '上传消息失败');
+                $this->error('保存失败，请稍候再试！');
+            }
+        } else {
+            $id = input('id');
+            if (!empty($id)) {
+                $articledetail = Db::name($this->table)->where('id', $id)->find();
+            }
+            $this->assign('articledetail', $articledetail);
+            return view();
+        }
+    }
+
+    function addueditor() {
+        $url = str_replace($_SERVER['SERVER_NAME'] . '/', $_SERVER['SERVER_NAME'] . '/#/', Url::build('Message/index')) . '?' . $_SERVER['QUERY_STRING'];
+        $url = preg_replace('/s=[^\s]*&/', '', $url);
+        $articledetail = '';
+
+        if (request()->isPost()) {
+            $data = input('param.');
+            $data['content'] = $data['editor'];
+            if (empty($data['content'])) {
+                $this->error('内容不能为空');
+            }
+            if ($data['type'] == 'all') {
+                $this->error('必须选择客户端类型');
+            }
+            $data['push_type'] = 'all';
+            $data['pri'] = '3';
+
+            if (empty($data['id'])) {
+                $data['publish_time'] = time();
+                $data['create_at'] = time();
+            } else {
+                $data['update_at'] = time();
+            }
+            $result = DataService::save($this->table, $data);//Db::name($this->table)->allowField(true)->insert($data);
+            if ($result !== false) {
+                if (empty($data['id'])) {
+                    //推送消息
+                    //发送推送消息
+                    if ($data['type'] == 0) {
+                        $re_key = 'wztx_shipper';
+                    } else if ($data['type'] == 1) {
+                        $re_key = 'wztx_driver';
+                    }
+                    if (in_array($re_key, ['wztx_shipper', 'wztx_driver'])) {
                         pushInfo('', $data['title'], $data['content'], 'wztx_shipper');//推送给
                     }
                 }
@@ -168,7 +221,7 @@ class Message extends BaseController {
      */
     public function show() {
         $ids = explode(',', input("post.id", ''));
-        if (Db::name($this->table)->where('id', 'in', $ids)->update(['delete_at' =>null, 'update_at' => time()])) {
+        if (Db::name($this->table)->where('id', 'in', $ids)->update(['delete_at' => null, 'update_at' => time()])) {
             LogService::write('文章显示', '文章显示' . input("post.id", ''));
             $this->success("文章显示成功！", '');
         }
