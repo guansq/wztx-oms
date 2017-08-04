@@ -236,7 +236,7 @@ class Driver extends BaseController {
             LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time().'更新成功');
             $push_token = getDrPushToken($id);
             if(!empty($push_token) && !empty($titlepush) && !empty($contentpush)){
-                sendMsg($id,$titlepush,$contentpush,0);
+                sendMsg($id,$titlepush,$contentpush,1);
                 pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
             }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
