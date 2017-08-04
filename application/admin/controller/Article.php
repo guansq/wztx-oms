@@ -12,6 +12,7 @@ use service\LogService;
 use service\DataService;
 use think\Db;
 use think\Url;
+
 class Article extends BaseController {
     protected $table = 'SystemArticle';
     protected $title = '文章管理';
@@ -22,7 +23,12 @@ class Article extends BaseController {
             $where['title'] = ['like', "%" . input('name') . "%"];
         }
         $db = Db::name($this->table);
-        $this->assign('list', $db->field('*')->where($where)->select());
+        $list = $db->field('*')->where($where)->select();
+        foreach ($list as $k =>$v){
+            $list[$k]['content'] = substr( strip_tags( $v['content']),0,20);
+        }
+
+        $this->assign('list',$list);
         $this->assign('title', $this->title);
         return view();
     }
