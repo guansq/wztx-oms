@@ -106,7 +106,7 @@ class Withdraw extends BaseController{
         $detail = $withdrawLogic->updateStatus(['id' => $id], $result);
         if ($detail) {
             LogService::write(input('status').'--' . $id, '通过提现');
-            $item = $withdrawLogic->getListItem($id);
+            $item = $withdrawLogic->getListItem(['id'=>$id]);
             if(!empty($item)){
                 $push_token = getDrPushToken($item['base_id']);
                 if(!empty($push_token) ){
