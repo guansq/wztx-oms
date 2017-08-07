@@ -58,7 +58,7 @@ class Message extends BaseController {
                 'check' => '<input class="list-check-box" value="' . $v['id'] . '" type="checkbox"/>',//id
                 'title' => $v['title'],//
                 'typename' => $typename,//
-                'content' => $v['content'],//
+                'content' => mb_substr( strip_tags( $v['content']),0,20),//
                 'is_del' => empty($v['delete_at']) ? '正常' : '已删除',
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Message/addmessage', ['id' => $v['id']]) . '" >查看</a> | 
 <a class="look"  data-update="' . $v['id'] . '"  href="javascript:void(0);"  data-field=""  data-action="' . url('Message/del', ['id' => $v['id']]) . '" >删除</a> | 

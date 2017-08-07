@@ -102,17 +102,20 @@ class Index extends BaseController {
         }
         if ($this->request->isGet()) {
             $this->assign('verify', true);
-            return $this->_form('SystemUser', 'user/pass');
+            return $this->_form('SystemAdmin', 'user/pass');
         } else {
             $data = $this->request->post();
             if ($data['password'] !== $data['repassword']) {
                 $this->error('两次输入的密码不一致，请重新输入！');
             }
+            if ($data['password'] === $data['oldpassword']) {
+                $this->error('新密码和旧密码一致，请重新输入！');
+            }
             $user = Db::name('SystemAdmin')->where('id', session('user.id'))->find();
             if (md5($data['oldpassword']) !== $user['password']) {
                 $this->error('旧密码验证失败，请重新输入！');
             }
-            if (DataService::save('SystemUser', ['id' => session('user.id'), 'password' => md5($data['password'])])) {
+            if (DataService::save('SystemAdmin', ['id' => session('user.id'), 'password' => md5($data['password'])])) {
                 $this->success('密码修改成功，下次请使用新密码登录！', '');
             } else {
                 $this->error('密码修改失败，请稍候再试！');
@@ -128,7 +131,7 @@ class Index extends BaseController {
             $this->error('系统超级账号禁止操作！');
         }*/
         if (intval($this->request->request('id')) === intval(session('user.id'))) {
-            return $this->_form('SystemUser', 'user/form');
+            return $this->_form('SystemAdmin', 'user/form');
         }
         $this->error('访问异常！');
     }

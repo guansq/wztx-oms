@@ -116,7 +116,7 @@ class Order extends BaseController {
 //        $addressdetail = $orderLogic->getAddressInfo(['id' => $list[0]['org_address_id']]);
 //        $this->assign('org_address', $addressdetail[0]);
         //车辆信息
-        $carinfo = $orderLogic->getCardInfo(['a.id' => $list[0]['dr_id']]);
+        $carinfo = $orderLogic->getCardInfo(['a.id' => $list['dr_id']]);
 
         $this->assign('carinfo',empty($carinfo[0])?'':$carinfo[0] );
         return view('edit');

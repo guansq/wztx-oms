@@ -25,7 +25,7 @@ class Article extends BaseController {
         $db = Db::name($this->table);
         $list = $db->field('*')->where($where)->select();
         foreach ($list as $k =>$v){
-            $list[$k]['content'] = substr( strip_tags( $v['content']),0,20);
+            $list[$k]['content'] = mb_substr( strip_tags( $v['content']),0,20);
         }
 
         $this->assign('list',$list);
