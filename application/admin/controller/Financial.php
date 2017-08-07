@@ -45,15 +45,15 @@ class Financial extends BaseController {
         if (empty(input('begintime')) || empty(input('endtime'))) {
             switch (input('type')) {
                 case '30days':
-                    $begin_time = strtotime(date('Y-m-d')) - 86400 * 30;
+                    $begin_time = strtotime(date('Y-m-d')) - 86400 * 29;
                     $end_time = strtotime(date('Y-m-d'));
                     break;
                 case '15days':
-                    $begin_time = strtotime(date('Y-m-d')) - 86400 * 15;
+                    $begin_time = strtotime(date('Y-m-d')) - 86400 * 14;
                     $end_time = strtotime(date('Y-m-d'));
                     break;
                 case '7days':
-                    $begin_time = strtotime(date('Y-m-d')) - 86400 * 7;
+                    $begin_time = strtotime(date('Y-m-d')) - 86400 * 6;
                     $end_time = strtotime(date('Y-m-d'));
                     break;
                 case 'today':
