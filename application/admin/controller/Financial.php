@@ -63,14 +63,13 @@ class Financial extends BaseController {
                     break;
             }
         } else {
-            if ((strtotime(input('endtime')) - strtotime('begintime')) > 30 * 24 * 60 * 60) {
+            if ((strtotime(input('endtime')) - strtotime(input('begintime'))) > 30 * 24 * 60 * 60) {
                 return (["is_show" => '2', "order_amount" => [0], "tran_total" => [0], "data_show" => [date("Y-m-d")], "datestr" => date("Y-m-d")]);
                 $info = ['draw' => time(), 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => [], 'extdata' => $where, 'showmsg' => '查询时间不能超过30天'];
             }
             $begin_time = strtotime(input('begintime'));
             $end_time = strtotime(input('endtime'));
         }
-
         $where['pay_time'] = array('between', array($begin_time, $end_time));
         // $titile = '统计';
         $datearray = $this->prDates(date('Y-m-d', $begin_time), date('Y-m-d', $end_time));

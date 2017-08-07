@@ -29,7 +29,7 @@
           <div class="form-group custom_btn">
             <label class="col-sm-2 control-label"></label>
             <div class="col-sm-6">
-              <span id="showmsg"></span>
+              <span id="showmsg">&nbsp;</span>
             </div>
           </div>
           <div class="form-group custom_btn">
@@ -67,11 +67,12 @@
                 share_percent: $("#share_percent").val(),
             },
             function (obj) {
-                layer.msg('修改成功', function () {
-                    location.reload();
-                });
+                layer.msg('修改成功');
+                location.reload();
+                return true;
             }
         );
+        return false;
     }
 </script>
 {/block}
