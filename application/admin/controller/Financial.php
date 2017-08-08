@@ -252,7 +252,7 @@ class Financial extends BaseController {
      * @param  int $id
      * @return \think\Response
      */
-    public function showdetail($id) {
+    public function showdetail() {
         $where = [];
         $type = 0;
         $id = intval(input('id'));

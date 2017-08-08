@@ -74,13 +74,11 @@ class Withdraw extends BaseController{
      * @param  int $id
      * @return \think\Response
      */
-    public function showdetail($id)
+    public function showdetail()
     {
-        $where = [];
-        $type = 0;
         $id = intval(input('id'));
         $withdrawLogic = Model('Withdraw', 'logic');
-        $item = $withdrawLogic->getListItem($id);
+        $item = $withdrawLogic->getListItem(['id'=>$id]);
         if (empty($item)) {
             $this->error('未查询到当前用户信息', '');
         }
@@ -98,6 +96,9 @@ class Withdraw extends BaseController{
     {
         if(!in_array(input('status'),['agree','refuse'])){
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => ['msg'=>'状态不合法']]);
+        }
+        if(empty(input('remark'))){
+            return json(['code' => 4000, 'msg' => '备注不能为空', 'data' => ['msg'=>'备注不能为空']]);
         }
         //后期添加提现具体操作
         $id = input('id');
