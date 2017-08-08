@@ -124,12 +124,29 @@ class Order extends BaseController {
 
     //审核通过
     public function pass() {
+        $titile = input('title');
+        if (empty($titile)) {
+            return json(['code' => 4000, 'msg' => '输入文本不能为空', 'data' => []]);
+        }
+
         $id = input('id');
         $orderLogic = model('Order', 'logic');
-        $status = ['per_status' => 'pass', 'update_at' => time(), 'pay_time' => time(), 'status' => 'pay_success','is_pay'=>1,'pay_way'=>4];
+        $status = ['per_status' => 'pass', 'update_at' => time(), 'pay_time' => time(), 'status' => 'pay_success','is_pay'=>1,'pay_way'=>4,'per_remark'=>$titile];
         $detail = $orderLogic->updateStatus(['id' => $id], $status);
         if ($detail) {
             LogService::write('订单:' . $id, '凭证审核通过');
+            $list = $orderLogic->getListOneInfo( ['id' => $id]);
+            if (empty($list)) {
+                return json(['code' => 4000, 'msg' => '未查询到当前订单信息', 'data' => []]);
+            }
+            $sp_id =  $list['sp_id'];
+            $push_token = getSpPushToken($sp_id);
+            if(!empty($push_token)){
+                $titlepush = '凭证审核通过';
+                $contentpush = '订单:'.$list['order_code'].'，凭证审核通过:';
+                sendMsg($sp_id,$titlepush,$contentpush,0);
+                pushInfo($push_token,$titlepush,$contentpush,'wztx_shipper');//推送给货主
+            }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
             LogService::write('订单:' . $id, '凭证审核更新失败');
@@ -177,7 +194,7 @@ class Order extends BaseController {
                 if(!empty($push_token)){
                     $titlepush = '有一笔订单结算成功';
                     $contentpush = '订单:'.$list['order_code'].'，结算金额:'.$clear_price;
-                    sendMsg($id,$titlepush,$contentpush,1);
+                    sendMsg($dr_id,$titlepush,$contentpush,1);
                     pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
                 }
                 $this->success('更新成功！', '');
@@ -214,6 +231,19 @@ class Order extends BaseController {
 
         $detail = $orderLogic->updateStatus($where, $status);
         if ($detail) {
+            $orderLogic = model('Order', 'logic');
+                $list = $orderLogic->getListOneInfo( ['id' => $id]);
+            if (empty($list)) {
+                return json(['code' => 4000, 'msg' => '未查询到当前订单信息', 'data' => []]);
+            }
+            $sp_id =  $list['sp_id'];
+            $push_token = getSpPushToken($sp_id);
+            if(!empty($push_token)){
+                $titlepush = '支付凭证被拒绝';
+                $contentpush = '订单:'.$list['order_code'].'，支付凭证被拒绝原因:'.$tmp;
+                sendMsg($sp_id,$titlepush,$contentpush,0);
+                pushInfo($push_token,$titlepush,$contentpush,'wztx_shipper');//推送给货主
+            }
             LogService::write('订单页面:' . $id, $authtype . ',' . $titile . ',' . time().'更新成功');
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
