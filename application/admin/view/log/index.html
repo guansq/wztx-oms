@@ -1,19 +1,17 @@
 {extend name='extra@admin/content' /}
 
 {block name="button"}
-<div class="nowrap pull-right" style="margin-top:10px">
-    {if auth("$classuri/del")}
-    <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
-            class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除日志
-    </button>
-    {/if}
-</div>
+
 {/block}
 
 {block name="content"}
-
+<div class="head_box">
+    <a href="javascript:void(0);">系统权限</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">操作日志</a>
+</div>
 <!-- 表单搜索 开始 -->
-<form class="animated form-search" action='{:url("$classuri/index")}' onsubmit="return false" method="get">
+<form class="animated form-search" action='{:url("$classuri/index")}' onsubmit="return false" method="get"  style="margin-top:10px">
 
     <div class="row">
         <div class="col-xs-3">
@@ -41,6 +39,14 @@
             <div class="form-group">
                 <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
             </div>
+        </div>
+
+        <div class="nowrap pull-right" style="">
+            {if auth("$classuri/del")}
+            <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
+                    class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除日志
+            </button>
+            {/if}
         </div>
     </div>
 </form>

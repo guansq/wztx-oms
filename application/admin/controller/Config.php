@@ -92,35 +92,40 @@ class Config extends BaseController {
      * 保险费率设置
      */
     public function premium() {
-        $this->title = '保险费率设置';
-        $this->index();
+        //$this->title = '保险费率设置';
+        return view();
+      //  $this->index();
     }
 
     //保证金设置
     public function bond() {
         $this->title = '保证金设置';
-        $this->index();
+        return view();
     }
-
+    //结算
+    public function clear() {
+        $this->title = '结算';
+        return view();
+    }
     //提现日期设置
     public function withdraw() {
         $this->title = '提现日期设置';
-        $this->index();
+        return view();
     }
 
     //客服管理
     public function custommanage() {
         $this->title = '客服管理';
-        $this->index();
+        return view();
     }
     //限额管理
     public function limitamount() {
-        $this->title = '转账限额';
-        $this->index();
+        $this->title = '转账限额管理';
+        return view();
     }
     //转账账户管理
     public function tranaccount() {
-        $this->title = '转账账户';
-        $this->index();
+        $this->title = '转账账户管理';
+        return view();
     }
 }

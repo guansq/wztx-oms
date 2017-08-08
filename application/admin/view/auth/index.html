@@ -1,13 +1,19 @@
 {extend name='extra@admin/content' /}
 
 {block name="button"}
-<div class="nowrap pull-right" style="margin-top:10px">
-    <button data-modal='{:url("$classuri/add")}' data-title="添加权限" class='layui-btn layui-btn-small'><i class='fa fa-plus'></i> 添加权限</button>
-    <button data-update data-field='delete' data-action='{:url("$classuri/del")}' class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除权限</button>
-</div>
+
 {/block}
 
 {block name="content"}
+<div class="head_box">
+    <a href="javascript:void(0);">系统权限</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">权限管理</a>
+</div>
+<div class="nowrap pull-right" style="margin-top:10px;margin-bottom: 10px;">
+    <button data-modal='{:url("$classuri/add")}' data-title="添加权限" class='layui-btn layui-btn-small'><i class='fa fa-plus'></i> 添加权限</button>
+    <button data-update data-field='delete' data-action='{:url("$classuri/del")}' class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除权限</button>
+</div>
 <form onsubmit="return false;" data-auto="" method="POST">
     <input type="hidden" value="resort" name="action"/>
     <table class="table table-hover">

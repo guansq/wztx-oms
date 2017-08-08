@@ -73,6 +73,7 @@ class Index extends BaseController {
      * @return View
      */
     public function main() {
+        //var_dump(sysconf('clear_percent'));
         echo  md5('RUITU111111KEJI');
         $_version = Db::query('select version() as ver');
         $version = array_pop($_version);

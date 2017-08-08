@@ -3,18 +3,25 @@
 {block name="style"}
 <link href="//cdn.bootcss.com/wangeditor/2.1.20/css/wangEditor.css" rel="stylesheet">
 {/block}
-{block name="button"}
-<div class="nowrap pull-right" style="margin-top:10px">
-	<a type="button" class="layui-btn layui-btn-small"   data-open='{:url("$classuri/addueditor")}'   data-title="添加文章"><i class="fa fa-plus"></i>  添加文章</a>
-	<button data-update data-field='delete' data-action='{:url("$classuri/del")}'
-					class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除文章
-	</button>
+<div class="head_box">
+	<a href="javascript:void(0);">系统设置</a>
+	<span> >> </span>
+	<a href="javascript:void(0);">保证金设置</a>
 </div>
+{block name="button"}
+
+
 {/block}
 
 {block name="content"}
+<div class="head_box">
+	<a href="javascript:void(0);">文章管理</a>
+	<span> >> </span>
+	<a href="javascript:void(0);">说明介绍</a>
+</div>
+
 <!-- 表单搜索 开始 -->
-<form class="animated form-search" action='{:url("$classuri/index")}' onsubmit="return false" method="get">
+<form class="animated form-search" action='{:url("$classuri/index")}' onsubmit="return false" method="get" style="margin-top:10px">
 
 	<div class="row">
 		<div class="col-xs-3">
@@ -29,6 +36,13 @@
 			<div class="form-group">
 				<button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
 			</div>
+		</div>
+
+		<div class="nowrap pull-right" >
+			<a type="button" class="layui-btn layui-btn-small"   data-open='{:url("$classuri/addueditor")}'   data-title="添加文章"><i class="fa fa-plus"></i>  添加文章</a>
+			<button data-update data-field='delete' data-action='{:url("$classuri/del")}'
+					class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除文章
+			</button>
 		</div>
 	</div>
 </form>

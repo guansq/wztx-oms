@@ -39,7 +39,7 @@ class Auth extends BaseController {
      * 权限列表
      */
     public function index() {
-        $this->title = '系统权限管理';
+       // $this->title = '系统权限管理';
         parent::_list($this->table);
     }
 

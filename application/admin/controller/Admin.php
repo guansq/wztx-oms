@@ -39,7 +39,7 @@ class Admin extends BaseController {
      */
     public function index() {
         // 设置页面标题
-        $this->title = '系统用户管理';
+       // $this->title = '系统用户管理';
         // 获取到所有GET参数
         $get = $this->request->get();
         // 实例Query对象

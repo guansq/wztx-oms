@@ -4,32 +4,36 @@
 <link href="//cdn.bootcss.com/wangeditor/2.1.20/css/wangEditor.css" rel="stylesheet">
 {/block}
 {block name="button"}
-<div class="nowrap pull-right" style="margin-top:10px">
-    <a type="button" class="layui-btn layui-btn-small" data-open='{:url("$classuri/addueditor")}' data-title="添加系统消息"><i
-            class="fa fa-plus"></i> 添加系统消息</a>
-    <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
-            class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除系统消息
-    </button>
-</div>
+
 {/block}
 
 {block name="content"}
+<div class="head_box">
+    <a href="javascript:void(0);">文章管理</a>
+    <span> >> </span>
+    <a href="javascript:void(0);">系统消息</a>
+</div>
+
+
 <!-- 表单搜索 开始 -->
-<form class="animated form-search" action='{:url("$classuri/index")}' onsubmit="return false" method="get">
+<form class="animated form-search" action='{:url("$classuri/index")}' onsubmit="return false" method="get"
+      style="margin-top:10px">
 
     <div class="row">
         <div class="col-xs-3">
             <div class="form-group">
                 <input type="text" name="title" id="title" value="{$Think.get.name|default=''}" placeholder="名称"
-                       class="input-sm form-control"  autocomplete="off">
+                       class="input-sm form-control" autocomplete="off">
             </div>
         </div>
         <div class="col-xs-3">
-            <select class="form-control " id="type" name="type">
-                <option value="all">客户端类型</option>
-                <option value="0">货主端</option>
-                <option value="1">司机端</option>
-            </select>
+            <div class="form-group">
+                <select class="form-control " id="type" name="type">
+                    <option value="all">客户端类型</option>
+                    <option value="0">货主端</option>
+                    <option value="1">司机端</option>
+                </select>
+            </div>
         </div>
 
         <div class="col-xs-1">
@@ -37,6 +41,14 @@
                 <button type="button" class="btn btn-sm btn-white" id="searchVal"><i class="fa fa-search"></i> 搜索
                 </button>
             </div>
+        </div>
+        <div class="nowrap pull-right" style="">
+            <a type="button" class="layui-btn layui-btn-small" data-open='{:url("$classuri/addueditor")}'
+               data-title="添加系统消息"><i
+                    class="fa fa-plus"></i> 添加系统消息</a>
+            <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
+                    class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除系统消息
+            </button>
         </div>
     </div>
 </form>
@@ -73,6 +85,7 @@
             });
         })
     });
+
     function initPage() {
 
 //        $('input').iCheck({
@@ -124,7 +137,7 @@
                     "sLast": "末页"
                 },
                 "sEmptyTable": "暂无数据",
-                "info":"当前总记录数_TOTAL_条",
+                "info": "当前总记录数_TOTAL_条",
                 "sInfoEmpty": "当前总记录数_TOTAL_条",
             },
             "processing": true,

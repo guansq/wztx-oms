@@ -6,43 +6,45 @@
 
 {block name="content"}
 <main class="main">
-  <div class="head_box">
-    <a href="javascript:void(0);">分享管理</a>
-    <span> >> </span>
-    <a href="javascript:void(0);">分享佣金设置</a>
-  </div>
-  <div class="con_box">
-    <h1 class="h1">佣金设置</h1>
-    <div class="operate_box">
-      <div class="commission">
-        <form class="form-horizontal" onsubmit="return check();" method="post">
-          <div class="form-group" style="margin: 0 0 15px 0;">
-            <label class="col-sm-2 control-label">分享佣金&nbsp;:&nbsp;</label>
-            <div class="col-sm-10">
-              <input type="text" required class="form-control" name="share_percent" id="share_percent"  onkeyup="if(isNaN(value))value=''" placeholder="" autocomplete="off" style="float:left; width: 80%" value="{:sysconf('share_percent')}">%
-            </div>
-
-          </div>
-          <div class="form-group" style="margin: 0 0 15px 0;">
-            金额以首单总额为基数计算
-          </div>
-          <div class="form-group custom_btn" style="min-height: 24px">
-            <label class="col-sm-2 control-label"></label>
-            <div class="col-sm-6">
-              <span id="showmsg"></span>
-            </div>
-          </div>
-          <div class="form-group custom_btn">
-            <label class="col-sm-2 control-label"></label>
-            <div class="col-sm-6">
-              <button type="submit" class="btn btn-primary" >确定</button>
-            </div>
-          </div>
-        </form>
-      </div>
-
+    <div class="head_box">
+        <a href="javascript:void(0);">系统设置</a>
+        <span> >> </span>
+        <a href="javascript:void(0);">分享佣金设置</a>
     </div>
-  </div>
+    <div class="con_box">
+        <h1 class="h1">分享佣金设置</h1>
+        <div class="operate_box">
+            <div class="commission">
+                <form class="form-horizontal" onsubmit="return check();" method="post">
+                    <div class="form-group" style="margin: 0 0 15px 0;">
+                        <label class="col-sm-2 control-label">分享佣金&nbsp;:&nbsp;</label>
+                        <div class="col-sm-10">
+                            <input type="text" required class="form-control" name="share_percent" id="share_percent"
+                                   onkeyup="if(isNaN(value))value=''" placeholder="" autocomplete="off"
+                                   style="float:left; width: 80%" value="{:sysconf('share_percent')}">%
+                        </div>
+
+                    </div>
+                    <div class="form-group" style="margin: 0 0 15px 0;">
+                        金额以首单总额为基数计算
+                    </div>
+                    <div class="form-group custom_btn" style="min-height: 24px">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-6">
+                            <span id="showmsg"></span>
+                        </div>
+                    </div>
+                    <div class="form-group custom_btn">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
 </main>
 {/block}
 
@@ -51,10 +53,10 @@
     function check() {
         var pattern_amount = /(^[0-9]+(.[0-9]{1,})?$)/;
         var flag = 0;
-        if(!(pattern_amount.test($("#share_percent").val()) && pattern_amount.test($("#share_percent").val()))){
+        if (!(pattern_amount.test($("#share_percent").val()) && pattern_amount.test($("#share_percent").val()))) {
             $("#showmsg").html('数字不符合要求');
             flag = 1;
-        }else{
+        } else {
             $("#showmsg").html('');
         }
         $("#showmsg").css({"color": "red"});

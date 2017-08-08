@@ -167,7 +167,7 @@ class Order extends BaseController {
             }
             $final_price = $list['final_price'];
             $dr_id =  $list['dr_id'];
-            $clear_price =$final_price*0.01;
+            $clear_price =floatval(wztxMoney($final_price*sysconf('clear_percent')));
             $driverLogic = model('Driver', 'logic');
             $status = ['cash'=>['exp','cash+'.$clear_price], 'update_at' => time()];
             $detail = $driverLogic->updateStatus(['id' => $dr_id], $status);

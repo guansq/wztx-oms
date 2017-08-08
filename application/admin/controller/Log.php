@@ -36,7 +36,7 @@ class Log extends BaseController {
      * 日志列表
      */
     public function index() {
-        $this->title = '系统操作日志';
+        //$this->title = '系统操作日志';
         $db = Db::name($this->table)->order('id desc');
         $get = $this->request->get();
         foreach (['action', 'content', 'username'] as $key) {

@@ -18,7 +18,7 @@ class Message extends BaseController {
     protected $title = '系统消息管理';
 
     function index() {
-        $this->assign('title', $this->title);
+        //$this->assign('title', $this->title);
         return view();
     }
 

@@ -9,29 +9,25 @@
     <div class="head_box">
         <a href="javascript:void(0);">系统设置</a>
         <span> >> </span>
-        <a href="javascript:void(0);">转账限额管理</a>
+        <a href="javascript:void(0);">结算率设置</a>
     </div>
     <div class="con_box">
-        <h1 class="h1">转账限额管理</h1>
+        <h1 class="h1">结算率设置</h1>
         <div class="operate_box">
             <div class="commission">
                 <form class="form-horizontal" onsubmit="return check();"
                       method="post">
                     <div class="form-group" style="margin: 0 0 15px 0;">
-                        <label class="col-sm-2 control-label">微信限额&nbsp;:&nbsp;</label>
+                        <label class="col-sm-2 control-label">结算率&nbsp;:&nbsp;</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="weixin_limit" id="weixin_limit" placeholder=""
-                                   style="float:left; width: 80%" value="{:sysconf('weixin_limit')}" required onkeyup="if(isNaN(value))value=''"  autocomplete="off">元
+                            <input type="text" required class="form-control" name="clear_percent" id="clear_percent"
+                                   onkeyup="if(isNaN(value))value=''" placeholder="" autocomplete="off"
+                                   style="float:left; width: 80%" value="{:sysconf('clear_percent')}">%
                         </div>
 
                     </div>
                     <div class="form-group" style="margin: 0 0 15px 0;">
-                        <label class="col-sm-2 control-label">支付宝限额&nbsp;:&nbsp;</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="alipay_limit" id="alipay_limit" placeholder=""
-                                   onkeyup="if(isNaN(value))value=''" required style="float:left; width: 80%" value="{:sysconf('alipay_limit')}"  autocomplete="off">元
-                        </div>
-
+                        结算金额 = 订单总金额*（100-结算率）/100
                     </div>
                     <div class="form-group custom_btn" style="min-height: 24px">
                         <label class="col-sm-2 control-label"></label>
@@ -55,24 +51,25 @@
 
 {block name="script"}
 <script type="text/javascript">
-    $('#weixin_limit,#alipay_limit').blur(function () {
-        var pattern_amount = /(^[0-9]+(.[0-9]{1,2})?$)/;
+
+    $('#clear_percent').blur(function () {
+        var pattern_amount = /(^[0-9]+(.[0-9]{1,})?$)/;
         var flag = 0;
-        if(!(pattern_amount.test($("#weixin_limit").val()) && pattern_amount.test($("#alipay_limit").val()))){
-            $("#showmsg").html('金额只能是整数或者两位小数');
+        if (!(pattern_amount.test($("#clear_percent").val()) && pattern_amount.test($("#clear_percent").val()))) {
+            $("#showmsg").html('数字不符合要求');
             flag = 1;
-        }else{
+        } else {
             $("#showmsg").html('');
         }
+        $("#showmsg").css({"color": "red"});
     });
-
     function check() {
-        var pattern_amount = /(^[0-9]+(.[0-9]{1,2})?$)/;
+        var pattern_amount = /(^[0-9]+(.[0-9]{1,})?$)/;
         var flag = 0;
-        if(!(pattern_amount.test($("#weixin_limit").val()) && pattern_amount.test($("#alipay_limit").val()))){
-            $("#showmsg").html('金额只能是整数或者两位小数');
+        if (!(pattern_amount.test($("#clear_percent").val()) && pattern_amount.test($("#clear_percent").val()))) {
+            $("#showmsg").html('数字不符合要求');
             flag = 1;
-        }else{
+        } else {
             $("#showmsg").html('');
         }
         $("#showmsg").css({"color": "red"});
@@ -82,8 +79,7 @@
         $.post(
             "{:url('Config/change')}",
             {
-                weixin_limit: $("#weixin_limit").val(),
-                alipay_limit: $("#alipay_limit").val(),
+                clear_percent: $("#clear_percent").val(),
             },
             function (obj) {
                 layer.msg('修改成功');

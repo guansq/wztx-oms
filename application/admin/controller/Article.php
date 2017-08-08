@@ -29,7 +29,7 @@ class Article extends BaseController {
         }
 
         $this->assign('list',$list);
-        $this->assign('title', $this->title);
+        //$this->assign('title', $this->title);
         return view();
     }
 
