@@ -22,7 +22,7 @@
                         <label class="col-sm-4 control-label ">账户余额可提现开始:&nbsp;</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control " id="withdraw_begintime" name="withdraw_begintime"
-                                   required
+
                                    autocomplete="off"
                                    placeholder=""
                                    style="float:left; width: 80%" value="{:sysconf('withdraw_begintime')}" min="1"
@@ -35,7 +35,7 @@
                         <label class="col-sm-4 control-label ">账户余额可提现结束:&nbsp;</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control " id="withdraw_endtime" name="withdraw_endtime"
-                                   required
+
                                    autocomplete="off"
                                    placeholder=""
                                    style="float:left; width: 80%" value="{:sysconf('withdraw_endtime')}" min="1"
@@ -51,9 +51,9 @@
                         </div>
                     </div>
                     <div class="form-group custom_btn">
-                        <label class="col-sm-2 control-label"></label>
-                        <div class="col-sm-6">
-                            <button type="submit" class="btn btn-primary">确定</button>
+                        <label class="col-sm-4 control-label"></label>
+                        <div class="col-sm-7">
+                            <button type="submit" class="btn btn-primary" style="margin-left: 10px;">确定</button>
                         </div>
                     </div>
                 </form>

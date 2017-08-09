@@ -21,7 +21,7 @@
                         <label class="col-sm-2 control-label">微信限额&nbsp;:&nbsp;</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" name="weixin_limit" id="weixin_limit" placeholder=""
-                                   style="float:left; width: 80%" value="{:sysconf('weixin_limit')}" required onkeyup="if(isNaN(value))value=''"  autocomplete="off">元
+                                   style="float:left; width: 80%" value="{:sysconf('weixin_limit')}"  onkeyup="if(isNaN(value))value=''"  autocomplete="off">元
                         </div>
 
                     </div>
@@ -29,7 +29,7 @@
                         <label class="col-sm-2 control-label">支付宝限额&nbsp;:&nbsp;</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" name="alipay_limit" id="alipay_limit" placeholder=""
-                                   onkeyup="if(isNaN(value))value=''" required style="float:left; width: 80%" value="{:sysconf('alipay_limit')}"  autocomplete="off">元
+                                   onkeyup="if(isNaN(value))value=''"  style="float:left; width: 80%" value="{:sysconf('alipay_limit')}"  autocomplete="off">元
                         </div>
 
                     </div>
