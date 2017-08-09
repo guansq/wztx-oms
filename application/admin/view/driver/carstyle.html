@@ -27,14 +27,38 @@
         <div >
             <span style="color:red">*点击选中车型显示，前端车型列表仅展示选中车型</span>
         </div>
-        <div class="ve_con" style="min-height: 300px">
-            {volist name='carstyle' id='pcarstyle'}
-            <span class="ve_type">
-                <input type="checkbox" name="checkname" id="check{$pcarstyle.id}" value="{$pcarstyle.id}" {if $pcarstyle.status eq 0}checked="true"{/if}  >
-                {$pcarstyle.name}
-            </span>
-            {/volist}
-        </div>
+        <form onsubmit="return false;" data-auto="" method="POST" style="width: 30%">
+            <input type="hidden" value="resort" name="action"/>
+            <div class="velength_table" >
+                <table id="example" class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th class='list-table-check-td'>
+
+                        </th>
+                        <th class='list-table-sort-td' >
+                            <button type="submit" class="layui-btn layui-btn-normal layui-btn-mini">排 序</button>
+                        </th>
+                        <th >名称</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name='list' id='plist'}
+                    <tr>
+                        <td> <input type="checkbox" name="checkname" id="check{$plist.id}" value="{$plist.id}" {if $plist.status eq 0}checked="true"{/if}  ></td>
+                        <td class='list-table-sort-td'>
+                            <input name="_{$plist.id}" value="{$plist.sort}" class="list-sort-input"/>
+                        </td>
+                        <td>{$plist.name}</td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+
+
 
 
     </div>

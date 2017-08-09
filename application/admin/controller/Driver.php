@@ -259,11 +259,28 @@ class Driver extends BaseController {
 
     //车型设置
     public function carstyle() {
-        $driverLogic = Model('Driver', 'logic');
-        $where = ['type' => 1];
-        $carstyle = $driverLogic->getCarList($where);
-        $this->assign('carstyle', $carstyle);
+        $db = Db::name('CarStyle');
+        # 列表排序默认处理
+        if ($this->request->isPost() && $this->request->post('action') === 'resort') {
+            $data = $this->request->post();
+            unset($data['action']);
+            foreach ($data as $key => &$value) {
+                if (false === $db->where('id', intval(ltrim($key, '_')))->update(['sort' => $value])) {
+                    $this->error('列表排序失败，请稍候再试！');
+                }
+            }
+            $this->success('列表排序成功，正在刷新列表！', '');
+        }
+
+        $list = $db->field('*')->where(['type' => 2])->order('sort')->select();
+        $this->assign('list', $list);
         return view();
+
+//        $driverLogic = Model('Driver', 'logic');
+//        $where = ['type' => 1];
+//        $carstyle = $driverLogic->getCarList($where);
+//        $this->assign('carstyle', $carstyle);
+//        return view();
     }
 
     //车型添加
@@ -323,7 +340,19 @@ class Driver extends BaseController {
     //车长设置
     public function carlength() {
         $db = Db::name('CarStyle');
-        $list = $db->field('*')->where(['type' => 2])->select();
+        # 列表排序默认处理
+        if ($this->request->isPost() && $this->request->post('action') === 'resort') {
+            $data = $this->request->post();
+            unset($data['action']);
+            foreach ($data as $key => &$value) {
+                if (false === $db->where('id', intval(ltrim($key, '_')))->update(['sort' => $value])) {
+                    $this->error('列表排序失败，请稍候再试！');
+                }
+            }
+            $this->success('列表排序成功，正在刷新列表！', '');
+        }
+
+        $list = $db->field('*')->where(['type' => 2])->order('sort')->select();
         $this->assign('list', $list);
         return view();
     }
