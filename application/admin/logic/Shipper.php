@@ -47,8 +47,8 @@ class Shipper extends BaseLogic {
         } else if ($where['type'] == 'company') {
             $list = Db::name('SpBaseInfo')->alias('a')->join('SpCompanyAuth b', 'a.id=b.sp_id', 'left')
                 ->where($where)
-                ->field('a.*,a.back_pic person_back_pic,a.front_pic person_front_pic,b.*,b.back_pic com_back_pic,b.front_pic com_front_pic,b.identity com_identity,a.identity person_identity')->select();
-            //  echo $this->getLastSql();
+                ->field('a.*,a.back_pic person_back_pic,a.hold_pic person_hold_pic,a.front_pic person_front_pic,b.*,b.back_pic com_back_pic,b.front_pic com_front_pic,b.identity com_identity,a.identity person_identity,b.hold_pic com_hold_pic')->select();
+          // echo $this->getLastSql();
         }
         if ($list) {
             $list = collection($list)->toArray();

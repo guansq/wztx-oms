@@ -213,7 +213,7 @@ class Order extends BaseController {
         $id = input('id');
         $authtype = input('type');
         $orderLogic = model('Order', 'logic');
-        $status = ['per_status' => 'refuse', 'update_at' => time(), 'pay_time' => time()];
+        $status = ['per_status' => 'refuse', 'update_at' => time()];
         $where = ['id' => $id];
         if (empty($titile)) {
             return json(['code' => 4000, 'msg' => '输入文本不能为空', 'data' => []]);

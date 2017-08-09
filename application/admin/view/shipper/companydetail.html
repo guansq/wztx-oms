@@ -76,6 +76,15 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
+                    {if isset($item.com_hold_pic) && $item.com_hold_pic neq ''}
+                    <img src="{$item.com_hold_pic}" alt="法人手持身份证照片">
+                    {else/}
+                    手持身份证照片
+                    {/if}
+                </section>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
                     {if isset($item.com_front_pic) && $item.com_front_pic neq ''}
                     <img src="{$item.com_front_pic}" alt="法人身份证正面照">
                     {else/}
@@ -118,8 +127,8 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.hold_pic) && $item.hold_pic neq ''}
-                    <img src="{$item.hold_pic}" alt="手持身份证照片">
+                    {if isset($item.person_hold_pic) && $item.person_hold_pic neq ''}
+                    <img src="{$item.person_hold_pic}" alt="手持身份证照片">
                     {else/}
                     手持身份证照片
                     {/if}
