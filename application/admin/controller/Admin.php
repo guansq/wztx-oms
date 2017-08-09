@@ -50,6 +50,7 @@ class Admin extends BaseController {
                 $db->where($key, 'like', "%{$get[$key]}%");
             }
         }
+        $db->where('username', 'not in', "admin");
         // 实例化并显示
         parent::_list($db);
     }
