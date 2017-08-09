@@ -68,6 +68,7 @@ class OrderComment extends BaseController
                 'id' => $v['id'],//id
                 'check' => '<input class="list-check-box" value="'.$v['id'].'" type="checkbox"/>',//id
                 'pay_orderid' => $v['pay_orderid'],//订单编号
+                'order_code' => $v['order_code'],//订单编号
                 'spbasename' => $v['sp_name'],//评论者
                 'limitship' => $v['limit_ship'] . '星',//发货时效几星
                 'attitude' => $v['attitude'] . '星',//服务态度几星

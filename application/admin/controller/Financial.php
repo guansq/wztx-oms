@@ -228,7 +228,7 @@ class Financial extends BaseController {
                     'phone' => $v['phone'],//手机号
                     'name' => $v['name'],//真实姓名
                     'type' => $types[$v['type']],//用户身份
-                    'paytime' => empty($v['pay_time']) ? '' : date('Y-m-d', $v['pay_time']),//充值时间
+                    'paytime' => empty($v['pay_time']) ? '' : date('Y-m-d H:i', $v['pay_time']),//充值时间
                     'payway' => $payways[$v['pay_way']],//充值路径
                     'amount' => number_format($v['real_amount'], 2),//充值金额 实际支付金额
                     'balance' => number_format($v['balance'], 2),// 账户余额

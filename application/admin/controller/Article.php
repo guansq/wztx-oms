@@ -24,8 +24,11 @@ class Article extends BaseController {
         }
         $db = Db::name($this->table);
         $list = $db->field('*')->where($where)->select();
+        $num = 0;
         foreach ($list as $k =>$v){
+            $num =$num+1;
             $list[$k]['content'] = mb_substr( strip_tags( $v['content']),0,20);
+            $list[$k]['num'] = $num;
         }
 
         $this->assign('list',$list);

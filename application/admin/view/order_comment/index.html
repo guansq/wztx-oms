@@ -21,8 +21,8 @@
         <div class="operate_box">
             <form class="form-inline">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="订单编号" id="ordernum" name="ordernum">
-                    <input type="text" class="form-control mr_20" placeholder="司机/货主姓名" id="name" name="name">
+                    <input type="text" class="form-control mr_20" placeholder="订单编号" id="ordernum" name="ordernum" autocomplete="off">
+                    <input type="text" class="form-control mr_20" placeholder="司机/货主姓名" id="name" name="name" autocomplete="off">
                     <input type="text" style="min-width: 220px;" class="date_time form-control mr_20" placeholder="开始时间"
                            id="begintime" name="begintime">
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="结束时间"
@@ -148,7 +148,7 @@
             "pageLength": 10,
             "columns": [
                 {"data": "check"},
-                {"data": "pay_orderid"},
+                {"data": "order_code"},
                 {"data": "spbasename"},
                 {"data": "limitship"},
                 {"data": "attitude"},
