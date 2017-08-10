@@ -116,7 +116,7 @@ class Withdraw extends BaseController {
                     if (!empty($push_token)) {
                         $titlepush = '通过提现审核';
                         $contentpush = '通过提现审核';
-                        sendMsg($id, $titlepush, $contentpush, 1);
+                        sendMsg($item['base_id'], $titlepush, $contentpush, 1);
                         pushInfo($push_token, $titlepush, $contentpush, 'wztx_driver');//推送给司机
                     }
                 }
@@ -131,7 +131,7 @@ class Withdraw extends BaseController {
                     if (!empty($push_token)) {
                         $titlepush = '拒绝提现审核';
                         $contentpush = '拒绝提现审核原因:'.input('remark');
-                        sendMsg($id, $titlepush, $contentpush, 1);
+                        sendMsg($item['base_id'], $titlepush, $contentpush, 1);
                         pushInfo($push_token, $titlepush, $contentpush, 'wztx_driver');//推送给司机
                     }
                 }
