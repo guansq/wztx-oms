@@ -38,7 +38,7 @@ function sendMsg($sendeeId,$title,$content,$basetype=0,$type='single',$pri=3){
     $data = [
         'msg_id' => $msgId,
         'sendee_id' => $sendeeId,
-        'type' => 0,
+        'type' => $basetype,
         'create_at' => time(),
         'update_at' => time()
     ];
