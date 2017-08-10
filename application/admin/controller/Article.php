@@ -67,7 +67,7 @@ class Article extends BaseController {
 //        $url =  dirname($url).'?'.$_SERVER['QUERY_STRING'];
         $articledetail = '';
         $this->assign('uploadurl', url('admin/plugs/uploadSource'));
-        $this->assign('title', $this->title);
+    //    $this->assign('title', $this->title);
         if (request()->isPost()) {
             $data = input('param.');
             $data['content'] = $data['editor'];
