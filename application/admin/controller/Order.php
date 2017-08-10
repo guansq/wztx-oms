@@ -174,7 +174,7 @@ class Order extends BaseController {
         $id = input('id');
         $orderLogic = model('Order', 'logic');
         //状态为支付成功，或者评论的时候更新结算状态,计算结算金额,更新base表里面总的金额
-        $status = ['is_clear' => '1', 'update_at' => time(),'clear_price'=>['exp',(sysconf('clear_percent')/100).'*final_price']];
+        $status = ['is_clear' => '1', 'update_at' => time(),'clear_price'=>['exp',((100-sysconf('clear_percent'))/100).'*final_price']];
         $where = ['id' => $id,'status'=>['exp','in ("pay_success","comment")'],'is_clear' => '0'];
         $detail = $orderLogic->updateStatus($where, $status);
         if ($detail) {
@@ -184,7 +184,7 @@ class Order extends BaseController {
             }
             $final_price = $list['final_price'];
             $dr_id =  $list['dr_id'];
-            $clear_price =floatval(wztxMoney($final_price*sysconf('clear_percent')/100));
+            $clear_price =floatval(wztxMoney($final_price*(100-sysconf('clear_percent'))/100));
             $driverLogic = model('Driver', 'logic');
             $status = ['cash'=>['exp','cash+'.$clear_price], 'update_at' => time()];
             $detail = $driverLogic->updateStatus(['id' => $dr_id], $status);
