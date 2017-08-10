@@ -124,10 +124,10 @@ class Order extends BaseController {
 
     //审核通过
     public function pass() {
-        $titile = input('title');
-        if (empty($titile)) {
-            return json(['code' => 4000, 'msg' => '输入文本不能为空', 'data' => []]);
-        }
+//        $titile = input('title');
+//        if (empty($titile)) {
+//            return json(['code' => 4000, 'msg' => '输入文本不能为空', 'data' => []]);
+//        }
 
         $id = input('id');
         $orderLogic = model('Order', 'logic');
