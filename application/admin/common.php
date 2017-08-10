@@ -66,7 +66,7 @@ function sendSMS($phone,$content,$rt_key='wztx_shipper'){
 /*
  * 推送信息 推送给货主为$rt_key='wztx_shipper' 推送给司机为 $rt_key='wztx_driver'
  */
-function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
+function pushInfo($token,$title,$content,$rt_key='wztx_shipper',$type='private'){
     $sendData = [
         "platform" => "all",
         "rt_appkey" => $rt_key,
@@ -83,8 +83,7 @@ function pushInfo($token,$title,$content,$rt_key='wztx_shipper'){
             "style" => 0,
             "alert_type" => -1,
             "extras" => [
-                "0" => "RuiTu",
-                "key" => "value"
+                'type'=>$type
             ]
         ]
     ];

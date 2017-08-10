@@ -272,7 +272,7 @@ class Driver extends BaseController {
             $this->success('列表排序成功，正在刷新列表！', '');
         }
 
-        $list = $db->field('*')->where(['type' => 2])->order('sort')->select();
+        $list = $db->field('*')->where(['type' => 1])->order('sort')->select();
         $this->assign('list', $list);
         return view();
 
