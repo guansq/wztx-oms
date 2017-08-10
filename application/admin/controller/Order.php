@@ -131,7 +131,7 @@ class Order extends BaseController {
 
         $id = input('id');
         $orderLogic = model('Order', 'logic');
-        $status = ['per_status' => 'pass', 'update_at' => time(), 'pay_time' => time(), 'status' => 'pay_success','is_pay'=>1,'pay_way'=>4,'per_remark'=>$titile];
+        $status = ['per_status' => 'pass', 'update_at' => time(), 'pay_time' => time(), 'status' => 'pay_success','is_pay'=>1,'pay_way'=>4];
         $detail = $orderLogic->updateStatus(['id' => $id], $status);
         if ($detail) {
             LogService::write('订单:' . $id, '凭证审核通过');
