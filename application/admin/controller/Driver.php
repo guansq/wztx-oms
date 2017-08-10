@@ -125,10 +125,10 @@ class Driver extends BaseController {
 
         $carauth = $driverLogic->getCarinfoAuth($item[0]['car_id']);
         if (!empty($carauth)) {
-            foreach ($carauth[0] as $key =>$v){
+            foreach ($carauth[0] as $key => $v) {
                 $returnArr[$key] = $v;
             }
-           // var_dump($carauth);
+            // var_dump($carauth);
             /*$carstyle = $driverLogic->getCarList();
             $carstylearray = [];
             foreach ($carstyle as $key => $item) {
@@ -154,11 +154,11 @@ class Driver extends BaseController {
         if ($detail) {
             LogService::write('司机端:' . $id, '审核通过');
             $push_token = getDrPushToken($id);
-            if(!empty($push_token)){
+            if (!empty($push_token)) {
                 $titlepush = '认证信息审核通过';
                 $contentpush = '您的认证信息审核通过';
-                sendMsg($id,$titlepush,$contentpush,1);
-                pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
+                sendMsg($id, $titlepush, $contentpush, 1);
+                pushInfo($push_token, $titlepush, $contentpush, 'wztx_driver');//推送给司机
             }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
@@ -186,8 +186,8 @@ class Driver extends BaseController {
                 $tmp = $titile;// . ',' . time();
                 $where['auth_status'] = 'check';
                 $titlepush = '认证信息审核被拒绝';
-                $contentpush = '您的认证信息审核被拒绝,拒绝原因:'.$titile;
-              //  $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
+                $contentpush = '您的认证信息审核被拒绝,拒绝原因:' . $titile;
+                //  $status['auth_info'] = ['exp', 'concat(IFNULL(auth_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['auth_info'] = $tmp;
                 break;
             case 'frozen': //冻结账户
@@ -196,8 +196,8 @@ class Driver extends BaseController {
                 $status['is_frozen'] = '1';
                 $tmp = $titile;// . ',' . time();
                 $titlepush = '账户信息被冻结';
-                $contentpush = '您的账户信息被冻结,冻结原因:'.$titile;
-              //  $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
+                $contentpush = '您的账户信息被冻结,冻结原因:' . $titile;
+                //  $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['frozen_info'] = $tmp;
                 break;
             case 'unfrozen': //取消冻结
@@ -206,8 +206,8 @@ class Driver extends BaseController {
                 $status['is_frozen'] = '0';
                 $tmp = $titile;// . ',' . time();
                 $titlepush = '账户信息取消冻结';
-                $contentpush = '您的账户信息取消冻结,取消冻结:'.$titile;
-              //  $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
+                $contentpush = '您的账户信息取消冻结,取消冻结:' . $titile;
+                //  $status['frozen_info'] = ['exp', 'concat(IFNULL(frozen_info,\'\'),\'' . '-' . $tmp . '\')'];
                 $status['frozen_info'] = $tmp;
                 break;
             case 'black': //加入黑名单
@@ -232,22 +232,22 @@ class Driver extends BaseController {
             $detail = $driverLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {
-                LogService::write('司机端:' . $id, input('phone') . ',' . $tmp . ',' . time().','.$authtype.',更新失败');
+                LogService::write('司机端:' . $id, input('phone') . ',' . $tmp . ',' . time() . ',' . $authtype . ',更新失败');
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
             }
         }
 
         $detail = $driverLogic->updateStatus($where, $status);
         if ($detail) {
-            LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time().'更新成功');
+            LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time() . '更新成功');
             $push_token = getDrPushToken($id);
-            if(!empty($push_token) && !empty($titlepush) && !empty($contentpush)){
-                sendMsg($id,$titlepush,$contentpush,1);
-                pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
+            if (!empty($push_token) && !empty($titlepush) && !empty($contentpush)) {
+                sendMsg($id, $titlepush, $contentpush, 1);
+                pushInfo($push_token, $titlepush, $contentpush, 'wztx_driver');//推送给司机
             }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         } else {
-            LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time().'更新失败');
+            LogService::write('司机端:' . $id, $authtype . ',' . $titile . ',' . time() . '更新失败');
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
     }
@@ -292,11 +292,11 @@ class Driver extends BaseController {
             $data['create_at'] = time();
             $data['update_at'] = time();
             $result = DataService::save('CarStyle', $data);
-            if($result !== false ){
-                LogService::write('车型添加成功' ,implode(',',input('param.')));
+            if ($result !== false) {
+                LogService::write('车型添加成功', implode(',', input('param.')));
                 $this->success('恭喜，保存成功哦！', '');
-            }else{
-                LogService::write('车型添加失败' ,implode(',',input('param.')));
+            } else {
+                LogService::write('车型添加失败', implode(',', input('param.')));
                 $this->error('保存失败，请稍候再试！', '');
             }
             return view();
@@ -309,15 +309,25 @@ class Driver extends BaseController {
     public function carlengthdel() {
         $table = 'CarStyle';
         if (DataService::update($table)) {
-            LogService::write('车长状态修改','车长状态修改成功'.input("post.id", ''));
+            LogService::write('车长状态修改', '车长状态修改成功' . input("post.id", ''));
             $this->success("车长状态修改成功！", '');
         }
-        LogService::write('车长状态修改','车长状态修改失败'.input("post.id", ''));
+        LogService::write('车长状态修改', '车长状态修改失败' . input("post.id", ''));
         $this->error("车长状态修改失败，请稍候再试！");
     }
 
-    //车型状态修改
+    //车长状态修改
     public function carstyledel() {
+        $table = 'CarStyle';
+        if (DataService::update($table)) {
+            LogService::write('车型状态修改', '车型状态修改成功' . input("post.id", ''));
+            $this->success("车型状态修改成功！", '');
+        }
+        LogService::write('车型状态修改', '车型状态修改失败' . input("post.id", ''));
+        $this->error("车型状态修改失败，请稍候再试！");
+    }
+    //车型状态修改
+    /*public function carstyledel() {
         $data = input('param.');
         $data['status'] = 1;
         $dealcarstyle = '';
@@ -335,7 +345,7 @@ class Driver extends BaseController {
             LogService::write('车型状态修改','车型状态修改失败'.$allid);
             return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
-    }
+    }*/
 
     //车长设置
     public function carlength() {
@@ -364,11 +374,11 @@ class Driver extends BaseController {
             $data['create_at'] = time();
             $data['update_at'] = time();
             $result = DataService::save('CarStyle', $data);
-            if($result !== false){
-                LogService::write('车长设置添加',implode(',',input('param.')).'恭喜，保存成功哦！');
+            if ($result !== false) {
+                LogService::write('车长设置添加', implode(',', input('param.')) . '恭喜，保存成功哦！');
                 $this->success('恭喜，保存成功哦！', '');
-            }else{
-                LogService::write('车长设置添加',implode(',',input('param.')).'保存失败');
+            } else {
+                LogService::write('车长设置添加', implode(',', input('param.')) . '保存失败');
                 $this->error('保存失败，请稍候再试！');
             }
         } else {
@@ -395,15 +405,15 @@ class Driver extends BaseController {
         $wheredrids = $driverLogic->getReauthListIds($where);
         $dr_id = [];
 
-        if(!empty($wheredrids)){
-            foreach ($wheredrids as $wheredrid =>$item) {
+        if (!empty($wheredrids)) {
+            foreach ($wheredrids as $wheredrid => $item) {
                 $dr_id[] = $item['dr_id'];
             }
-            LogService::write('司机端重新认证-系统',implode(',',$dr_id));
+            LogService::write('司机端重新认证-系统', implode(',', $dr_id));
             $status = ['auth_status' => 'init', 'pass_time' => '', 'update_at' => time()];
-            $result = $driverLogic->updateStatus(['id'=>['exp','in ('.implode(',',$dr_id).')']], $status);
-            echo  $result;
-        }else{
+            $result = $driverLogic->updateStatus(['id' => ['exp', 'in (' . implode(',', $dr_id) . ')']], $status);
+            echo $result;
+        } else {
             echo 'no change';
         }
 
@@ -491,10 +501,10 @@ class Driver extends BaseController {
             Db::rollback();
         }
         if (!$flag) {
-            LogService::write('删除司机端基本信息表和系统表成功',implode(',',$drids));
+            LogService::write('删除司机端基本信息表和系统表成功', implode(',', $drids));
             $this->success('用户信息删除成功', '');
         } else {
-            LogService::write('删除司机端基本信息表和系统表失败',implode(',',$drids));
+            LogService::write('删除司机端基本信息表和系统表失败', implode(',', $drids));
             $this->error('用户信息删除失败', '');
         }
     }

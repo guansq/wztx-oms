@@ -63,7 +63,8 @@
                         <td>{$plist.over_metres_price}元/公里</td>
                         <td>{$plist.weight_price}元/公里/公斤</td>
                         <td>{if $plist.status eq 0}正常{else /}删除{/if}</td>
-                        <td><a data-modal='{:url("$classuri/carlengthadd")}?id={$plist.id}' data-title="编辑车长">编辑</a> |
+                        <td>
+                            <!--<a data-modal='{:url("$classuri/carlengthadd")}?id={$plist.id}' data-title="编辑车长">编辑</a> |-->
                             {if $plist.status eq 0} <a data-update="{$plist.id}" data-value="1" data-field="status"
                                                        data-action='{:url("$classuri/carlengthdel")}'
                                                        data-title="确认删除吗">删除</a>{else /}
