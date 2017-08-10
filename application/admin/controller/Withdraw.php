@@ -125,7 +125,7 @@ class Withdraw extends BaseController {
                 if (!empty($item)) {
                     $real_amount = $item['real_amount'];
                     $driverLogic = model('Driver', 'logic');
-                    $status = ['cash' => 'cash+'.$real_amount, 'update_at' => time()];
+                    $status = ['cash' =>['exp', 'cash+'.$real_amount], 'update_at' => time()];
                     $detail = $driverLogic->updateStatus(['id' => $item['base_id']], $status);
                     $push_token = getDrPushToken($item['base_id']);
                     if (!empty($push_token)) {
