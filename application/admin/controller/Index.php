@@ -73,6 +73,7 @@ class Index extends BaseController {
      * @return View
      */
     public function main() {
+     //  echo  number_format('1000000000000.015',2,'.',',');
         //var_dump(sysconf('clear_percent'));
         $_version = Db::query('select version() as ver');
         $version = array_pop($_version);

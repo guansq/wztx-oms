@@ -191,7 +191,7 @@ class Order extends BaseController {
             if($detail){
                 LogService::write('订单:' . $id, '订单结算成功');
                 $push_token = getDrPushToken($dr_id);
-                if(!empty($push_token)){
+                if(!empty($push_token) && !empty($clear_price)){
                     $titlepush = '有一笔订单结算成功';
                     $contentpush = '订单:'.$list['order_code'].'，结算金额:'.$clear_price;
                     sendMsg($dr_id,$titlepush,$contentpush,1);
