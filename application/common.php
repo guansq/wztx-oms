@@ -295,3 +295,100 @@ function prDates($start, $end) {
         $dt_start = strtotime('+1 day', $dt_start);
     }
 }
+
+
+/*
+ * 添加推荐列表根据订单情况
+ */
+function saveOrderShare($order_id = ''){
+    if(empty($order_id)){
+        return false;
+    }
+    //获取订单详情
+    $orderInfo = model('Order', 'logic')->getListOneInfo([ 'id' => $order_id]);
+    if (empty($orderInfo)) {
+        return false;
+    }
+    if(in_array($orderInfo['status'],['pay_success','comment'])){
+        $spBaseInfo =getBaseSpUserInfo($orderInfo['sp_id']);
+        $share_money = wztxMoney($orderInfo['final_price']*getSysconf('share_percent')/100);
+        if(!empty($spBaseInfo['recomm_id'])){
+            $spInviteBaseInfo = getBaseSpUserInfo($spBaseInfo['recomm_id']);
+            $whereSp = [
+                'share_name'=>$spBaseInfo['real_name'],
+                'share_id'=>$spBaseInfo['recomm_id'],
+                'status'=>0,
+                'type'=>0,
+                'code'=>$spInviteBaseInfo['recomm_code'],
+                'invite_name'=>$spInviteBaseInfo['real_name'],
+                'invite_id'=>$orderInfo['sp_id'],
+                'pay_orderid'=>$order_id,
+                'amount'=>$share_money,
+                'create_at'=>time(),
+            ];
+            if(saveRecomm($whereSp)){
+                $isUpdate =  Db::name('SpBaseInfo')->where(['id'=>$spBaseInfo['recomm_id']])->update(['bonus'=>['exp','bonus+'.$share_money]]);
+            }
+        }
+
+        $drBaseInfo = getBaseDrUserInfo($orderInfo['dr_id']);
+        if(!empty($drBaseInfo['recomm_id'])){
+            $drInviteBaseInfo = getBaseDrUserInfo($drBaseInfo['recomm_id']);
+
+            $whereSp = [
+                'share_name'=>$drBaseInfo['real_name'],
+                'share_id'=>$drBaseInfo['recomm_id'],
+                'status'=>0,
+                'type'=>1,
+                'code'=>$drInviteBaseInfo['recomm_code'],
+                'invite_name'=>$drInviteBaseInfo['real_name'],
+                'invite_id'=>$orderInfo['dr_id'],
+                'pay_orderid'=>$order_id,
+                'amount'=>$share_money,
+                'create_at'=>time(),
+            ];
+            if(saveRecomm($whereSp)){
+                $isUpdate =  Db::name('DrBaseInfo')->where(['id'=>$drBaseInfo['recomm_id']])->update(['cash'=>['exp','cash+'.$share_money]]);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+// 保存推荐信息
+function saveRecomm($where){
+    if(empty($where['share_id']) || empty($where['share_id']) || !in_array($where['type'],['0','1'])){
+        return false;
+    }
+    $whereExist = ['share_id'=>$where['share_id'],'invite_id'=>$where['invite_id'],'type'=>$where['type']];
+    $isExist =  Db::name('ShareList')->where($whereExist)->find();
+    if(!empty($isExist)){
+        return false;
+    }
+    return Db::name('ShareList')->insert($where);
+}
+
+function getBaseSpUserInfo($sp_id){
+    return Db::name('sp_base_info')->where("id",$sp_id)->find();
+}
+/**
+ * Auther: guanshaoqiu <94600115@qq.com>
+ * Describe:通过用户ID获取相关信息
+ */
+ function getBaseDrUserInfo($user_id){
+     return Db::name('dr_base_info')->where("id",$user_id)->find();
+}
+/**
+ * 获取设备或配置系统参数
+ * @param string $name  参数名称
+ * @param bool   $value 默认值
+ * @return string|bool
+ */
+function getSysconf($name, $defaultValue = ''){
+    $data = Db::name('system_config')->where(['name' => $name])->find();
+    if(empty($data)){
+        return $defaultValue;
+    }
+    return $data['value'];
+
+}

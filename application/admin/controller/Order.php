@@ -142,6 +142,7 @@ class Order extends BaseController {
             $sp_id =  $list['sp_id'];
             $push_token = getSpPushToken($sp_id);
             if(!empty($push_token)){
+                saveOrderShare($id);//存入推荐列表
                 $titlepush = '凭证审核通过';
                 $contentpush = '订单:'.$list['order_code'].'，凭证审核通过';
                 sendMsg($sp_id,$titlepush,$contentpush,0);
