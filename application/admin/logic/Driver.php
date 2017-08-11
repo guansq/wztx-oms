@@ -121,7 +121,7 @@ class Driver extends BaseLogic {
     * 得到某种状态的数量
    */
     public function getListTotalNum($where = []) {
-        $list = Db::name('SpBaseInfo')->alias('a')->where($where)->count();
+        $list = Db::name('DrBaseInfo')->alias('a')->where($where)->count();
         return $list;
     }
 }
