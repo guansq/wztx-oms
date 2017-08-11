@@ -26,7 +26,7 @@ class Share extends BaseLogic
     public function getListItem($where=[])
     {
 
-        $list = Db::name('ShareList')->where($where)->field('count(*) num ,SUM(amount) total,share_name,share_id,code')->select();
+        $list = Db::name('ShareList')->where($where)->field('count(*) num ,SUM(amount) total,share_name,share_id,code,type')->select();
        // echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();
