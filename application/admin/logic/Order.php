@@ -78,4 +78,23 @@ class Order extends BaseLogic {
         return $list;
     }
 
+    /*
+      * 得到订单数量
+     */
+    public function getListTotalNum($where = []) {
+        $list = Db::name('TransportOrder')->alias('a')->where($where)->count();
+
+        return $list;
+    }
+    /*
+         * 得到订单成功数量和销量
+        */
+    public function getSuccessTotal($where = []) {
+        $list = Db::name('TransportOrder')->alias('a')->where($where)->field(' count(id) order_amount,sum(final_price) tran_total')->select();
+        //echo $this->getLastSql();
+        if ($list) {
+            $list = collection($list)->toArray();
+        }
+        return $list;
+    }
 }

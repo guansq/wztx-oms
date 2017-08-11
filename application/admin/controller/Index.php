@@ -31,7 +31,6 @@ use service\HttpService;
 class Index extends BaseController {
 
 
-
     /**
      * 后台框架布局
      * @return View
@@ -51,29 +50,65 @@ class Index extends BaseController {
      * @return array
 
     private function _filterMenu($menus) {
-        foreach ($menus as $key => &$menu) {
-            if (!empty($menu['sub'])) {
-                $menu['sub'] = $this->_filterMenu($menu['sub']);
-            }
-            if (!empty($menu['sub'])) {
-                $menu['url'] = '#';
-            } elseif (stripos($menu['url'], 'http') === 0) {
-                continue;
-            } elseif ($menu['url'] !== '#' && auth(join('/', array_slice(explode('/', $menu['url']), 0, 3)))) {
-                $menu['url'] = url($menu['url']);
-            } else {
-                unset($menus[$key]);
-            }
-        }
-        return $menus;
-    }*/
+     * foreach ($menus as $key => &$menu) {
+     * if (!empty($menu['sub'])) {
+     * $menu['sub'] = $this->_filterMenu($menu['sub']);
+     * }
+     * if (!empty($menu['sub'])) {
+     * $menu['url'] = '#';
+     * } elseif (stripos($menu['url'], 'http') === 0) {
+     * continue;
+     * } elseif ($menu['url'] !== '#' && auth(join('/', array_slice(explode('/', $menu['url']), 0, 3)))) {
+     * $menu['url'] = url($menu['url']);
+     * } else {
+     * unset($menus[$key]);
+     * }
+     * }
+     * return $menus;
+     * }*/
 
     /**
      * 主机信息显示
      * @return View
      */
     public function main() {
-     //  echo  number_format('1000000000000.015',2,'.',',');
+        $orderLogic = model('Order', 'logic');
+        $hangwhere = ['status' => 'hang'];
+        $hangnum = $orderLogic->getListTotalNum($hangwhere);
+        $clearwhere = ['is_clear' => '1'];
+        $clearnum = $orderLogic->getListTotalNum($clearwhere);
+        $spchecknum = model('Shipper', 'logic')->getListTotalNum(['auth_status' => 'check']);
+        $drchecknum = model('Driver', 'logic')->getListTotalNum(['auth_status' => 'check']);
+        $begin_time_7days = strtotime(date('Y-m-d')) - 86400 * 6;
+        $end_time_7days = strtotime(date('Y-m-d')) + 86400 - 1;
+        $begin_time_today = strtotime(date('Y-m-d'));
+        $end_time_today = strtotime(date('Y-m-d')) + 86400 - 1;
+        $where_7days['pay_time'] = array('between', array($begin_time_7days, $end_time_7days));
+        $result_7days = $orderLogic->getSuccessTotal($where_7days);
+        $where_today['pay_time'] = array('between', array($begin_time_today, $end_time_today));
+        $result_today = $orderLogic->getSuccessTotal($where_today);
+        $where_today_base['create_at'] = array('between', array($begin_time_today, $end_time_today));
+        $where_7days_base['create_at'] = array('between', array($begin_time_7days, $end_time_7days));
+        $spnewnum = model('Shipper', 'logic')->getListTotalNum($where_today_base);
+        $spnewnum7d = model('Shipper', 'logic')->getListTotalNum($where_7days_base);
+        $drnewnum = model('Driver', 'logic')->getListTotalNum($where_today_base);
+        $drnewnum7d = model('Driver', 'logic')->getListTotalNum($where_7days_base);
+
+        $list = [
+            'hangnum' => $hangnum,
+            'clearnum' => $clearnum,
+            'spchecknum' => $spchecknum,
+            'drchecknum' => $drchecknum,
+            'newtotal' => $spnewnum + $drnewnum,
+            'newtotal7d' => $spnewnum7d + $drnewnum7d,
+            'order_amount_7d' => $result_7days[0]['order_amount'],
+            'tran_total_7d' => number_format($result_7days[0]['tran_total'],2,'.',','),
+            'order_amount_today' => $result_today[0]['order_amount'],
+            'tran_total_today' =>number_format ($result_today[0]['tran_total'],2,'.',','),
+        ];
+//        var_dump($list);
+        $this->assign('list', $list);
+        //  echo  number_format('1000000000000.015',2,'.',',');
         //var_dump(sysconf('clear_percent'));
         $_version = Db::query('select version() as ver');
         $version = array_pop($_version);
@@ -81,8 +116,8 @@ class Index extends BaseController {
         if (session('user.username') === 'admin' && session('user.password') === '21232f297a57a5a743894a0e4a801fc3') {
             $url = url('admin/index/pass') . '?id=' . session('user.id');
             $alert = [
-                'type'    => 'danger',
-                'title'   => '安全提示',
+                'type' => 'danger',
+                'title' => '安全提示',
                 'content' => "超级管理员默认密码未修改，建议马上<a href='javascript:void(0)' data-modal='{$url}'>修改</a>！"
             ];
             $this->assign('alert', $alert);
