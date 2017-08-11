@@ -327,7 +327,7 @@ function saveOrderShare($order_id = ''){
                 'create_at'=>time(),
             ];
             if(saveRecomm($whereSp)){
-                $isUpdate =  Db::name('SpBaseInfo')->where(['id'=>$spBaseInfo['recomm_id']])->update(['bonus'=>['exp','bonus+'.$share_money]]);
+                $isUpdate =  Db::name('SpBaseInfo')->where(['id'=>$spBaseInfo['recomm_id']])->update(['balance'=>['exp','balance+'.$share_money]]);
             }
         }
 
