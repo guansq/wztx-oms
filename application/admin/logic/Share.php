@@ -12,8 +12,8 @@ class Share extends BaseLogic
        */
     public function getListInfo($start, $length, $where = [])
     {
-        $list = Db::name('ShareList')->field('share_id,type')->group('share_id and type')->limit("$start,$length")->order('create_at desc')->where($where)->select();
-        //echo $this->getLastSql();
+        $list = Db::name('ShareList')->field('share_id,type')->group('share_id , type')->limit("$start,$length")->order('create_at desc')->where($where)->select();
+       // echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();
         }
