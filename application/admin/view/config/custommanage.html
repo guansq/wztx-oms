@@ -70,10 +70,10 @@
             $("#showmsg").html('请输入正确的客服电话');
             flag = 1;
         }
-        if(!( pattern_phone.test($("#complain_phone").val()))){
-            $("#showmsg").html('请输入正确的投诉电话');
-            flag = 1;
-        }
+//        if(!( pattern_phone.test($("#complain_phone").val()))){
+//            $("#showmsg").html('请输入正确的投诉电话');
+//            flag = 1;
+//        }
         var pattern_email = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
         if(!(pattern_email.test($("#custom_email").val()))){
             $("#showmsg").html('邮件不符合规则');
