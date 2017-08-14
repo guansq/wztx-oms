@@ -72,6 +72,8 @@ class Index extends BaseController {
      * @return View
      */
     public function main() {
+        //echo date('Y-m-d 00:00:00', strtotime('this week'));
+        //echo date('Y-m-d 00:00:00', strtotime('this week'));
         $orderLogic = model('Order', 'logic');
         $hangwhere = ['status' => 'hang'];
         $hangnum = $orderLogic->getListTotalNum($hangwhere);
@@ -79,7 +81,7 @@ class Index extends BaseController {
         $clearnum = $orderLogic->getListTotalNum($clearwhere);
         $spchecknum = model('Shipper', 'logic')->getListTotalNum(['auth_status' => 'check']);
         $drchecknum = model('Driver', 'logic')->getListTotalNum(['auth_status' => 'check']);
-        $begin_time_7days = strtotime(date('Y-m-d')) - 86400 * 6;
+        $begin_time_7days = strtotime(date('Y-m-d 00:00:00', strtotime('this week')));
         $end_time_7days = strtotime(date('Y-m-d')) + 86400 - 1;
         $begin_time_today = strtotime(date('Y-m-d'));
         $end_time_today = strtotime(date('Y-m-d')) + 86400 - 1;
