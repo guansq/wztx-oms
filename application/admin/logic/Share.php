@@ -38,7 +38,7 @@ class Share extends BaseLogic
     //获得筛选总条数
     public function getListNum($where = [])
     {
-        $list = Db::name('ShareList')->field('share_id,type')->group('share_id and type')->where($where)->count();
+        $list = Db::name('ShareList')->field('share_id,type')->group('share_id , type')->where($where)->count();
         return $list;
     }
 }
