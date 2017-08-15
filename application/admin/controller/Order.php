@@ -174,27 +174,27 @@ class Order extends BaseController {
     public function clear() {
         $id = input('id');
         $orderLogic = model('Order', 'logic');
-        //状态为支付成功，或者评论的时候更新结算状态,计算结算金额,更新base表里面总的金额
-        $status = ['is_clear' => '1', 'update_at' => time(),'clear_price'=>['exp',((100-sysconf('clear_percent'))/100).'*final_price']];
+        //状态为支付成功，或者评论的时候更新结算状态,计算结算金额,更新base表里面总的金额   floor($num*100)/100
+        $list = $orderLogic->getListOneInfo( ['id' => $id]);
+        if (empty($list)) {
+            $this->error('未查询到当前订单信息', '');
+        }
+        $final_price = $list['final_price'];
+        $clear_price =floor($final_price*(100-sysconf('clear_percent')))/100;
+        $status = ['is_clear' => '1', 'update_at' => time(),'clear_price'=>$clear_price];
         $where = ['id' => $id,'status'=>['exp','in ("pay_success","comment")'],'is_clear' => '0'];
         $detail = $orderLogic->updateStatus($where, $status);
         if ($detail) {
-            $list = $orderLogic->getListOneInfo( ['id' => $id]);
-            if (empty($list)) {
-                $this->error('未查询到当前订单信息', '');
-            }
-            $final_price = $list['final_price'];
             $dr_id =  $list['dr_id'];
-            $clear_price =floatval(wztxMoney($final_price*(100-sysconf('clear_percent'))/100));
             $driverLogic = model('Driver', 'logic');
             $status = ['cash'=>['exp','cash+'.$clear_price], 'update_at' => time()];
             $detail = $driverLogic->updateStatus(['id' => $dr_id], $status);
             if($detail){
-                LogService::write('订单:' . $id, '订单结算成功');
+                LogService::write('订单:' . $id, '订单结算成功'.$clear_price);
                 $push_token = getDrPushToken($dr_id);
                 if(!empty($push_token) && !empty($clear_price)){
                     $titlepush = '有一笔订单结算成功';
-                    $contentpush = '订单:'.$list['order_code'].'，结算金额:'.$clear_price;
+                    $contentpush = '订单:'.$list['order_code'].'，结算金额:'.$clear_price.'元';
                     sendMsg($dr_id,$titlepush,$contentpush,1);
                     pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
                 }

@@ -72,6 +72,9 @@ class Index extends BaseController {
      * @return View
      */
     public function main() {
+//        $num = 123213.111;
+//        echo floor($num*100)/100 ;
+//        echo  '<br>';
         //echo date('Y-m-d 00:00:00', strtotime('this week'));
         //echo date('Y-m-d 00:00:00', strtotime('this week'));
         $orderLogic = model('Order', 'logic');

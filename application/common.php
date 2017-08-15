@@ -310,9 +310,9 @@ function saveOrderShare($order_id = ''){
         return false;
     }
     if(in_array($orderInfo['status'],['pay_success','comment'])){
-        $spBaseInfo =getBaseSpUserInfo($orderInfo['sp_id']);
-        $share_money = wztxMoney($orderInfo['final_price']*getSysconf('share_percent')/100);
-        if(!empty($spBaseInfo['recomm_id'])){
+        $spBaseInfo =getBaseSpUserInfo($orderInfo['sp_id']); // floor($num*100)/100
+        $share_money =floor($orderInfo['final_price']*getSysconf('share_percent'))/100;
+        if(!empty($spBaseInfo['recomm_id']) && !empty($share_money)){
             $spInviteBaseInfo = getBaseSpUserInfo($spBaseInfo['recomm_id']);
             $whereSp = [
                 'share_name'=>$spInviteBaseInfo['real_name'],
@@ -332,9 +332,8 @@ function saveOrderShare($order_id = ''){
         }
 
         $drBaseInfo = getBaseDrUserInfo($orderInfo['dr_id']);
-        if(!empty($drBaseInfo['recomm_id'])){
+        if(!empty($drBaseInfo['recomm_id']) && !empty($share_money)){
             $drInviteBaseInfo = getBaseDrUserInfo($drBaseInfo['recomm_id']);
-
             $whereSp = [
                 'share_name'=>$drInviteBaseInfo['real_name'],
                 'share_id'=>$drBaseInfo['recomm_id'],
