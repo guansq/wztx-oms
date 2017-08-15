@@ -43,6 +43,7 @@ function initPage(){
       issure : true
     });
   });
+    $.fn.dataTable.ext.errMode = 'none'; //不显示任何错误信息
 
   //datatable
   var table = $('#example').DataTable({

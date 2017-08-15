@@ -47,7 +47,9 @@ function initTimePicker(){
 }
 
 function initTable(){
-  var table = $('#example').DataTable({
+    $.fn.dataTable.ext.errMode = 'none'; //不显示任何错误信息
+
+    var table = $('#example').DataTable({
     //paging: false, 设置是否分页
     "info": true,  //去除左下角的信息
     "lengthChange": false, //是否允许用户改变表格每页显示的记录数

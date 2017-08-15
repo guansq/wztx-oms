@@ -92,6 +92,8 @@
     });
 
     function initPage() {
+        $.fn.dataTable.ext.errMode = 'none'; //不显示任何错误信息
+
         var table = $('#example').DataTable({
             //paging: false, 设置是否分页
             "info": true,  //去除左下角的信息
