@@ -97,9 +97,8 @@
                 'success' : function(obj){
                     layer.closeAll();
                     if(obj.code == 2000){
-                        layer.msg('操作成功', function(){
-                            location.reload();
-                        });
+                        layer.msg('操作成功');
+                        location.reload();
                     }else{
                         layer.alert(obj.msg);
                     }

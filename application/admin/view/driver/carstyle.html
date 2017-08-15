@@ -22,13 +22,13 @@
                 <button type="button" class="layui-btn layui-btn-small" data-modal='{:url("$classuri/carstyleadd")}'><i
                         class="fa fa-plus"></i>新增车型</button>
                 <button data-update data-field='' data-value="1" data-action='{:url("$classuri/carstyledel")}'
-                        class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除车型
+                        class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 禁用车型
                 </button>
                 <!--<button type="button" class="layui-btn layui-btn-small layui-btn-danger" id="rem_vehicle">选中车型显示</button>-->
             </p>
         </h1>
         <div >
-            <span style="color:red">*删除车型表示前端不展示</span>
+            <span style="color:red">*禁用车型表示前端不展示</span>
         </div>
         <form onsubmit="return false;" data-auto="" method="POST" style="width: 60%">
             <input type="hidden" value="resort" name="action"/>
@@ -55,12 +55,12 @@
                             <input name="_{$plist.id}" value="{$plist.sort}" class="list-sort-input"/>
                         </td>
                         <td>{$plist.name}</td>
-                        <td>{if $plist.status eq 0}正常{else /}删除{/if}</td>
+                        <td>{if $plist.status eq 0}正常{else /}禁用{/if}</td>
                         <td>
                             <!--<a data-modal='{:url("$classuri/carlengthadd")}?id={$plist.id}' data-title="编辑车长">编辑</a> |-->
                             {if $plist.status eq 0} <a data-update="{$plist.id}" data-value="1" data-field="status"
                                                        data-action='{:url("$classuri/carstyledel")}'
-                                                       data-title="确认删除吗">删除</a>{else /}
+                                                       data-title="确认禁用吗">禁用</a>{else /}
                             <a data-update="{$plist.id}" data-value="0" data-field="status"
                                data-action='{:url("$classuri/carstyledel")}' data-title="确认开启吗">开启</a>{/if}
                         </td>
@@ -98,7 +98,7 @@
       $('#add_vehicle').click(function () {
           $("#addstyle").show();
       });
-      //删除
+      //禁用
       $('#rem_vehicle').click(function () {
           var text="";
           $("input[name=checkname]").each(function() {
