@@ -51,6 +51,10 @@ class Login extends BaseController {
             (empty($password) || strlen($password) < 4) && $this->error('登录密码长度不能少于4位有效字符!');
             $user = Db::name('SystemAdmin')->where('username', $username)->find();
             empty($user) && $this->error('登录账号不存在，请重新输入!');
+            if(empty($user['status'])){
+                session('user', '');
+                $this->error('当前用户已经被禁用');
+            }
             ($user['password'] !== md5($password)) && $this->error('登录密码与账号不匹配，请重新输入!');
             Db::name('SystemAdmin')->where('id', $user['id'])->update(['login_at' => ['exp', 'now()'], 'login_num' => ['exp', 'login_num+1']]);
             session('user', $user);
