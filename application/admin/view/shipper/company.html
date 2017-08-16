@@ -20,7 +20,7 @@
         <div class="operate_box">
             <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="企业名称" id="companyname"  autocomplete="off">
+                    <input type="text" class="form-control mr_20" placeholder="企业名称" id="companyname"  autocomplete="off" onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
                     <select class="form-control mr_20" id="province">
                         <option value="all">省份</option>
                         {volist name='provincelist' id='pprovince'}
