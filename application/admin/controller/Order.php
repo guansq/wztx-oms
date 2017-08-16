@@ -41,7 +41,7 @@ class Order extends BaseController {
             //$get[$key] = trim($get[$key]);
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
-                    $where['a.order_code|c.card_number|org_address_name|dest_address_name'] = ['like', "%{$get[$key]}%"];
+                    $where['a.order_code|c.card_number|org_address_name|dest_address_name|dest_address_detail|org_address_detail'] = ['like', "%{$get[$key]}%"];
                 } elseif ($key == 'is_insured') {
                     if ($get[$key] == 1) {
                         $where['a.premium_amount'] = array('gt', 0);
