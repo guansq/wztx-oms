@@ -18,7 +18,7 @@
     <div class="con_box">
         <h1 class="h1">充值记录 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control mr_20" placeholder="手机号码" id="phone" name="phone" autocomplete="off">
                     <input type="text" class="form-control mr_20" placeholder="用户名" id="name" name="name" autocomplete="off">
@@ -36,6 +36,7 @@
                         <!--<option>银联</option>-->
                     </select>
                 </div>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <div class="operate_tab">
@@ -132,12 +133,40 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if(  $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('type'), ['person','company']) != -1){
+                            $("#type").val( $.cookie('type'));
+                        }else{
+                            $("#type").val( 'all');
+                        }
+                        if($.inArray( $.cookie('payway'), ['2','1']) != -1){
+                            $("#payway").val( $.cookie('payway'));
+                        }else{
+                            $("#payway").val( 'all');
+                        }
+                        if( $.cookie('recharge_name')){
+                            $("#name").val( $.cookie('recharge_name'));
+                        }
+                        if( $.cookie('phone')){
+                            $("#phone").val( $.cookie('phone'));
+                        }
+                        if( $.cookie('paytime')){
+                            $("#paytime").val( $.cookie('paytime'));
+                        }
+                    }else {
+                        $.cookie('type',$("#type").val() );
+                        $.cookie('recharge_name',$("#name").val() );
+                        $.cookie('phone',$("#phone").val() );
+                        $.cookie('paytime',$("#paytime").val() );
+                        $.cookie('payway',$("#payway").val() );
+                     //   $.cookie('status',$("#status").val() );
+                    }
                     parameter.type = $("#type").val();
                     parameter.name = $("#name").val();
                     parameter.phone = $("#phone").val();
                     parameter.paytime = $("#paytime").val();
                     parameter.payway = $("#payway").val();
-                    parameter.status = $("#status").val();
+                    //parameter.status = $("#status").val();
                 },
             },
             "pageLength": 10,
@@ -160,6 +189,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
         // tr点击选中事件

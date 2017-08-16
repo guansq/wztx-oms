@@ -19,7 +19,7 @@
     <div class="con_box">
         <h1 class="h1">司机列表 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control mr_20" placeholder="司机名称/车牌号" id="name" name="name" autocomplete="off">
                     <select class="form-control mr_20" id="sex" name="sex">
@@ -41,6 +41,7 @@
                         <option value="init">未认证</option>
                     </select>
                 </div>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <span style="color: red">*删除操作谨慎操作（不可逆）</span>
@@ -119,6 +120,30 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if(  $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('sex'), ['2','1']) != -1){
+                            $("#sex").val( $.cookie('sex'));
+                        }else{
+                            $("#sex").val( 'all');
+                        }
+                        if($.inArray( $.cookie('auth_status'), ['refuse','pass','check','init']) != -1){
+                            $("#auth_status").val( $.cookie('auth_status'));
+                        }else{
+                            $("#auth_status").val( 'all');
+                        }
+                        if( $.cookie('dr_name')){
+                            $("#name").val( $.cookie('dr_name'));
+                        }
+                        if( $.cookie('province')){
+                            $("#province").val( $.cookie('province'));
+                        }
+                    }else {
+                        $.cookie('dr_name',$("#name").val() );
+                        $.cookie('province',$("#province").val() );
+                        $.cookie('auth_status',$("#auth_status").val() );
+                        $.cookie('sex',$("#sex").val() );
+                    }
+
                     parameter.name = $("#name").val();
                     parameter.province = $("#province").val();
                     parameter.sex = $("#sex").val();
@@ -150,6 +175,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
 

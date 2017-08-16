@@ -19,7 +19,7 @@
     <div class="con_box">
         <h1 class="h1">提现申请 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control mr_20" placeholder="输入订单号" id="orderno" name="orderno"  autocomplete="off">
                     <input type="text" class="form-control mr_20" placeholder="手机号码" id="phone" name="phone"  autocomplete="off">
@@ -41,6 +41,7 @@
                         <!--<option value="pay_fail">银行返回失败</option>-->
                     </select>
                 </div>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary" id="searchVal">搜索</button>
             </form>
             <div class="operate_tab">
@@ -147,8 +148,33 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if(  $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('status'), ['init','agree','refuse']) != -1){
+                            $("#status").val( $.cookie('status'));
+                        }else{
+                            $("#status").val( 'all');
+                        }
+                        if( $.cookie('withdraw_name')){
+                            $("#name").val( $.cookie('withdraw_name'));
+                        }
+                        if( $.cookie('phone')){
+                            $("#phone").val( $.cookie('phone'));
+                        }
+                        if( $.cookie('applytime')){
+                            $("#applytime").val( $.cookie('applytime'));
+                        }
+                        if( $.cookie('orderno')){
+                            $("#orderno").val( $.cookie('orderno'));
+                        }
+                    }else {
+                        $.cookie('withdraw_name',$("#name").val() );
+                        $.cookie('orderno',$("#orderno").val() );
+                        $.cookie('phone',$("#phone").val() );
+                        $.cookie('applytime',$("#applytime").val() );
+                        $.cookie('status',$("#status").val() );
+                    }
                     parameter.orderno = $("#orderno").val();
-                    parameter.type = $("#type").val();
+                    // parameter.type = $("#type").val();
                     parameter.name = $("#name").val();
                     parameter.phone = $("#phone").val();
                     parameter.applytime = $("#applytime").val();
@@ -176,6 +202,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
         // tr点击选中事件

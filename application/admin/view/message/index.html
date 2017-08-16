@@ -38,6 +38,7 @@
 
         <div class="col-xs-1">
             <div class="form-group">
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-sm btn-white" id="searchVal"><i class="fa fa-search"></i> 搜索
                 </button>
             </div>
@@ -148,6 +149,19 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if(  $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('type'), ['0','1']) != -1){
+                            $("#type").val( $.cookie('type'));
+                        }else{
+                            $("#type").val( 'all');
+                        }
+                        if( $.cookie('title')){
+                            $("#title").val( $.cookie('title'));
+                        }
+                    }else {
+                        $.cookie('title',$("#title").val() );
+                        $.cookie('type',$("#type").val() );
+                    }
                     parameter.title = $("#title").val();
                     parameter.type = $("#type").val();
                 },
@@ -176,6 +190,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
 

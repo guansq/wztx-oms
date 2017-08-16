@@ -19,7 +19,7 @@
     <div class="con_box">
         <h1 class="h1">订单列表 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地" id="name"
                            name="name"  autocomplete="off">
@@ -52,6 +52,7 @@
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="订单时间"
                            id="create_at" name="create_at">
                 </div>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <div >
@@ -166,10 +167,40 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if(  $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('is_clear'), ['0','1']) != -1){
+                            $("#is_clear").val($.cookie('is_clear'));
+                        }else{
+                            $("#is_clear").val('all');
+                        }
+                        if($.inArray( $.cookie('tran_type'), ['0','1']) != -1){
+                            $("#tran_type").val($.cookie('tran_type'));
+                        }else{
+                            $("#tran_type").val( 'all');
+                        }
+                        if($.inArray( $.cookie('status'), ['hang','quote','quoted','distribute','photo','pay_failed','pay_success','comment']) != -1){
+                            $("#status").val( $.cookie('status'));
+                        }else{
+                            $("#status").val( 'all');
+                        }
+                        if( $.cookie('create_at')){
+                            $("#create_at").val( $.cookie('create_at'));
+                        }
+                        if( $.cookie('order_name')){
+                            $("#name").val( $.cookie('order_name'));
+                        }
+                    }else {
+                        $.cookie('create_at',$("#create_at").val() );
+                        $.cookie('order_name',$("#name").val() );
+                        $.cookie('status',$("#status").val() );
+                        $.cookie('tran_type',$("#tran_type").val() );
+                        $.cookie('is_clear',$("#is_clear").val() );
+                    }
+
                     parameter.name = $("#name").val();
                     parameter.status = $("#status").val();
                     parameter.tran_type = $("#tran_type").val();
-                    parameter.is_insured = $("#is_insured").val();
+                  //  parameter.is_insured = $("#is_insured").val();
                     parameter.create_at = $("#create_at").val();
                     parameter.is_clear = $("#is_clear").val();
                 },
@@ -195,6 +226,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
 

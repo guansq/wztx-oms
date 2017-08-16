@@ -18,7 +18,7 @@
     <div class="con_box">
         <h1 class="h1">累计未结算 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control mr_20" placeholder="输入订单号" id="order_code" name="order_code" autocomplete="off">
                     <!--<input type="text" class="form-control mr_20" placeholder="保单号" id="policy_code" name="policy_code">-->
@@ -26,6 +26,7 @@
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="交易时间"
                            id="pay_time" name="pay_time">
                 </div>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <div class="operate_tab">
@@ -117,10 +118,25 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if(  $('#searchflag').val() == 0){
+                        if( $.cookie('unb_name')){
+                            $("#name").val( $.cookie('unb_name'));
+                        }
+                        if( $.cookie('order_code')){
+                            $("#order_code").val( $.cookie('order_code'));
+                        }
+                        if( $.cookie('pay_time')){
+                            $("#pay_time").val( $.cookie('pay_time'));
+                        }
+                    }else {
+                        $.cookie('unb_name',$("#name").val() );
+                        $.cookie('order_code',$("#order_code").val() );
+                        $.cookie('pay_time',$("#pay_time").val() );
+                    }
                     parameter.name = $("#name").val();
                     parameter.order_code = $("#order_code").val();
                     parameter.pay_time = $("#pay_time").val();
-                    parameter.policy_code = $("#policy_code").val();
+                  //  parameter.policy_code = $("#policy_code").val();
                 },
             },
             "pageLength": 10,
@@ -142,6 +158,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
         // tr点击选中事件

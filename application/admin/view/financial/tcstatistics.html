@@ -21,7 +21,7 @@
             <span style="color:red">*注:暂时<br>支付时间在所选时间之内<br> 提供所选时间段30天之内的数据</span>
         </div>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <select class="form-control mr_20" name="type" id="type">
                         <option value="today">今日</option>
@@ -32,6 +32,7 @@
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 开始时间" name="begintime" id="begintime">
                     到
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 结束时间" name="endtime" id="endtime">
+                    <input type="hidden" value="0" name="searchflag" id="searchflag">
                     <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索
                     </button>
                 </div>

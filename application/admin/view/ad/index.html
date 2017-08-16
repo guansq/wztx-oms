@@ -23,7 +23,7 @@
     <div class="con_box">
         <h1 class="h1">广告列表 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline" >
+            <form class="form-inline"  onsubmit="return false;" >
                 <div class="form-group mr_20">
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder=" 开始时间"
                            id="begintime" name="begintime"  autocomplete="off">
@@ -36,6 +36,7 @@
                     <option value="0">货主端</option>
                     <option value="1">司机端</option>
                 </select>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <div class="operate_tab">
@@ -211,6 +212,24 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if( $("#port").val() == 'all' &&  $("#endtime").val()=='' &&  $("#begintime").val()=='' && $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('port'), ['0','1']) != -1){
+                            $("#port").val( $.cookie('port'));
+                        }else{
+                            $("#port").val( 'all');
+                        }
+                        if( $.cookie('endtime')){
+                            $("#endtime").val( $.cookie('endtime'));
+                        }
+                        if( $.cookie('begintime')){
+                            $("#begintime").val( $.cookie('begintime'));
+                        }
+                    }else {
+                        $.cookie('port',$("#port").val() );
+                        $.cookie('endtime',$("#endtime").val() );
+                        $.cookie('begintime',$("#begintime").val() );
+                    }
+
                     parameter.port = $("#port").val();
                     parameter.begintime = $("#begintime").val();
                     parameter.endtime = $("#endtime").val();
@@ -247,7 +266,7 @@
                         },
                         'success': function (obj) {
                             data = obj.data[0];
-                            console.log(data);
+                          //  console.log(data);
                             $("#addport").val(data.port);
                             $("#addbegintime").val(data.begintime);
                             $("#addendtime").val(data.endtime);
@@ -289,9 +308,8 @@
                             'success' : function(obj){
                                 layer.closeAll();
                                 if(obj.code == 2000){
-                                    layer.msg('修改成功', function(){
-                                        location.reload();
-                                    });
+                                    layer.msg('修改成功');
+                                    table.ajax.reload();
                                 }else{
                                     layer.alert(obj.msg);
                                 }
@@ -308,6 +326,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
 

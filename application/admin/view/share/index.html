@@ -19,7 +19,7 @@
     <div class="con_box">
         <h1 class="h1">分享列表 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline" onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control" placeholder="输入用户名" id="name" name="name"  autocomplete="off">
                 </div>
@@ -28,6 +28,7 @@
                     <option value="0">货主端</option>
                     <option value="1">司机端</option>
                 </select>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <div class="operate_tab">
@@ -104,6 +105,19 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    if(  $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('type'), ['0','1']) != -1){
+                            $("#type").val( $.cookie('type'));
+                        }else{
+                            $("#type").val( 'all');
+                        }
+                        if( $.cookie('share_name')){
+                            $("#name").val( $.cookie('share_name'));
+                        }
+                    }else {
+                        $.cookie('share_name',$("#name").val() );
+                        $.cookie('type',$("#type").val() );
+                    }
                     parameter.name = $("#name").val();
                     parameter.type = $("#type").val();
                 },
@@ -127,6 +141,7 @@
         });
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
 

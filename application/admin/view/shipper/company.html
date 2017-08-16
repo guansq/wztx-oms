@@ -18,7 +18,7 @@
     <div class="con_box">
         <h1 class="h1">公司货主 <span>（共<b id="totalnum">0</b>条）</span></h1>
         <div class="operate_box">
-            <form class="form-inline">
+            <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control mr_20" placeholder="企业名称" id="companyname"  autocomplete="off">
                     <select class="form-control mr_20" id="province">
@@ -41,6 +41,7 @@
                         <option value="init">未认证</option>
                     </select>
                 </div>
+                <input type="hidden" value="0" name="searchflag" id="searchflag">
                 <button type="button" class="btn btn-primary"  id="searchVal"><i class="fa fa-search"></i> 搜索</button>
             </form>
             <span style="color: red">*删除操作谨慎操作（不可逆）</span>
@@ -119,6 +120,29 @@
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
                     parameter.type = 'company';
+                    if(  $('#searchflag').val() == 0){
+                        if($.inArray( $.cookie('bond_status'), ['init','checked','frozen']) != -1){
+                            $("#bond_status").val( $.cookie('bond_status'));
+                        }else{
+                            $("#bond_status").val( 'all');
+                        }
+                        if($.inArray( $.cookie('auth_status'), ['refuse','pass','check','init']) != -1){
+                            $("#auth_status").val( $.cookie('auth_status'));
+                        }else{
+                            $("#auth_status").val( 'all');
+                        }
+                        if( $.cookie('companyname')){
+                            $("#companyname").val( $.cookie('companyname'));
+                        }
+                        if( $.cookie('province')){
+                            $("#province").val( $.cookie('province'));
+                        }
+                    }else {
+                        $.cookie('companyname',$("#companyname").val() );
+                        $.cookie('auth_status',$("#auth_status").val() );
+                        $.cookie('bond_status',$("#bond_status").val() );
+                        $.cookie('province',$("#province").val() );
+                    }
                     parameter.companyname = $("#companyname").val();
                     parameter.auth_status = $("#auth_status").val();
                     parameter.bond_status = $("#bond_status").val();
@@ -148,6 +172,7 @@
 
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
+            $('#searchflag').val(1);
             table.ajax.reload();
         })
         // tr点击选中事件
