@@ -22,7 +22,7 @@
             <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
                     <input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地" id="name"
-                           name="name"  autocomplete="off">
+                           name="name"  autocomplete="off"  onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
                     <select class="form-control mr_20" id="status" name="status">
                         <option value="all">订单状态</option>
                         <option value="hang">挂起</option>
@@ -69,7 +69,9 @@
                             <th>车牌号</th>
                             <!--<th>货物保险状态</th>-->
                             <th>出发地</th>
+                            <th>出发地详情</th>
                             <th>目的地</th>
+                            <th>目的地详情</th>
                             <th>状态</th>
                             <th>结算状态</th>
                             <th>操作</th>
@@ -82,6 +84,8 @@
                             <!--<td></td>-->
                             <td></td>
                             <!--<td></td>-->
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -213,7 +217,9 @@
                 {"data": "card_number"},
 //                {"data": "is_ensured"},
                 {"data": "org_address_name"},
+                {"data": "org_address_detail"},
                 {"data": "dest_address_name"},
+                {"data": "dest_address_detail"},
                 {"data": "status"},
                 {"data": "clearstauts"},
                 {"data": "action"},

@@ -21,7 +21,7 @@
         <div class="operate_box">
             <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="司机名称/车牌号" id="name" name="name" autocomplete="off">
+                    <input type="text" class="form-control mr_20" placeholder="司机名称/车牌号" id="name" name="name" autocomplete="off"  onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
                     <select class="form-control mr_20" id="sex" name="sex">
                         <option value="all">性别</option>
                         <option value="1">男</option>

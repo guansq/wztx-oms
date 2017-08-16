@@ -31,7 +31,7 @@ class OrderComment extends BaseController
                 if ($key == 'name') {
                     $where['sp_name|dr_name'] = ['like', "%{$get[$key]}%"];
                 } elseif ($key == 'ordernum') {
-                    $where['pay_orderid'] = ['like', "%{$get[$key]}%"];
+                    $where['order_code'] = ['like', "%{$get[$key]}%"];
                 } else {
                     $where[$key] = $get[$key];
                 }

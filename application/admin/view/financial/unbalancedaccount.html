@@ -20,9 +20,9 @@
         <div class="operate_box">
             <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="输入订单号" id="order_code" name="order_code" autocomplete="off">
+                    <input type="text" class="form-control mr_20" placeholder="输入订单号" id="order_code" name="order_code" autocomplete="off"  onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
                     <!--<input type="text" class="form-control mr_20" placeholder="保单号" id="policy_code" name="policy_code">-->
-                    <input type="text" class="form-control mr_20" placeholder="货主/司机用户名" id="name" name="name" autocomplete="off">
+                    <input type="text" class="form-control mr_20" placeholder="货主/司机用户名" id="name" name="name" autocomplete="off"  onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="交易时间"
                            id="pay_time" name="pay_time">
                 </div>

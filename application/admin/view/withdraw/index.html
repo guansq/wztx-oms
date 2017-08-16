@@ -21,9 +21,9 @@
         <div class="operate_box">
             <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control mr_20" placeholder="输入订单号" id="orderno" name="orderno"  autocomplete="off">
-                    <input type="text" class="form-control mr_20" placeholder="手机号码" id="phone" name="phone"  autocomplete="off">
-                    <input type="text" class="form-control mr_20" placeholder="用户名" id="name" name="name"  autocomplete="off">
+                    <input type="text" class="form-control mr_20" placeholder="输入订单号" id="orderno" name="orderno"  autocomplete="off" onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
+                    <input type="text" class="form-control mr_20" placeholder="手机号码" id="phone" name="phone"  autocomplete="off" onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
+                    <input type="text" class="form-control mr_20" placeholder="用户名" id="name" name="name"  autocomplete="off" onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="申请日期"
                            id="applytime" name="applytime">
                     <!--<select class="form-control mr_20" id="type" name="type">-->

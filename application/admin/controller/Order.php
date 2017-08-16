@@ -71,8 +71,10 @@ class Order extends BaseController {
                 'policy_code' => $v['policy_code'],//保单号
                 'card_number' => $v['card_number'],//车牌
                 'is_ensured' => ($v['premium_amount'] > 0) ? '保险' : '未保险',//货物保险状态
-                'org_address_name' => $v['org_address_name'].$v['org_address_detail'],//出发地
-                'dest_address_name' => $v['dest_address_name'].$v['dest_address_detail'],//目的地
+                'org_address_name' => $v['org_address_name'],//出发地
+                'org_address_detail' => $v['org_address_detail'],//出发地
+                'dest_address_name' => $v['dest_address_name'],//目的地
+                'dest_address_detail' => $v['dest_address_detail'],//目的地
                 'status' => $this->stauusLists[$v['status']],//状态
                 'clearstauts'=>(empty($v['is_clear'])?'未结算':'结算'),
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a>
