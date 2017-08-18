@@ -27,6 +27,10 @@ class Order extends BaseController {
 
         return view();
     }
+    public function test() {
+
+        return view();
+    }
 
     /**
      * 得到订单列表
@@ -35,6 +39,10 @@ class Order extends BaseController {
     public function getOrderList() {
         $where = [];
         $get = input('param.');
+        if(isset($get['order'][0])){
+            $orderby = $get['columns'][$get['order'][0]['column']]['data'].' '.$get['order'][0]['dir'];
+            //var_dump($orderby);
+        }
         //性别 车牌/姓名 省
         // 应用搜索条件
         foreach (['name', 'status', 'tran_type', 'is_insured', 'create_at','is_clear'] as $key) {
@@ -58,7 +66,7 @@ class Order extends BaseController {
         $start = input('start') == '' ? 0 : input('start');
         $length = input('length') == '' ? 10 : input('length');
         $orderLogic = Model('Order', 'logic');
-        $list = $orderLogic->getListInfo($start, $length, $where);
+        $list = $orderLogic->getListInfo($start, $length, $where,$orderby);
         //  var_dump($list);
         $returnArr = [];
         $num = 0;

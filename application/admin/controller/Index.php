@@ -72,6 +72,11 @@ class Index extends BaseController {
      * @return View
      */
     public function main() {
+        /*$paramAll['withdrawal_amount'] = 0.123;
+        if(!preg_match( '/^[0-9]+(.[0-9]{1,2})?$/', $paramAll['withdrawal_amount'])){
+            echo '111';
+            //returnJson(4000, '请输入小数点后两位');
+        }*/
 //        $num = 123213.111;
 //        echo floor($num*100)/100 ;
 //        echo  '<br>';
