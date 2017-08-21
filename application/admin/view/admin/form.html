@@ -4,9 +4,9 @@
         <label class="layui-form-label">用户账号</label>
         <div class="layui-input-block">
             {if $vo and isset($vo.username)}
-            <input type="text" readonly="" disabled="" name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input disabled">
+            <input type="text" readonly="" disabled="" name="username" value='{$vo.username|default=""}' required="required" title="请输入4位及以上字符" placeholder="请输入用户名称" class="layui-input disabled">
             {else/}
-            <input type="text" name="username" value='{$vo.username|default=""}' required="required" pattern="[A-Za-z0-9\w]{4,20}" title="请输入正确的用户名称" placeholder="请输入用户名称" class="layui-input">
+            <input type="text" name="username" value='{$vo.username|default=""}' required="required" pattern="[A-Za-z0-9\w]{4,20}" title="请输入4位及以上字符" placeholder="请输入用户名称" class="layui-input">
             {/if}
         </div>
     </div>
