@@ -20,6 +20,7 @@ use service\ToolsService;
 use think\Db;
 use think\View;
 use service\HttpService;
+use think\Validate;
 
 /**
  * 后台入口
@@ -72,16 +73,6 @@ class Index extends BaseController {
      * @return View
      */
     public function main() {
-        /*$paramAll['withdrawal_amount'] = 0.123;
-        if(!preg_match( '/^[0-9]+(.[0-9]{1,2})?$/', $paramAll['withdrawal_amount'])){
-            echo '111';
-            //returnJson(4000, '请输入小数点后两位');
-        }*/
-//        $num = 123213.111;
-//        echo floor($num*100)/100 ;
-//        echo  '<br>';
-        //echo date('Y-m-d 00:00:00', strtotime('this week'));
-        //echo date('Y-m-d 00:00:00', strtotime('this week'));
         $orderLogic = model('Order', 'logic');
         $hangwhere = ['status' => 'hang'];
         $hangnum = $orderLogic->getListTotalNum($hangwhere);
@@ -112,9 +103,9 @@ class Index extends BaseController {
             'newtotal' => $spnewnum + $drnewnum,
             'newtotal7d' => $spnewnum7d + $drnewnum7d,
             'order_amount_7d' => $result_7days[0]['order_amount'],
-            'tran_total_7d' => number_format($result_7days[0]['tran_total'],2,'.',','),
+            'tran_total_7d' => number_format($result_7days[0]['tran_total'], 2, '.', ','),
             'order_amount_today' => $result_today[0]['order_amount'],
-            'tran_total_today' =>number_format ($result_today[0]['tran_total'],2,'.',','),
+            'tran_total_today' => number_format($result_today[0]['tran_total'], 2, '.', ','),
         ];
 //        var_dump($list);
         $this->assign('list', $list);

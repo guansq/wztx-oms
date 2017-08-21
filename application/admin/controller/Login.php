@@ -41,6 +41,7 @@ class Login extends BaseController {
      * @return string
      */
     public function index() {
+
         if ($this->request->isGet()) {
             $this->assign('title', '用户登录');
             return $this->fetch();

@@ -10,7 +10,12 @@ class Order extends BaseLogic {
        * 得到订单列表
        */
     public function getListInfo($start, $length, $where = [],$orderby='') {
-        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseInfo b', 'a.dr_id=b.id', 'left')->join('DrCarinfoAuth c', 'b.car_id=c.id', 'left')->where($where)->limit("$start,$length")
+        if($length == -1){
+            $limit = '';
+        }else{
+            $limit = "$start,$length";
+        }
+        $list = Db::name('TransportOrder')->alias('a')->join('DrBaseInfo b', 'a.dr_id=b.id', 'left')->join('DrCarinfoAuth c', 'b.car_id=c.id', 'left')->where($where)->limit($limit)
             ->field('a.*,c.card_number')->order($orderby)->order('a.create_at desc')->select();
 //echo $this->getLastSql();
         if ($list) {

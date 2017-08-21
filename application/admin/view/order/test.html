@@ -2,6 +2,24 @@
 
 {block name="style"}
 <link href='https://cdn.bootcss.com/iCheck/1.0.2/skins/minimal/minimal.css' rel='stylesheet'>
+<style>
+    .Total{
+        display: inline-block;
+        clear: right;
+        margin-top: -6px;
+    }
+    .Lengthchanging{
+        display: inline-block;
+        float: left;
+        margin-right: 2em;
+    }
+    .toolbar{
+        float: right;
+        margin-right: 2em;
+        margin-top: -6px;
+    }
+</style>
+
 {/block}
 
 {block name="button"}
@@ -150,24 +168,33 @@
         var table = $('#example').DataTable({
             //paging: false, 设置是否分页
             "info": true,  //去除左下角的信息
-            "lengthChange": false, //是否允许用户改变表格每页显示的记录数
+            "lengthChange": true, //是否允许用户改变表格每页显示的记录数
             "ordering": true, //是否允许Datatables开启排序
             "searching": false,  //是否允许Datatables开启本地搜索
             "aaSorting" : [[1, "asc"]], //默认的排序方式，第2列，升序排列
             "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 , 2 , 3 ] }],
+            "aLengthMenu" : [[5, 8, 15,-1],[5, 8, 15,'all']], //更改显示记录数选项
+            "iDisplayLength" : 8, //默认显示的记录数
+           // "iDeferLoading": 8,
+            "serverSide": true,
+            // "aLengthMenu" : [12, 18, 19], //更改显示记录数选项
+           // "lengthMenu": [[2, 4, 6, -1], [2, 4, 6, "All"]],
+          //  "bPaginate" : true, //是否显示（应用）分页器
             language: {
                 "oPaginate": {
                     "sFirst": "首页",
                     "sPrevious": "上页",
                     "sNext": "下页",
-                    "sLast": "末页"
+                    "sLast": "末页",
+                    "sJump": "跳转"
                 },
                 "sEmptyTable": "暂无数据",
                 "info":"当前总记录数_TOTAL_条",
                 "sInfoEmpty": "当前总记录数_TOTAL_条",
+                "sLengthMenu": "显示 _MENU_ 记录",
             },
+            "dom": 'rt<"bottom"fp<"Lengthchanging"l><"Total"i><"toolbar">><"clear">',
             "processing": true,
-            "serverSide": true,
             "ajax": {
                 "url": '{:url("Order/getOrderList")}',
                 "type": "POST",
@@ -211,7 +238,7 @@
                     parameter.is_clear = $("#is_clear").val();
                 },
             },
-            "pageLength": 10,
+           // "pageLength": 10,
             "columns": [
                 {"data": "num"},
                 {"data": "order_code"},
@@ -231,7 +258,28 @@
                 $("#totalnum").html(settings.json.recordsFiltered);
             },
         });
-
+        $("div.toolbar").html(' <span>跳转第</span><input id="searchNumber" style="width: 40px;text-align: center; margin: 1em;"/><span >页</span>');
+        //绑定分页事件----在切换分页的时候触发
+        //table.on('page.dt', function () {
+        //  var info = table.page.info();
+        //  console.info('Showing page: ' + info.page + ' of ' + info.pages);
+        //});
+        //绘制的时候触发，绑定文本框的值
+        table.on('draw.dt', function (e, settings, data) {
+            var info = table.page.info();
+            //此处的page为0开始计算
+           // console.info('Showing page: ' + info.page + ' of ' + info.pages);
+            $('#searchNumber').val(info.page + 1);
+        });
+        //监听文本框更改
+        $('#searchNumber').change(function () {
+            var page = $(this).val();
+            page = parseInt(page) || 1;
+            page = page - 1;
+            //调转到指定页面索引 ，注意大小写
+            var oTable = $('#example').dataTable();
+            oTable.fnPageChange(page);
+        });
         $("#searchVal").on('click', function () {
             //console.log(orderTables);
             $('#searchflag').val(1);

@@ -39,6 +39,7 @@ class Order extends BaseController {
     public function getOrderList() {
         $where = [];
         $get = input('param.');
+        $orderby='';
         if(isset($get['order'][0])){
             $orderby = $get['columns'][$get['order'][0]['column']]['data'].' '.$get['order'][0]['dir'];
             //var_dump($orderby);
