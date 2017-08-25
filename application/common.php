@@ -82,7 +82,26 @@ function sysconf($name, $value = false) {
     }
     return isset($config[$name]) ? $config[$name] : '';
 }
-
+/**
+ * 设备或配置系统参数
+ * @param string $name 参数名称
+ * @param bool $value 默认是false为获取值，否则为更新
+ * @return string|bool
+ */
+function sysconfRemak($name, $value = false) {
+    static $config = [];
+    if ($value !== false) {
+        $config = [];
+        $data = ['name' => $name, 'value' => $value];
+        return DataService::save('SystemConfig', $data, 'name');
+    }
+    if (empty($config)) {
+        foreach (Db::name('SystemConfig')->select() as $vo) {
+            $config[$vo['name']] = $vo['remark'];
+        }
+    }
+    return isset($config[$name]) ? $config[$name] : '';
+}
 /**
  * array_column 函数兼容
  */

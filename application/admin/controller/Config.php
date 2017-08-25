@@ -49,10 +49,14 @@ class Config extends BaseController {
             foreach ($this->request->post() as $key => $vo) {
                 $org_config =  sysconf($key);
                 sysconf($key, $vo);
+                $remark_config =  sysconfRemak($key);
                 if(in_array($key,['storage_qiniu_secret_key'])){
                     $vo = '';
                 }
-                LogService::write('配置管理', $key.'从'.$org_config.'修改成'.$vo);
+                if(!empty($remark_config)){
+                    $key = $remark_config;
+                }
+                LogService::write('配置管理', $key.':从'.$org_config.'修改成'.$vo);
             }
 
             $this->success('数据修改成功！', '');
@@ -69,7 +73,11 @@ class Config extends BaseController {
                 if(in_array($key,['storage_qiniu_secret_key'])){
                     $vo = '';
                 }
-                LogService::write('配置管理', $key.'从'.$org_config.'修改成'.$vo);
+                $remark_config =  sysconfRemak($key);
+                if(!empty($remark_config)){
+                    $key = $remark_config;
+                }
+                LogService::write('配置管理', $key.':从'.$org_config.'修改成'.$vo);
             }
             return json(['code' => 2000, 'msg' => '成功', 'data' => []]);
         }

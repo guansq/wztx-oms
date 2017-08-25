@@ -115,7 +115,7 @@ class Withdraw extends BaseController {
                     $push_token = getDrPushToken($item['base_id']);
                     if (!empty($push_token)) {
                         $titlepush = '通过提现审核';
-                        $contentpush = '通过提现审核';
+                        $contentpush = '通过提现审核，提现详情:'.input('remark');
                         sendMsg($item['base_id'], $titlepush, $contentpush, 1);
                         pushInfo($push_token, $titlepush, $contentpush, 'wztx_driver');//推送给司机
                     }
