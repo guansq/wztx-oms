@@ -323,10 +323,10 @@ class Financial extends BaseController {
                 ->setCellValue('B' . $num, $v['phone'])
                 ->setCellValue('C' . $num, $v['name'])
                 ->setCellValue('D' . $num, $types[$v['type']])
-                ->setCellValue('E' . $num, empty($v['pay_time']) ? '' : date('Y-m-d', $v['pay_time']))
+                ->setCellValue('E' . $num, empty($v['pay_time']) ? '' : date('Y-m-d H:i', $v['pay_time']))
                 ->setCellValue('F' . $num, $payways[$v['pay_way']])
-                ->setCellValue('G' . $num, $v['real_amount'])
-                ->setCellValue('H' . $num, $v['balance'])
+                ->setCellValue('G' . $num, number_format($v['real_amount'], 2))
+                ->setCellValue('H' . $num, number_format($v['balance'], 2))
                 ->setCellValue('I' . $num, $paystatus[$v['pay_status']]);
 
         }

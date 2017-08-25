@@ -46,7 +46,7 @@ class Recharge extends BaseLogic {
       * 得到充值列表
       */
     public function getListInfos( $where = []) {
-        $list = Db::name('SpRechargeOrder')->field('*')->where($where)->select();
+        $list = Db::name('SpRechargeOrder')->field('*')->where($where)->order('pay_time desc')->select();
         //echo $this->getLastSql();
         if ($list) {
             $list = collection($list)->toArray();
