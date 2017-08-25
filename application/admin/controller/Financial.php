@@ -230,8 +230,8 @@ class Financial extends BaseController {
                     'type' => $types[$v['type']],//用户身份
                     'paytime' => empty($v['pay_time']) ? '' : date('Y-m-d H:i', $v['pay_time']),//充值时间
                     'payway' => $payways[$v['pay_way']],//充值路径
-                    'amount' => number_format($v['real_amount'], 2),//充值金额 实际支付金额
-                    'balance' => number_format($v['balance'], 2),// 账户余额
+                    'amount' => wztxMoney($v['real_amount']),//充值金额 实际支付金额
+                    'balance' => wztxMoney($v['balance']),// 账户余额
                     'status' => $paystatus[$v['pay_status']],//状态
                     'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Financial/showdetail', ['id' => $v['id']]) . '" >查看</a>',
                 ];
@@ -325,10 +325,13 @@ class Financial extends BaseController {
                 ->setCellValue('D' . $num, $types[$v['type']])
                 ->setCellValue('E' . $num, empty($v['pay_time']) ? '' : date('Y-m-d H:i', $v['pay_time']))
                 ->setCellValue('F' . $num, $payways[$v['pay_way']])
-                ->setCellValue('G' . $num, number_format($v['real_amount'], 2))
-                ->setCellValue('H' . $num, number_format($v['balance'], 2))
+                ->setCellValue('G' . $num, wztxMoney($v['real_amount']))
+                ->setCellValue('H' . $num,wztxMoney($v['balance']) )
                 ->setCellValue('I' . $num, $paystatus[$v['pay_status']]);
-
+            $PHPSheet ->getStyle('G'.$num)->getNumberFormat()
+                ->setFormatCode('#,##0.00');
+            $PHPSheet ->getStyle('H'.$num)->getNumberFormat()
+                ->setFormatCode('#,##0.00');
         }
 
         $PHPWriter = PHPExcel_IOFactory::createWriter($PHPExcel, 'Excel2007');//按照指定格式生成Excel文件，'Excel2007’表示生成2007版本的xlsx，
