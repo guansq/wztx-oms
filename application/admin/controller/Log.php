@@ -17,6 +17,8 @@ namespace app\admin\controller;
 use service\DataService;
 use think\Db;
 use service\LogService;
+use think\Model;
+
 /**
  * 系统日志管理
  * Class User
@@ -37,14 +39,21 @@ class Log extends BaseController {
      */
     public function index() {
         //$this->title = '系统操作日志';
-        $db = Db::name($this->table)->order('id desc');
+        $db = Db::name('SystemLog')->order('id desc');
         $get = $this->request->get();
         foreach (['action', 'content', 'username'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
                 $db->where($key, 'like', "%{$get[$key]}%");
             }
         }
-        parent::_list($db);
+        if(session('user')['username'] != 'admin'){
+            $db->where('username', 'exp',"not in('admin')")->where(['is_deleted'=>0]);
+        }
+
+        $list = $db->select();
+        $this->assign('list', $list);
+        return view();
+       // parent::_list($db);
     }
 
     /**
