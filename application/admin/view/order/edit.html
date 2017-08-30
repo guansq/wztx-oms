@@ -11,7 +11,7 @@
         <span href="javascript:void(0);">订单详情</span>
     </div>
     <div class="con_box">
-        <p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>订单详情</p>
+        <!--<p class="p_tit"><span class="glyphicon glyphicon-align-justify"></span>订单详情</p>-->
         <div class="details_box">
             <div class="datails_tit">
                 <span class="hr_span"></span>
@@ -21,6 +21,10 @@
             <div class="info_table">
                 <table class="table table-bordered">
                     <tbody>
+                    <tr>
+                        <td class="col-sm-6">结算状态</td>
+                        <td class="col-sm-6">{$list.clearstauts|default=''}</td>
+                    </tr>
                     <tr>
                         <td class="col-sm-6">订单状态</td>
                         <td class="col-sm-6">{$list.statusname|default=''}</td>

@@ -373,6 +373,58 @@ function saveOrderShare($order_id = ''){
     }
     return false;
 }
+
+//订单结算
+function clearOrder($order_id = '') {
+    $id = $order_id;
+    //状态为支付成功，或者评论的时候更新结算状态,计算结算金额,更新base表里面总的金额   floor($num*100)/100
+    $list = getListOneInfo( ['id' => $id]);
+    if (empty($list)) {
+        return;
+    }
+    $final_price = $list['final_price'];
+    $clear_price =floor($final_price*(100-sysconf('clear_percent')))/100;
+    $status = ['is_clear' => '1', 'update_at' => time(),'clear_price'=>$clear_price];
+    $where = ['id' => $id,'status'=>['exp','in ("pay_success","comment")'],'is_clear' => '0'];
+    $detail = updateStatus($where, $status);
+    if ($detail) {
+        $dr_id =  $list['dr_id'];
+        $status = ['cash'=>['exp','cash+'.$clear_price], 'update_at' => time()];
+        $detail =updateDrStatus(['id' => $dr_id], $status);
+        if($detail){
+            LogService::write('订单:' . $id, '订单结算成功'.$clear_price);
+            $push_token = getPushToken($dr_id);
+            if(!empty($push_token) && !empty($clear_price)){
+                $titlepush = '有一笔订单结算成功';
+                $contentpush = '订单:'.$list['order_code'].'，结算金额:'.$clear_price.'元';
+                sendMsg($dr_id,$titlepush,$contentpush,1);
+                pushInfo($push_token,$titlepush,$contentpush,'wztx_driver');//推送给司机
+            }
+        }else{
+            LogService::write('订单:' . $id, '订单状态更改成功，基本信息表剩余金额更新失败');
+        }
+    } else {
+        LogService::write('订单:' . $id, '订单结算失败');
+    }
+}
+//修改订单状态
+function updateStatus($where, $status) {
+    $list = Db::name('TransportOrder')->where($where)->update($status);
+    return $list;
+}
+//修改司机端认证态
+function updateDrStatus($where, $status) {
+    $list = Db::name('DrBaseInfo')->where($where)->update($status);
+    return $list;
+}
+/*
+* 得到通过id获取订单详情
+*/
+function getListOneInfo($where = []) {
+    $list = Db::name('TransportOrder')->alias('a')->where($where)->field('a.*')->find();
+    return $list;
+}
+
 // 保存推荐信息
 function saveRecomm($where){
     if(empty($where['share_id']) || empty($where['share_id']) || !in_array($where['type'],['0','1'])){

@@ -46,7 +46,7 @@ class Order extends BaseController {
         }
         //性别 车牌/姓名 省
         // 应用搜索条件
-        foreach (['name', 'status', 'tran_type', 'is_insured', 'create_at','is_clear'] as $key) {
+        foreach (['name', 'status', 'tran_type', 'is_insured', 'create_at','is_clear','pay_cer_pic'] as $key) {
             //$get[$key] = trim($get[$key]);
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
@@ -59,6 +59,12 @@ class Order extends BaseController {
                     }
                 } elseif ($key == 'create_at') {
                     $where['a.create_at'] = array('between', array(strtotime($get[$key]), strtotime($get[$key]) + 86400));
+                }elseif ($key == 'pay_cer_pic') {
+                    if( $get[$key] == 0){
+                        $where['a.pay_cer_pic'] = ['exp','is null'];
+                    }else{
+                        $where['a.pay_cer_pic'] = ['exp','is not null'];
+                    }
                 } else {
                     $where[$key] = $get[$key];
                 }
@@ -92,6 +98,7 @@ class Order extends BaseController {
                 'dr_phone'=>$v['dr_phone'],//司机电话
                 'car_style_length'=>$v['car_style_length'],//车长
                 'car_style_type'=>$v['car_style_type'],//车型
+                'pay_cer_pic'=>empty($v['pay_cer_pic'])?'否':'是',//是否有上传支付凭证
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a>
                                 <a class="hang-up" href="javascript: void(0);" data-field="status" data-value="hang" data-update="' . $v['id'] . '" data-action="' . url('Order/hang', ['id' => $v['id']]) . '">挂起</a>
 ',];
@@ -119,6 +126,7 @@ class Order extends BaseController {
             $this->error('未查询到当前订单信息', '');
         }
         $list['statusname'] = $this->stauusLists[$list['status']];
+        $list['clearstauts'] = (empty($list['is_clear'])?'未结算':'结算');
         $pay_cer_pic = explode('|', $list['pay_cer_pic']);
         $pay_cer_pic = array_filter($pay_cer_pic);
 
@@ -156,10 +164,12 @@ class Order extends BaseController {
             if (empty($list)) {
                 return json(['code' => 4000, 'msg' => '未查询到当前订单信息', 'data' => []]);
             }
+
             $sp_id =  $list['sp_id'];
             $push_token = getSpPushToken($sp_id);
+            saveOrderShare($id);//存入推荐列表
+            clearOrder($id); //结算订单
             if(!empty($push_token)){
-                saveOrderShare($id);//存入推荐列表
                 $titlepush = '凭证审核通过';
                 $contentpush = '订单:'.$list['order_code'].'，凭证审核通过';
                 sendMsg($sp_id,$titlepush,$contentpush,0);
@@ -189,6 +199,7 @@ class Order extends BaseController {
     }
     //订单结算
     public function clear() {
+        $this->error('订单结算失败！', '');
         $id = input('id');
         $orderLogic = model('Order', 'logic');
         //状态为支付成功，或者评论的时候更新结算状态,计算结算金额,更新base表里面总的金额   floor($num*100)/100

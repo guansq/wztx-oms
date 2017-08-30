@@ -49,6 +49,12 @@
                         <option value="1">已结算</option>
                         <option value="0">未结算</option>
                     </select>
+                    <select class="form-control mr_20" id="pay_cer_pic" name="pay_cer_pic">
+                        <option value="all">是否有上传凭证</option>
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+
                     <input type="text" style="min-width: 220px;" class="date_time form-control" placeholder="订单时间"
                            id="create_at" name="create_at">
                 </div>
@@ -80,6 +86,7 @@
                             <th>车型</th>
                             <th>状态</th>
                             <th>结算状态</th>
+                            <th>是否有上传凭证</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -165,6 +172,11 @@
                         }else{
                             $("#is_clear").val('all');
                         }
+                        if($.inArray( $.cookie('pay_cer_pic'), ['0','1']) != -1){
+                            $("#pay_cer_pic").val($.cookie('pay_cer_pic'));
+                        }else{
+                            $("#pay_cer_pic").val('all');
+                        }
                         if($.inArray( $.cookie('tran_type'), ['0','1']) != -1){
                             $("#tran_type").val($.cookie('tran_type'));
                         }else{
@@ -187,6 +199,7 @@
                         $.cookie('status',$("#status").val() );
                         $.cookie('tran_type',$("#tran_type").val() );
                         $.cookie('is_clear',$("#is_clear").val() );
+                        $.cookie('pay_cer_pic',$("#pay_cer_pic").val() );
                     }
 
                     parameter.name = $("#name").val();
@@ -195,6 +208,7 @@
                   //  parameter.is_insured = $("#is_insured").val();
                     parameter.create_at = $("#create_at").val();
                     parameter.is_clear = $("#is_clear").val();
+                    parameter.pay_cer_pic = $("#pay_cer_pic").val();
                 },
             },
             "pageLength": 10,
@@ -216,6 +230,7 @@
                 {"data": "car_style_type"},
                 {"data": "status"},
                 {"data": "clearstauts"},
+                {"data": "pay_cer_pic"},
                 {"data": "action"},
             ],
             "drawCallback": function (settings) {

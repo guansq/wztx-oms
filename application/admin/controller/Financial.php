@@ -175,7 +175,8 @@ class Financial extends BaseController {
                 'dr_name' => $v['dr_name'],//司机姓名
                 'pay_time_trans' => date('Y-m-d', $v['pay_time']),//交易时间
                 'amount' => $v['final_price'],//订单金额
-                'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a> <a class="settle" href="javascript: void(0);"  data-field="is_clear" data-value="1" data-update="' . $v['id'] . '" data-action="' . url('Order/clear', ['id' => $v['id']]) . '">结算</a>'];
+                'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a> '];
+            // <a class="settle" href="javascript: void(0);"  data-field="is_clear" data-value="1" data-update="' . $v['id'] . '" data-action="' . url('Order/clear', ['id' => $v['id']]) . '">结算</a>
         }
 
         $total = $rechargeLogic->getUnbalancedListNum($where);
