@@ -155,7 +155,8 @@ class Financial extends BaseController {
                 }
             }
         }
-        $where['status'] = ['exp', 'in ("pay_success","comment")'];
+        $where['status'] = ['exp', 'in ("photo")'];
+        $where['pay_cer_pic'] = ['exp', 'is not null'];
         $where['is_clear'] = 0;
         $start = input('start') == '' ? 0 : input('start');
         $length = input('length') == '' ? 10 : input('length');

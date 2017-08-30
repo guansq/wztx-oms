@@ -74,11 +74,11 @@ class Index extends BaseController {
      */
     public function main() {
         $orderLogic = model('Order', 'logic');
-        $hangwhere = ['status' => 'hang'];
-        $hangnum = $orderLogic->getListTotalNum($hangwhere);
+//        $hangwhere = ['status' => 'hang']; 挂起订单
+//        $hangnum = $orderLogic->getListTotalNum($hangwhere);
         $clearwhere = ['is_clear' => '1'];
         $clearnum = $orderLogic->getListTotalNum($clearwhere);
-        $unclearwhere = ['is_clear' => '0', 'status' =>['exp', 'in ("pay_success","comment")']];
+        $unclearwhere = ['is_clear' => '0', 'status' =>['exp', 'in ("photo")'],  'pay_cer_pic' => ['exp', 'is not null']];
         $unclearnum = $orderLogic->getListTotalNum($unclearwhere);
         $spchecknum = model('Shipper', 'logic')->getListTotalNum(['auth_status' => 'check']);
         $drchecknum = model('Driver', 'logic')->getListTotalNum(['auth_status' => 'check']);
@@ -100,27 +100,39 @@ class Index extends BaseController {
             'result_time'=>array('between', array($begin_time_7days, $end_time_7days)),
             'status' =>'agree'
         ] ;
+        $where_today_base_clear =[
+            'create_at'=>array('between', array($begin_time_today, $end_time_today)),
+            'is_clear' =>'1'
+        ] ;
+        $where_7days_base_clear =[
+            'create_at'=>array('between', array($begin_time_7days, $end_time_7days)),
+            'is_clear' =>'1'
+        ] ;
         $spnewnum = model('Shipper', 'logic')->getListTotalNum($where_today_base);
         $spnewnum7d = model('Shipper', 'logic')->getListTotalNum($where_7days_base);
         $drnewnum = model('Driver', 'logic')->getListTotalNum($where_today_base);
         $drnewnum7d = model('Driver', 'logic')->getListTotalNum($where_7days_base);
-        $withdrawtotal = model('Withdraw', 'logic')->getListTotalNum($where_today_base_with);
-        $withdrawtotal7d = model('Withdraw', 'logic')->getListTotalNum($where_7days_base_with);
+        $withdrawtotal = model('Withdraw', 'logic')->getListTotal($where_today_base_with); //今日提现
+        $withdrawtotal7d = model('Withdraw', 'logic')->getListTotal($where_7days_base_with);//7天提现
+        $cleartotal = model('Order', 'logic')->getListTotalNum($where_today_base_clear); //今日提现
+        $cleartotal7d = model('Order', 'logic')->getListTotalNum($where_7days_base_clear);//7天提现
+        $unwithdraw = model('Withdraw', 'logic')->getListTotalNum(['status'=>'init']);//提现待审核数量
 
         $list = [
-            'hangnum' => $hangnum,
+        //    'hangnum' => $hangnum,
             'unclearnum' => $unclearnum,
-            'clearnum' => $clearnum,
-            'spchecknum' => $spchecknum,
-            'drchecknum' => $drchecknum,
-            'newtotal' => $spnewnum + $drnewnum,
-            'spnew' => $spnewnum ,
-            'drnew' => $drnewnum,
-            'newtotal7d' => $spnewnum7d + $drnewnum7d,
-            'spnew7d' =>  $drnewnum7d,
-            'drnew7d' => $drnewnum7d,
+        //    'clearnum' => $clearnum,
+            'unwithdraw' => $unwithdraw, //未审核提现
+            'spchecknum' => $spchecknum, //待审核货主
+            'drchecknum' => $drchecknum, //待审核司机
+            'spnew' => $spnewnum , //今日新增货主
+            'drnew' => $drnewnum, //今日新增司机
+            'spnew7d' =>  $spnewnum7d,//本周新增货主
+            'drnew7d' => $drnewnum7d,//本周新增司机
             'withdrawtotal' =>  number_format($withdrawtotal[0]['withdraw_total'], 2, '.', ','),
             'withdrawtotal7d' =>  number_format($withdrawtotal7d[0]['withdraw_total'], 2, '.', ','),
+            'cleartotal' =>  number_format($cleartotal[0]['tran_total'], 2, '.', ','),
+            'cleartotal7d' =>  number_format($cleartotal7d[0]['tran_total'], 2, '.', ','),
             'order_amount_7d' => $result_7days[0]['order_amount'],
             'tran_total_7d' => number_format($result_7days[0]['tran_total'], 2, '.', ','),
             'order_amount_today' => $result_today[0]['order_amount'],

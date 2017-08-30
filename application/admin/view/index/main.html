@@ -12,7 +12,8 @@
 <style>
     .chart_u li{
         float: left;
-        margin-right: 25px;
+        margin-right: 118px;
+        margin-top: 15px;
         width: 300px;
         height: auto;
         text-align: center;
@@ -84,16 +85,16 @@
     </div>
     <ul class="chart_u" style="overflow: hidden;display: block">
         <li>
-            <div class="col_b" style="background: #63c2eb;">销售额统计</div>
+            <div class="col_b" style="background: #63c2eb;">交易额统计</div>
             <div class="info_b">
                 <section>
-                    <p class="p_title">本周总销售额</p>
+                    <p class="p_title">本周总交易额</p>
                     <p class="p_limit">
                         ￥ : <span>{$list.tran_total_7d}</span>
                     </p>
                 </section>
                 <section>
-                    <p class="p_title">今日销售额</p>
+                    <p class="p_title">今日交易额</p>
                     <p class="p_limit">
                         ￥ : <span>{$list.tran_total_today}</span>
                     </p>
@@ -110,7 +111,7 @@
                     </p>
                 </section>
                 <section>
-                    <p class="p_title">   本周总订单数        </p>
+                    <p class="p_title">   今日总订单数        </p>
                     <p class="p_limit">
                          <span>{$list.order_amount_today}</span>笔
                     </p>
@@ -130,6 +131,23 @@
                     <p class="p_title">今日提现额</p>
                     <p class="p_limit">
                         ￥ : <span>{$list.withdrawtotal}</span>
+                    </p>
+                </section>
+            </div>
+        </li>
+        <li>
+            <div class="col_b" style="background: #ff3393;">结算额统计</div>
+            <div class="info_b">
+                <section>
+                    <p class="p_title">本周总结算额</p>
+                    <p class="p_limit">
+                        ￥ : <span>{$list.cleartotal7d}</span>
+                    </p>
+                </section>
+                <section>
+                    <p class="p_title">今日结算额</p>
+                    <p class="p_limit">
+                        ￥ : <span>{$list.cleartotal}</span>
                     </p>
                 </section>
             </div>
@@ -174,15 +192,15 @@
     </div>
     <div class="undeal" data-open='{:url("financial/unbalancedAccount")}'>
         <div>
-            <span>未结算订单</span>
+            <span>支付凭证待审核</span>
             <p><span>{$list.unclearnum}</span>笔</p>
         </div>
 
     </div>
-    <div class="undeal" style=" margin-left: 30px;"  data-open='{:url("order/index")}' >
+    <div class="undeal" style=" margin-left: 30px;"  data-open='{:url("withdraw/index")}' >
         <div>
-        <span>已结算订单</span>
-        <p><span>{$list.clearnum}</span>笔</p>
+        <span>提现待审核</span>
+        <p><span>{$list.unwithdraw}</span>笔</p>
         </div>
     </div>
     <div class="undeal" style=" margin-left: 30px;"  data-open='{:url("shipper/index")}?type=person'>

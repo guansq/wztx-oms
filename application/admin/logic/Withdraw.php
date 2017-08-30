@@ -41,13 +41,20 @@ class Withdraw extends BaseLogic {
         return $list;
     }
     /*
-  * 得到某种状态的数量
+  * 得到某种状态的汇总
  */
-    public function getListTotalNum($where = []) {
+    public function getListTotal($where = []) {
         $list = Db::name('Withdraw')->alias('a')->where($where)->field(' count(id) withdraw_amount,sum(real_amount) withdraw_total')->select();
         if ($list) {
             $list = collection($list)->toArray();
         }
+        return $list;
+    }
+    /*
+  * 得到某种状态的数量
+ */
+    public function getListTotalNum($where = []) {
+        $list = Db::name('Withdraw')->alias('a')->where($where)->field('id ')->count();
         return $list;
     }
 
