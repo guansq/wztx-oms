@@ -145,7 +145,13 @@
 {/block}
 
 {block name="script"}
-
+<script>
+    //调用示例
+    layer.photos({
+        photos: '.auth_img'
+        , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+    });
+</script>
 <script>
     require(["jquery.dataTables", "icheck", "laydate"], function () {
         require(["dataTables.bootstrap"], function () {
@@ -247,7 +253,21 @@
                 {"data":"status"},
                 {"data": "action"},
             ],
+            "columnDefs":[
+                {
+                    "targets":3,
+                    "data":null,
+                    "render":function(data){
+                        return '<img src="'+data+'"  class="auth_img" style="width: 100px">';
+                    }
+                }
+            ],
             "drawCallback": function (settings) {
+                //调用示例
+                layer.photos({
+                    photos: '.auth_img'
+                    , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                });
                 //console.log(settings.json.recordsFiltered);
                 $("#totalnum").html(settings.json.recordsFiltered);
                 $(".edit").click(function (e) {
