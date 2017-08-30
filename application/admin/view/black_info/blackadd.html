@@ -1,0 +1,52 @@
+<form id="addstyle"class="layui-form layui-box" style='padding:25px 30px 20px 0;display: ' action='{:url()}' data-auto="true" method="post">
+    <div class="layui-form-item">
+        <p class="h2 text-center"></p>
+    </div>
+    <div class="layui-form-item"  id="showname">
+        <label class="layui-form-label" style="width: auto;display: block"></label>
+        <div class="layui-input-block" style="margin-left: 10px">
+            <input type="text" name="name" value='' required="required"  autocomplete="off"  title="名称 (填写：企业-企业名称，个人-姓名，车辆-车牌号，司机-姓名,电话-手机号码)" placeholder="名称 (填写：企业-企业名称，个人-姓名，车辆-车牌号，司机-姓名,电话-手机号码)" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" id="showid">
+        <label class="layui-form-label" style="width: auto;display: block" > ID (填写：企业-营业执照编号，个人货主-身份证号，车辆-发动机号，司机-身份证号，电话-客户端/司机端)</label>
+        <div class="layui-input-block"style="margin-left: 10px">
+            <input type="text" name="number" value='' required="required"  autocomplete="off"  title="ID (填写：企业-营业执照编号，个人货主-身份证号，车辆-发动机号，司机-身份证号，电话-客户端/司机端)" placeholder="ID (填写：企业-营业执照编号，个人货主-身份证号，车辆-发动机号，司机-身份证号，电话-客户端/司机端)" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item text-center">
+        <script>
+            $("#typeval").val($("#type").val());
+            var name = '名称 (填写：企业-企业名称，个人-姓名，车辆-车牌号，司机-姓名,电话-手机号码)';
+            var id = 'ID (填写：企业-营业执照编号，个人货主-身份证号，车辆-发动机号，司机-身份证号，电话-客户端/司机端)';
+            switch ($("#type").val()){
+                case 'person':
+                     name = '姓名';
+                     id = '身份证号码';
+                    break;
+                case 'company':
+                     name = '企业名称';
+                     id = '营业执照编号';
+                    break;
+                case 'car':
+                     name = '车牌号';
+                     id = '发动机号';
+                    break;
+                case 'driver':
+                     name = '姓名';
+                     id = '身份证号码';
+                    break;
+                    //'person','company','driver','car','phone'
+            }
+            $("#showname").find('label').html(name);
+            $("#showname").find('input').attr('title',name);
+            $("#showname").find('input').attr('placeholder',name);
+            $("#showid").find('label').html(id);
+            $("#showid").find('input').attr('title',id);
+            $("#showid").find('input').attr('placeholder',id);
+
+        </script>
+        <input type='hidden' value='' name='typeval' id="typeval"/>
+        <button class="layui-btn" type='submit'>保存数据</button>
+    </div>
+</form>

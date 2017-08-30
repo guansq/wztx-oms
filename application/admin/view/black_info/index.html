@@ -1,0 +1,343 @@
+{extend name='extra@admin/content' /}
+
+{block name="style"}
+<link href='https://cdn.bootcss.com/iCheck/1.0.2/skins/minimal/minimal.css' rel='stylesheet'>
+
+<style>
+    .container{
+        width: 100%;
+       /*// height: 400px;*/
+        margin: 20px auto 0px;
+        background-color: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+    .tab-wrapper{
+        position: relative;
+        width: 100%;
+        height: 60px;
+        /*background-color: #33344a;*/
+    }
+    .tab-wrapper .tab-radio{
+        display: none;
+    }
+    .tab-handler{
+        position: relative;
+        z-index: 2;
+        display: block;
+        float: left;
+        height: 60px;
+        padding: 0 40px;
+        color: #717181;
+        font-size: 16px;
+        line-height: 60px;
+        transition: .3s;
+        transform: scale(.9);
+        border: 1px solid #bcbcbc;
+    }
+    .tab-radio:checked + .tab-handler{
+        color: #fff;
+        border: 1px solid #bcbcbc;
+        background-color: #00b7ee;
+        transform: scale(1);
+    }
+    .tab-radio:checked + .tab-handler + .tab-content{
+        visibility: visible;
+        opacity: 1;
+
+        transform: scale(1);
+    }
+    .tab-wrapper .tab-content{
+        visibility: hidden;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        padding: 30px;
+        color: #999;
+        font-size: 14px;
+        line-height: 1.618em;
+        background-color: #fff;
+        opacity: 0;
+        transition: transform .5s, opacity .7s;
+        transform: translateY(20px);
+    }
+</style>
+{/block}
+
+{block name="button"}
+
+{/block}
+
+{block name="content"}
+
+<main class="main">
+    <div class="head_box">
+        <span href="javascript:void(0);">系统设置</span>
+        <span> >> </span>
+        <span href="javascript:void(0);">黑名单管理</span>
+    </div>
+    <div class="con_box">
+        <h1 class="h1">黑名单列表 <span>（共<b id="totalnum">0</b>条）</span>
+        <p class="vehicle">
+            <button type="button" class="layui-btn layui-btn-small " id="add_black" data-modal='{:url("black_info/blackadd")}'
+                    data-title="添加黑名单"><i class="fa fa-plus"></i> 添加黑名单
+            </button>
+        </p></h1>
+        <div class="operate_box">
+            <!--<form class="form-inline"  onsubmit="return false;">-->
+                <!--<div class="form-group mr_20">-->
+                    <!--<input type="text" class="form-control mr_20" placeholder="ID" id="number" name="number" autocomplete="off" onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">-->
+                    <!--<input type="text" class="form-control mr_20" placeholder="名称" id="name" name="name" autocomplete="off"  onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">-->
+                <!--</div>-->
+                <!--<button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>-->
+            <!--</form>-->
+            <div class="container">
+                <div class="tab-wrapper">
+                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-1" checked>
+                    <label for="tab-radio-1" class="tab-handler tab-handler-1" data-value="company" >企业</label>
+                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-2">
+                    <label for="tab-radio-2" class="tab-handler tab-handler-2" data-value="person" >个人</label>
+                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-3">
+                    <label for="tab-radio-3" class="tab-handler tab-handler-3" data-value="car" >车辆</label>
+                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-4">
+                    <label for="tab-radio-4" class="tab-handler tab-handler-4" data-value="driver" >司机</label>
+                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-5">
+                    <label for="tab-radio-5" class="tab-handler tab-handler-5" data-value="phone"  >手机</label>
+                    <input type="hidden" name="type" value="company" id="type">
+                </div>
+            </div>
+            <div class="operate_tab">
+                <div class="operate_table">
+                    <table id="example" class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th id="examplename">企业名称</th>
+                            <th  id="exampleid">营业执照编号</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{/block}
+
+{block name="script"}
+<script>
+    require(["jquery.dataTables", "icheck", "laydate"], function () {
+        require(["dataTables.bootstrap"], function () {
+            $(document).ready(function () {
+                initPage();
+                initEvent();
+            });
+        })
+    });
+
+    function initPage() {
+
+        /*$('input').iCheck({
+            checkboxClass: 'icheckbox_minimal',
+            radioClass: 'iradio_minimal',
+            increaseArea: '20%' // optional
+        });*/
+
+        //时间日期选择器
+        $(".date_time").focus(function () {
+            /*
+             laydate插件提供显示日期控件的方法
+             laydate(options)
+             * options - 选项,格式为 { key : value }
+             * 选项
+             * format - 日期格式
+             *
+             默认格式为 YYYY-MM-DD hh:mm:ss(标准格式)
+             * 客户端
+             * 服务器端
+             * 数据库
+             * istime - 是否开启时间选择
+             * 默认值为false,不开启
+             * isclear - 是否显示清空按钮
+             * istoday - 是否显示今天按钮
+             * issure - 是否显示确认按钮
+             */
+            laydate({
+                format: "YYYY-MM-DD",
+                //istime : true,
+                isclear: true,
+                istoday: true,
+                issure: true
+            });
+        });
+        $.fn.dataTable.ext.errMode = 'none'; //不显示任何错误信息
+
+        var table = $('#example').DataTable({
+            //paging: false, 设置是否分页
+            "info": true,  //去除左下角的信息
+            "lengthChange": false, //是否允许用户改变表格每页显示的记录数
+            "ordering": false, //是否允许Datatables开启排序
+            "searching": false,  //是否允许Datatables开启本地搜索
+            language: {
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "sEmptyTable": "暂无数据",
+                "info":"当前总记录数_TOTAL_条",
+                "sInfoEmpty": "当前总记录数_TOTAL_条",
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": '{:url("BlackInfo/getBlackList")}',
+                "type": "POST",
+                "data": function (parameter) {
+                    //添加额外的参数传给服务器
+//                    if(  $('#searchflag').val() == 0){
+//                        if( $.cookie('comment_name')){
+//                            $("#name").val( $.cookie('comment_name'));
+//                        }
+//                        if( $.cookie('ordernum')){
+//                            $("#ordernum").val( $.cookie('ordernum'));
+//                        }
+//                        if( $.cookie('endtime')){
+//                            $("#endtime").val( $.cookie('endtime'));
+//                        }
+//                        if( $.cookie('begintime')){
+//                            $("#begintime").val( $.cookie('begintime'));
+//                        }
+//                    }else {
+//                        $.cookie('comment_name',$("#name").val() );
+//                        $.cookie('ordernum',$("#ordernum").val() );
+//                        $.cookie('endtime',$("#endtime").val() );
+//                        $.cookie('begintime',$("#begintime").val() );
+//                    }
+//                    parameter.name = $("#name").val();
+                    parameter.type = $("#type").val();
+                },
+            },
+            "pageLength": 10,
+            "columns": [
+                {"data": "name"},
+                {"data": "number"},
+                {"data": "action"},
+            ],
+            "fnCreatedRow": function (nRow, aData, iDataIndex) {
+            },
+            "drawCallback": function (settings) {
+                //console.log(settings.json.recordsFiltered);
+                $("#totalnum").html(settings.json.recordsFiltered);
+
+            },
+        });
+
+        $("#searchVal").on('click', function () {
+            table.ajax.reload();
+        })
+
+        $(".tab-handler").on('click', function () {
+            $("#type").val($(this).attr('data-value'));
+            if($(this).attr('data-value') == 'phone'){
+                $("#add_black").attr('data-modal','{:url("black_info/blackphoneadd")}');
+            }else{
+                $("#add_black").attr('data-modal','{:url("black_info/blackadd")}');
+            }
+            switch ($("#type").val()){
+                case 'person':
+                    name = '姓名';
+                    id = '身份证号码';
+                    break;
+                case 'company':
+                    name = '企业名称';
+                    id = '营业执照编号';
+                    break;
+                case 'car':
+                    name = '车牌号';
+                    id = '发动机号';
+                    break;
+                case 'driver':
+                    name = '姓名';
+                    id = '身份证号码';
+                    break;
+                case 'phone':
+                    name = '手机号码';
+                    id = '客户端类型';
+                    break;
+                //'person','company','driver','car','phone'
+            }
+            $("#examplename").html(name);
+            $("#exampleid").html(id);
+            table.ajax.reload();
+        })
+
+        // tr点击选中事件
+        $('#example tbody').on('click', 'tr', function () {
+            $(this).toggleClass('warning');
+        });
+
+
+    }
+    function changeStauts(status, id, msg) {
+        layer.confirm(msg, {
+            btn: ['确定', '取消']
+        }, function (index) {
+            layer.close(index);
+            layer.load();
+            $.ajax({
+                'url': '{:url("OrderComment/updateStatus")}',
+                'type': 'POST',
+                'data': {
+                    'id': id,
+                    'status': status
+                },
+                'complete': function () {
+                },
+                'success': function (obj) {
+                    layer.closeAll();
+                    if (obj.code == 2000) {
+                        layer.msg('操作成功', function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.alert(obj.msg);
+                    }
+                },
+                'error': function () {
+                    layer.closeAll();
+                    layer.alert('请求失败');
+                }
+            });
+        });
+    }
+
+    function initEvent() {
+        var checkAll = $('input.all');  //全选的input
+        var checkboxs = $('input.check'); //所有单选的input
+
+        checkAll.on('ifChecked ifUnchecked', function (event) {
+            if (event.type == 'ifChecked') {
+                checkboxs.iCheck('check');
+            } else {
+                checkboxs.iCheck('uncheck');
+            }
+        });
+
+        checkboxs.on('ifChanged', function (event) {
+            if (checkboxs.filter(':checked').length == checkboxs.length) {
+                checkAll.prop('checked', true);
+            } else {
+                checkAll.prop('checked', false);
+            }
+            checkAll.iCheck('update');
+        })
+    }
+
+
+</script>
+{/block}

@@ -2,7 +2,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">车长名称</label>
         <div class="layui-input-block">
-            <input type="text"  autocomplete="off"  name="name" value='{$vo.name|default=""}'  required="required" title="请输入车长名称" placeholder="请输入车长名称" class="layui-input">
+            <input type="text"  autocomplete="off" id="car_name" name="name" value='{$vo.name|default=""}'  required="required" title="请输入车长名称" placeholder="请输入车长名称" class="layui-input">
         </div>
     </div>
 
@@ -34,7 +34,7 @@
     <div class="hr-line-dashed"></div>
 
     <div class="layui-form-item text-center">
-        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'/>{/if}
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'/><script>$("#car_name").attr('disabled', 'disabled')</script>{/if}
         <input type='hidden' value='2' name='type'/>
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>

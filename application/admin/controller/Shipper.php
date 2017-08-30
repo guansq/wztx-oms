@@ -358,8 +358,9 @@ class Shipper extends BaseController {
             default:
                 return json(['code' => 4000, 'msg' => '更新失败', 'data' => []]);
         }
+        //['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')']
         if (in_array($isblack, [1, 2])) {
-            $blackinfo = ['user_id' => $id, 'phone' => input('phone'), 'reason' => ['exp', 'concat(IFNULL(reason,\'\'),\'' . '-' . $tmp . '\')'], 'type' => '0',];
+            $blackinfo = ['user_id' => $id, 'phone' => input('phone'), 'reason' =>$tmp, 'type' => '0',];
             $detail = $shipperLogic->updateBlackStatus($isblack, $blackinfo);
             //修改黑名单记录表
             if (empty($detail)) {

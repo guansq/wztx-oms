@@ -18,7 +18,7 @@
         <div class="details_box">
             <div class="datails_tit">
                 <span class="hr_span"></span>
-                <h3>企业信息</h3>
+                <h3>司机信息</h3>
                 <span class="hr_span"></span>
             </div>
             <div class="info_table">
@@ -59,31 +59,24 @@
                         {/if}
                     </section>
                 </div>
-            </div>
-        </div>
-        <div class="authentication">
-            <div class="datails_tit">
-                <span class="hr_span"></span>
-                <h3>身份认证</h3>
-                <span class="hr_span"></span>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
-                    {if isset($item.personfrontpic) && $item.personfrontpic neq ''}
-                    <img src="{$item.personfrontpic}" alt="身份证正面照">
-                    {else/}
-                    身份证正面照
-                    {/if}
-                </section>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
-                    {if isset($item.personbackpic) && $item.personbackpic neq ''}
-                    <img src="{$item.personbackpic}" alt="身份证反面照">
-                    {else /}
-                    身份证反面照
-                    {/if}
-                </section>
+                <div class="auth_box">
+                    <section class="auth_img">
+                        {if isset($item.personfrontpic) && $item.personfrontpic neq ''}
+                        <img src="{$item.personfrontpic}" alt="身份证正面照">
+                        {else/}
+                        身份证正面照
+                        {/if}
+                    </section>
+                </div>
+                <div class="auth_box">
+                    <section class="auth_img">
+                        {if isset($item.personbackpic) && $item.personbackpic neq ''}
+                        <img src="{$item.personbackpic}" alt="身份证反面照">
+                        {else /}
+                        身份证反面照
+                        {/if}
+                    </section>
+                </div>
             </div>
         </div>
         <div class="authentication">
@@ -115,37 +108,21 @@
                         <td class="col-sm-6">车牌号</td>
                         <td class="col-sm-6">{$item.card_number|default=''}</td>
                     </tr>
-
-                    <tr>
-                        <td class="col-sm-6">营运证开始日期</td>
-                        <td class="col-sm-6">{if isset($item.operation_startline) && $item.operation_startline neq  ''}{$item.operation_startline|date='Y-m-d',###}{/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">营运证截止日期</td>
-                        <td class="col-sm-6">{if isset($item.operation_deadline) && $item.operation_deadline neq  ''}{$item.operation_deadline|date='Y-m-d',###}{/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">保单开始日期</td>
-                        <td class="col-sm-6">{if isset($item.policy_startline) && $item.policy_startline neq  ''}{$item.policy_startline|date='Y-m-d',###}{/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">保单截止日期</td>
-                        <td class="col-sm-6">{if isset($item.policy_deadline) && $item.policy_deadline neq  ''}{$item.policy_deadline|date='Y-m-d',###}{/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">行驶证开始日期</td>
-                        <td class="col-sm-6">{if isset($item.license_startline) && $item.license_startline neq ''}{$item.license_startline|date='Y-m-d',###}{/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-sm-6">行驶证截止日期</td>
-                        <td class="col-sm-6">{if isset($item.license_deadline) && $item.license_deadline neq ''}{$item.license_deadline|date='Y-m-d',###}{/if}
-                        </td>
-                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="auth_box">
+                <section class="auth_img">
+                    {if isset($item.index_pic) && $item.index_pic neq ''}
+                    <img src="{$item.index_pic}" alt="车头和车牌号码照">
+                    {else /}
+                    车头和车牌号码照
+                    {/if}
+                </section>
+            </div>
+            <div class="info_table">
+                <table class="table table-bordered">
+                    <tbody>
                     <tr>
                         <td class="col-sm-6">驾驶证开始日期</td>
                         <td class="col-sm-6">{if isset($item.driving_startline) && $item.driving_startline neq ''}{$item.driving_startline|date='Y-m-d',###}{/if}
@@ -161,21 +138,28 @@
             </div>
             <div class="auth_box">
                 <section class="auth_img">
-                    {if isset($item.index_pic) && $item.index_pic neq ''}
-                    <img src="{$item.index_pic}" alt="车头和车牌号码照">
-                    {else /}
-                    车头和车牌号码照
-                    {/if}
-                </section>
-            </div>
-            <div class="auth_box">
-                <section class="auth_img">
                     {if isset($item.driving_licence_pic) && $item.driving_licence_pic neq '' }
                     <img src="{$item.driving_licence_pic}" alt="驾驶证照">
                     {else/}
                     驾驶证照
                     {/if}
                 </section>
+            </div>
+            <div class="info_table">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="col-sm-6">行驶证开始日期</td>
+                        <td class="col-sm-6">{if isset($item.license_startline) && $item.license_startline neq ''}{$item.license_startline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">行驶证截止日期</td>
+                        <td class="col-sm-6">{if isset($item.license_deadline) && $item.license_deadline neq ''}{$item.license_deadline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="auth_box">
                 <section class="auth_img">
@@ -186,6 +170,22 @@
                     {/if}
                 </section>
             </div>
+            <div class="info_table">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="col-sm-6">保单开始日期</td>
+                        <td class="col-sm-6">{if isset($item.policy_startline) && $item.policy_startline neq  ''}{$item.policy_startline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">保单截止日期</td>
+                        <td class="col-sm-6">{if isset($item.policy_deadline) && $item.policy_deadline neq  ''}{$item.policy_deadline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="auth_box">
                 <section class="auth_img">
                     {if isset($item.policy_pic) && $item.policy_pic neq ''}
@@ -194,6 +194,22 @@
                     保险单照
                     {/if}
                 </section>
+            </div>
+            <div class="info_table">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="col-sm-6">营运证开始日期</td>
+                        <td class="col-sm-6">{if isset($item.operation_startline) && $item.operation_startline neq  ''}{$item.operation_startline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-6">营运证截止日期</td>
+                        <td class="col-sm-6">{if isset($item.operation_deadline) && $item.operation_deadline neq  ''}{$item.operation_deadline|date='Y-m-d',###}{/if}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="auth_box">
                 <section class="auth_img">

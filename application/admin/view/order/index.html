@@ -21,7 +21,7 @@
         <div class="operate_box">
             <form class="form-inline"  onsubmit="return false;">
                 <div class="form-group mr_20">
-                    <input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地" id="name"
+                    <input type="text" class="form-control min-w mr_20" placeholder="订单编号 车牌号 出发地 目的地 货主姓名 司机姓名" id="name"
                            name="name"  autocomplete="off"  onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">
                     <select class="form-control mr_20" id="status" name="status">
                         <option value="all">订单状态</option>
@@ -64,38 +64,26 @@
                         <thead>
                         <tr>
                             <th>序号</th>
+                            <th>订单时间</th>
+                            <th>货主姓名</th>
                             <th>订单编号</th>
                             <!--<th>保单号</th>-->
-                            <th>车牌号</th>
                             <!--<th>货物保险状态</th>-->
                             <th>出发地</th>
                             <th>出发地详情</th>
                             <th>目的地</th>
                             <th>目的地详情</th>
+                            <th>司机姓名</th>
+                            <th>司机电话</th>
+                            <th>车牌号</th>
+                            <th>车长</th>
+                            <th>车型</th>
                             <th>状态</th>
                             <th>结算状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <!--<td></td>-->
-                            <td></td>
-                            <!--<td></td>-->
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <a class="look" data-open='{:url("$classuri/1")}'>查看</a>
-                                <a class="hang-up" href="javascript: void(0);">挂起</a>
-                                <a class="settle" href="javascript: void(0);">结算</a>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -212,14 +200,20 @@
             "pageLength": 10,
             "columns": [
                 {"data": "num"},
+                {"data": "create_at"},
+                {"data": "sp_name"},
                 {"data": "order_code"},
 //                {"data": "policy_code"},
-                {"data": "card_number"},
 //                {"data": "is_ensured"},
                 {"data": "org_address_name"},
                 {"data": "org_address_detail"},
                 {"data": "dest_address_name"},
                 {"data": "dest_address_detail"},
+                {"data": "dr_name"},
+                {"data": "dr_phone"},
+                {"data": "card_number"},
+                {"data": "car_style_length"},
+                {"data": "car_style_type"},
                 {"data": "status"},
                 {"data": "clearstauts"},
                 {"data": "action"},

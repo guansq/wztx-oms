@@ -36,7 +36,18 @@ class Withdraw extends BaseLogic {
     //提现状态
     function updateStatus($where, $status)
     {
+
         $list = Db::name('Withdraw')->where($where)->update($status);
+        return $list;
+    }
+    /*
+  * 得到某种状态的数量
+ */
+    public function getListTotalNum($where = []) {
+        $list = Db::name('Withdraw')->alias('a')->where($where)->field(' count(id) withdraw_amount,sum(real_amount) withdraw_total')->select();
+        if ($list) {
+            $list = collection($list)->toArray();
+        }
         return $list;
     }
 

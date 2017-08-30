@@ -105,7 +105,7 @@ class Withdraw extends BaseController {
         //后期添加提现具体操作
         $id = input('id');
         $withdrawLogic = Model('Withdraw', 'logic');
-        $result = ['status' => input('status'), 'remark' => input('remark'), 'update_at' => time()];
+        $result = ['status' => input('status'), 'remark' => input('remark'), 'update_at' => time(),'result_time'=>time()];
         $detail = $withdrawLogic->updateStatus(['id' => $id], $result);
         if ($detail) {
             LogService::write(input('status') . '--' . $id, '提现');

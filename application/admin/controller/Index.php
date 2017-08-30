@@ -78,6 +78,8 @@ class Index extends BaseController {
         $hangnum = $orderLogic->getListTotalNum($hangwhere);
         $clearwhere = ['is_clear' => '1'];
         $clearnum = $orderLogic->getListTotalNum($clearwhere);
+        $unclearwhere = ['is_clear' => '0', 'status' =>['exp', 'in ("pay_success","comment")']];
+        $unclearnum = $orderLogic->getListTotalNum($unclearwhere);
         $spchecknum = model('Shipper', 'logic')->getListTotalNum(['auth_status' => 'check']);
         $drchecknum = model('Driver', 'logic')->getListTotalNum(['auth_status' => 'check']);
         $begin_time_7days = strtotime(date('Y-m-d 00:00:00', strtotime('this week')));
@@ -90,18 +92,35 @@ class Index extends BaseController {
         $result_today = $orderLogic->getSuccessTotal($where_today);
         $where_today_base['create_at'] = array('between', array($begin_time_today, $end_time_today));
         $where_7days_base['create_at'] = array('between', array($begin_time_7days, $end_time_7days));
+        $where_today_base_with =[
+            'result_time'=>array('between', array($begin_time_today, $end_time_today)),
+            'status' =>'agree'
+        ] ;
+        $where_7days_base_with =[
+            'result_time'=>array('between', array($begin_time_7days, $end_time_7days)),
+            'status' =>'agree'
+        ] ;
         $spnewnum = model('Shipper', 'logic')->getListTotalNum($where_today_base);
         $spnewnum7d = model('Shipper', 'logic')->getListTotalNum($where_7days_base);
         $drnewnum = model('Driver', 'logic')->getListTotalNum($where_today_base);
         $drnewnum7d = model('Driver', 'logic')->getListTotalNum($where_7days_base);
+        $withdrawtotal = model('Withdraw', 'logic')->getListTotalNum($where_today_base_with);
+        $withdrawtotal7d = model('Withdraw', 'logic')->getListTotalNum($where_7days_base_with);
 
         $list = [
             'hangnum' => $hangnum,
+            'unclearnum' => $unclearnum,
             'clearnum' => $clearnum,
             'spchecknum' => $spchecknum,
             'drchecknum' => $drchecknum,
             'newtotal' => $spnewnum + $drnewnum,
+            'spnew' => $spnewnum ,
+            'drnew' => $drnewnum,
             'newtotal7d' => $spnewnum7d + $drnewnum7d,
+            'spnew7d' =>  $drnewnum7d,
+            'drnew7d' => $drnewnum7d,
+            'withdrawtotal' =>  number_format($withdrawtotal[0]['withdraw_total'], 2, '.', ','),
+            'withdrawtotal7d' =>  number_format($withdrawtotal7d[0]['withdraw_total'], 2, '.', ','),
             'order_amount_7d' => $result_7days[0]['order_amount'],
             'tran_total_7d' => number_format($result_7days[0]['tran_total'], 2, '.', ','),
             'order_amount_today' => $result_today[0]['order_amount'],

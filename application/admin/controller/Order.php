@@ -50,7 +50,7 @@ class Order extends BaseController {
             //$get[$key] = trim($get[$key]);
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'name') {
-                    $where['a.order_code|c.card_number|org_address_name|dest_address_name|dest_address_detail|org_address_detail'] = ['like', "%{$get[$key]}%"];
+                    $where['a.order_code|c.card_number|org_address_name|dest_address_name|dest_address_detail|org_address_detail|dr_name|a.real_name|a.company_name|a.dr_phone|a.car_style_length|a.car_style_type'] = ['like', "%{$get[$key]}%"];
                 } elseif ($key == 'is_insured') {
                     if ($get[$key] == 1) {
                         $where['a.premium_amount'] = array('gt', 0);
@@ -86,10 +86,16 @@ class Order extends BaseController {
                 'dest_address_detail' => $v['dest_address_detail'],//目的地
                 'status' => $this->stauusLists[$v['status']],//状态
                 'clearstauts'=>(empty($v['is_clear'])?'未结算':'结算'),
+                'create_at'=>empty($v['create_at'])?'':date('Y-m-d',$v['create_at']),//创建时间
+                'dr_name'=>$v['dr_name'],//司机姓名
+                'sp_name'=>($v['customer_type'] == 'person')?$v['real_name']:$v['company_name'],//货主姓名
+                'dr_phone'=>$v['dr_phone'],//司机电话
+                'car_style_length'=>$v['car_style_length'],//车长
+                'car_style_type'=>$v['car_style_type'],//车型
                 'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Order/showdetail', ['id' => $v['id']]) . '" >查看</a>
                                 <a class="hang-up" href="javascript: void(0);" data-field="status" data-value="hang" data-update="' . $v['id'] . '" data-action="' . url('Order/hang', ['id' => $v['id']]) . '">挂起</a>
-                                <a class="settle" href="javascript: void(0);"  data-field="is_clear" data-value="1" data-update="' . $v['id'] . '" data-action="' . url('Order/clear', ['id' => $v['id']]) . '">结算</a>
 ',];
+            //            <a class="settle" href="javascript: void(0);"  data-field="is_clear" data-value="1" data-update="' . $v['id'] . '" data-action="' . url('Order/clear', ['id' => $v['id']]) . '">结算</a>
         }
         $total = $orderLogic->getListNum($where);
         // var_dump($returnArr);

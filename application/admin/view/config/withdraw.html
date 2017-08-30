@@ -17,7 +17,7 @@
         <div class="operate_box">
             <div class="commission">
                 <form class="form-horizontal" onsubmit="return check();"
-                      method="post" id="form1" data-listen="" style="font-size: 14px;">
+                      method="post" id="form1"  style="font-size: 14px;">
                     <div class="form-group" style="margin: 0 0 15px 0;">
                         <label class="col-sm-4 control-label ">账户余额可提现开始:&nbsp;</label>
                         <div class="col-sm-7">
@@ -26,8 +26,8 @@
                                    autocomplete="off"
                                    placeholder=""
                                    style="float:left; width: 80%" value="{:sysconf('withdraw_begintime')}" min="1"
-                                   max="30"
-                                   onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 30 ) this.value=1">
+                                   max="31"
+                                   onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 31 ||  this.value<1) this.value=1">
                         </div>
                         <label class="col-sm-2 control-label " style=" text-align: left;margin-left: -88px;">号
                         </label>
@@ -40,8 +40,8 @@
                                    autocomplete="off"
                                    placeholder=""
                                    style="float:left; width: 80%" value="{:sysconf('withdraw_endtime')}" min="1"
-                                   max="30"
-                                   onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 30 ) this.value=30;">
+                                   max="31"
+                                   onkeyup="this.value=this.value.replace(/\D/g,'');if(this.value > 31) this.value=31;">
                         </div>
                         <label class="col-sm-2 control-label " style=" text-align: left;margin-left: -88px;">号
                         </label>
@@ -123,6 +123,14 @@
     });
 
     function check() {
+        if($("#withdraw_begintime").val()<1){
+            $("#showmsg").html('开始时间不符合要求');
+            return false;
+        }
+        if($("#withdraw_endtime").val()<1){
+            $("#showmsg").html('结束时间不符合要求');
+            return false;
+        }
         if ($("#withdraw_begintime").val() - $("#withdraw_endtime").val() > 0) {
             $("#showmsg").html('开始时间必须小于结束时间');
         } else {
