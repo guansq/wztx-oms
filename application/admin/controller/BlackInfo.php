@@ -84,6 +84,7 @@ class BlackInfo extends BaseController {
             //  $action = '';
             $returnArr[] = [
                 'id'=>$v['id'],
+                'check' => '<input class="list-check-box" value="' . $v['id'] . '" type="checkbox"/>',//id
                 'name' => $name,//用户名称
                 'number' =>$number,//手机号
                 'action' => '<a class="look"  href="javascript:void(0);"  data-field="id" data-value="' . $v['id'] . '" data-update="' . $v['id'] . '" data-action="' . url('BlackInfo/changeStatus', ['id' => $v['id']]) . '"     >拉回白名单</a>',
@@ -96,6 +97,15 @@ class BlackInfo extends BaseController {
         $info = ['draw' => time(), 'recordsTotal' => $total, 'recordsFiltered' => $total, 'data' => $returnArr, 'extdata' => $where];
 
         return json($info);
+    }
+
+    //批量拉回白名单
+    public function blackdel(){
+        $ids = explode(',', input("id", ''));
+        foreach ($ids as $k =>$v){
+            $this->changeStatusAll($v);
+        }
+        $this->success('拉回白名单成功', '');
     }
 
 
@@ -183,10 +193,49 @@ class BlackInfo extends BaseController {
             return view();
         }
     }
-
     //拉回白名单
+    public function changeStatusAll($id='') {
+        $data['id'] = $id;
+        $isexist = Db::name('BlackList')->where(['id' => $data['id']])->find();
+
+        if (empty($isexist)) {
+            return false;
+        }
+        if (in_array($isexist['type'], [2, 3, 4, 5])) {
+            if (Db::name('BlackList')->where(['id' => $data['id'], 'type' => $isexist['type']])->update(['is_del' => 1, 'update_at' => time()])) {
+                if (!empty($isexist['user_id'])) {
+                    //0=货主端，1=司机端，2=个人货主,3=公司货主，4=司机，5=车辆
+                    if (in_array($isexist['type'], [2, 3])) {
+                        Db::name('BlackList')->where(['user_id' => $isexist['user_id'], 'type' => ['exp', 'in (0,2,3)']])->update(['is_del' => 1, 'update_at' => time()]);
+                        $detail = model('Shipper', 'logic')->updateStatus(['id' => $isexist['user_id']], ['is_black' => 0]);
+                    } else if (in_array($isexist['type'], [4, 5])) {
+                        Db::name('BlackList')->where(['user_id' => $isexist['user_id'], 'type' => ['exp', 'in (1,4,5)']])->update(['is_del' => 1, 'update_at' => time()]);
+                        $detail = model('Driver', 'logic')->updateStatus(['id' => $isexist['user_id']], ['is_black' => 0]);
+                    }
+                }
+                LogService::write('拉回白名单成功', '拉回白名单成功' . $data['id']);
+                return false;
+            }
+            LogService::write('拉回白名单失败', '拉回白名单失败' . $data['id']);
+            return false;
+        } else {
+            Db::name('BlackList')->where(['id' => $data['id'], 'type' => $isexist['type']])->update(['is_del' => 1, 'update_at' => time()]);
+            if ($isexist['type'] == 1) {
+                $driverLogic = model('Driver', 'logic');
+                $detail = $driverLogic->updateStatus(['phone' => $isexist['phone']], ['is_black' => 0]);
+            } else if ($isexist['type'] == 0) {
+                $shipperLogic = model('Shipper', 'logic');
+                $detail = $shipperLogic->updateStatus(['phone' => $isexist['phone']], ['is_black' => 0]);
+            }
+            LogService::write('拉回白名单成功', '拉回白名单成功' . $data['id']);
+            return false;
+        }
+    }
+
+
+        //拉回白名单
     public function changeStatus() {
-        $data = input('param.');
+         $data = input('param.');
         $isexist = Db::name('BlackList')->where(['id'=>$data['id']])->find();
 
         if(empty($isexist)){
@@ -194,6 +243,16 @@ class BlackInfo extends BaseController {
         }
         if(in_array($isexist['type'],[2,3,4,5]) ){
             if (Db::name('BlackList')->where(['id'=>$data['id'],'type'=>$isexist['type']])->update(['is_del'=>1,'update_at'=>time()])) {
+                if(!empty($isexist['user_id'])){
+                    //0=货主端，1=司机端，2=个人货主,3=公司货主，4=司机，5=车辆
+                    if(in_array($isexist['type'],[2,3])){
+                        Db::name('BlackList')->where(['user_id'=>$isexist['user_id'],'type'=>['exp','in (0,2,3)']])->update(['is_del'=>1,'update_at'=>time()]);
+                        $detail = model('Shipper', 'logic')->updateStatus(['id'=>$isexist['user_id']], ['is_black'=>0]);
+                    }else if(in_array($isexist['type'],[4,5])){
+                        Db::name('BlackList')->where(['user_id'=>$isexist['user_id'],'type'=>['exp','in (1,4,5)']])->update(['is_del'=>1,'update_at'=>time()]);
+                        $detail = model('Driver', 'logic')->updateStatus(['id'=>$isexist['user_id']], ['is_black'=>0]);
+                    }
+                }
                 LogService::write('拉回白名单成功', '拉回白名单成功' . $data['id']);
                 $this->success("拉回白名单成功！", '');
                 return;

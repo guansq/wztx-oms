@@ -148,7 +148,9 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+
                     if(  $('#searchflag').val() == 0){
+                        $.cookie('status', '{$status}');
                         if($.inArray( $.cookie('status'), ['init','agree','refuse']) != -1){
                             $("#status").val( $.cookie('status'));
                         }else{

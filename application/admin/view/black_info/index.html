@@ -82,6 +82,9 @@
             <button type="button" class="layui-btn layui-btn-small " id="add_black" data-modal='{:url("black_info/blackadd")}'
                     data-title="添加黑名单"><i class="fa fa-plus"></i> 添加黑名单
             </button>
+            <button data-update data-field='' data-value="1" data-action='{:url("black_info/blackdel")}'
+                    class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 拉回白名单
+            </button>
         </p></h1>
         <div class="operate_box">
             <!--<form class="form-inline"  onsubmit="return false;">-->
@@ -101,9 +104,10 @@
                     <label for="tab-radio-3" class="tab-handler tab-handler-3" data-value="car" >车辆</label>
                     <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-4">
                     <label for="tab-radio-4" class="tab-handler tab-handler-4" data-value="driver" >司机</label>
-                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-5">
-                    <label for="tab-radio-5" class="tab-handler tab-handler-5" data-value="phone"  >手机</label>
+                    <!--<input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-5">-->
+                    <!--<label for="tab-radio-5" class="tab-handler tab-handler-5" data-value="phone"  >手机</label>-->
                     <input type="hidden" name="type" value="company" id="type">
+                    <input type="hidden" name="searchflag" value="0" id="searchflag">
                 </div>
             </div>
             <div class="operate_tab">
@@ -111,6 +115,9 @@
                     <table id="example" class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
+                            <th class='list-table-check-td'>
+                                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox' id="examplecheck"/>
+                            </th>
                             <th id="examplename">企业名称</th>
                             <th  id="exampleid">营业执照编号</th>
                             <th>操作</th>
@@ -224,11 +231,13 @@
             },
             "pageLength": 10,
             "columns": [
+                {"data": "check"},
                 {"data": "name"},
                 {"data": "number"},
                 {"data": "action"},
             ],
             "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                $('td:eq(0)', nRow).addClass('list-table-check-td');
             },
             "drawCallback": function (settings) {
                 //console.log(settings.json.recordsFiltered);
@@ -273,6 +282,7 @@
             }
             $("#examplename").html(name);
             $("#exampleid").html(id);
+            $("#examplecheck").attr('checked',false);
             table.ajax.reload();
         })
 

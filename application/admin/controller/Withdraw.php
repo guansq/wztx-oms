@@ -14,6 +14,11 @@ class Withdraw extends BaseController {
      * @return \think\Response
      */
     public function index() {
+        if(input('status')){
+            $this->assign('status', input('status'));
+        }else{
+            $this->assign('status', 'all');
+        }
         return view();
     }
 

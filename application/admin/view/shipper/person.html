@@ -123,6 +123,8 @@
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
                     parameter.type = 'person';
+
+                    $.cookie('auth_status', '{$auth_status}');
                     //添加额外的参数传给服务器
                     if(  $('#searchflag').val() == 0){
                         if($.inArray( $.cookie('sex'), ['2','1']) != -1){
@@ -135,6 +137,7 @@
                         }else{
                             $("#bond_status").val( 'all');
                         }
+
                         if($.inArray( $.cookie('auth_status'), ['refuse','pass','check','init']) != -1){
                             $("#auth_status").val( $.cookie('auth_status'));
                         }else{

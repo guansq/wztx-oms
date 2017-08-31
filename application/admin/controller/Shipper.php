@@ -18,6 +18,11 @@ class Shipper extends BaseController {
         } else {
             $tpl = 'person';
         }
+        if(input('auth_status')){
+            $this->assign('auth_status', input('auth_status'));
+        }else{
+            $this->assign('auth_status', 'all');
+        }
         $provincelist = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江',
             '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南',
             '广东', '广西', '海南', '重庆', '四川', '贵州', '云南', '西藏', '陕西', '甘肃',
@@ -257,6 +262,7 @@ class Shipper extends BaseController {
         try {
             $resultSS = $shipperLogic->delSystemShipperIds(["id" => ['exp', 'in (' . implode(',', $spids) . ')']]);
             $resultSBI = $shipperLogic->delSpBaseInfoIds($where);
+            Db::name('BlackList')->where(['user_id'=>['exp', 'in (' . implode(',', $spids) . ')'],'type'=>['exp','in (0,2,3)']])->update(['is_del'=>1,'update_at'=>time()]);
             // 提交事务
             Db::commit();
         } catch (\Exception $e) {

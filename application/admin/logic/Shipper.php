@@ -3,7 +3,7 @@
 namespace app\admin\logic;
 
 use \think\Db;
-
+use service\DataService;
 class Shipper extends BaseLogic {
     /*
      * 得到货主端分页列表
@@ -61,24 +61,145 @@ class Shipper extends BaseLogic {
         $list = Db::name('SpBaseInfo')->where($where)->update($status);
         return $list;
     }
+    //删除黑名单
+    public function delBlack($blackinfo=[]){
+        if(empty($blackinfo)){
+            return false;
+        }
+        $spdetail = Db::name('SpBaseInfo')->where([ 'id' => $blackinfo['user_id']])->find();
+        if(empty($spdetail)){
+            return false;
+        }
 
+        if($spdetail['type'] == 'person'){
+            $data['update_at'] = time();
+            $data['type'] = 2;
+            $data['name'] = $spdetail['real_name'];
+            $data['number'] = $spdetail['identity'];
+            $data['user_id'] = $blackinfo['user_id'];
+            $data['reason'] = $blackinfo['reason'];
+
+            $isexist = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->find();
+            if(!empty($isexist)){
+                $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>1,'update_at'=>time()]);
+            }
+            $dataphone['type'] = 0;
+            $dataphone['phone'] = $spdetail['phone'];
+            $dataphone['reason'] = $blackinfo['reason'];
+            $dataphone['user_id'] = $blackinfo['user_id'];
+
+            $isexist = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->find();
+            if(!empty($isexist)){
+                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>1,'update_at'=>time()]);
+            }
+            return true;
+        }else if($spdetail['type'] == 'company'){
+            $dataphone['type'] = 0;
+            $dataphone['phone'] = $spdetail['phone'];
+            $dataphone['reason'] = $blackinfo['reason'];
+            $dataphone['user_id'] = $blackinfo['user_id'];
+
+            $isexist = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->find();
+            if(!empty($isexist)){
+                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>1,'update_at'=>time()]);
+            }
+            $data['update_at'] = time();
+            $data['type'] = 3;
+            $companydetail =  Db::name('SpCompanyAuth')->where(['id'=>$spdetail['company_id']])->find();
+            if(!empty($companydetail)){
+                $data['name'] = $companydetail['com_name'];
+                $data['number'] = $companydetail['com_buss_num'];
+                $data['user_id'] = $blackinfo['user_id'];
+                $data['reason'] = $blackinfo['reason'];
+
+                $isexist = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->find();
+                if(!empty($isexist)){
+                    $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>1,'update_at'=>time()]);
+                }
+            }
+            return true;
+        }
+        return true;
+    }
+    //添加黑名单
+    public function addBlack($blackinfo=[]){
+        if(empty($blackinfo)){
+            return false;
+        }
+        $spdetail = Db::name('SpBaseInfo')->where([ 'id' => $blackinfo['user_id']])->find();
+        if(empty($spdetail)){
+            return false;
+        }
+
+        if($spdetail['type'] == 'person'){
+            $data['update_at'] = time();
+            $data['type'] = 2;
+            $data['name'] = $spdetail['real_name'];
+            $data['number'] = $spdetail['identity'];
+            $data['user_id'] = $blackinfo['user_id'];
+            $data['reason'] = $blackinfo['reason'];
+
+            $isexist = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->find();
+            if(empty($isexist)){
+                $data['create_at'] = time();
+                $result = DataService::save('BlackList', $data);
+            }else{
+                $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time()]);
+            }
+            $dataphone['type'] = 0;
+            $dataphone['phone'] = $spdetail['phone'];
+            $dataphone['reason'] = $blackinfo['reason'];
+            $dataphone['user_id'] = $blackinfo['user_id'];
+
+            $isexist = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->find();
+            if(empty($isexist)){
+                $dataphone['create_at'] = time();
+                $result = DataService::save('BlackList', $dataphone);
+            }else{
+                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>0,'update_at'=>time()]);
+            }
+            return true;
+        }else if($spdetail['type'] == 'company'){
+            $dataphone['type'] = 0;
+            $dataphone['phone'] = $spdetail['phone'];
+            $dataphone['reason'] = $blackinfo['reason'];
+            $dataphone['user_id'] = $blackinfo['user_id'];
+
+            $isexist = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->find();
+            if(empty($isexist)){
+                $dataphone['create_at'] = time();
+                $result = DataService::save('BlackList', $dataphone);
+            }else{
+                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>0,'update_at'=>time()]);
+            }
+            $data['update_at'] = time();
+            $data['type'] = 3;
+            $companydetail =  Db::name('SpCompanyAuth')->where(['id'=>$spdetail['company_id']])->find();
+            if(!empty($companydetail)){
+                $data['name'] = $companydetail['com_name'];
+                $data['number'] = $companydetail['com_buss_num'];
+                $data['user_id'] = $blackinfo['user_id'];
+                $data['reason'] = $blackinfo['reason'];
+
+                $isexist = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->find();
+                if(empty($isexist)){
+                    $data['create_at'] = time();
+                    $result = DataService::save('BlackList', $data);
+                }else{
+                    $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time()]);
+                }
+            }
+            return true;
+        }
+        return true;
+    }
     //修改货主端黑名单状态
     public function updateBlackStatus($isblack, $blackinfo) {
-        $where = ['type' => $blackinfo['type'], 'user_id' => $blackinfo['user_id']];
-        $list = Db::name('BlackList')->where($where)->select();
         if ($isblack == 1) {
-            $blackinfo['is_del'] = 0;
+            return $this->addBlack($blackinfo);
         } elseif ($isblack == 2) {
-            $blackinfo['is_del'] = 1;
+            return $this->delBlack($blackinfo);
         }
-        if (empty($list)) {
-            $blackinfo['create_at'] = time();
-            $result = Db::name('BlackList')->insert($blackinfo);
-        } else {
-            $blackinfo['update_at'] = time();
-            $result = Db::name('BlackList')->where($where)->update($blackinfo);
-        }
-        return $result;
     }
 
     //通过sp_id获得系统表中id

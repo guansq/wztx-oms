@@ -197,19 +197,19 @@
         </div>
 
     </div>
-    <div class="undeal" style=" margin-left: 30px;"  data-open='{:url("withdraw/index")}' >
+    <div class="undeal" style=" margin-left: 30px;"  data-open='{:url("withdraw/index")}?status=init' >
         <div>
         <span>提现待审核</span>
         <p><span>{$list.unwithdraw}</span>笔</p>
         </div>
     </div>
-    <div class="undeal" style=" margin-left: 30px;"  data-open='{:url("shipper/index")}?type=person'>
+    <div class="undeal" style=" margin-left: 30px;"  data-open='{:url("shipper/index")}?type=person&auth_status=check'>
         <div>
         <span>待审核货主</span>
         <p><span>{$list.spchecknum}</span>个</p>
         </div>
     </div>
-    <div class="undeal" style=" margin-left: 30px;" data-open='{:url("driver/index")}' >
+    <div class="undeal" style=" margin-left: 30px;" data-open='{:url("driver/index")}?auth_status=check' >
         <div>
         <span>待审核司机</span>
         <p><span>{$list.drchecknum}</span>个</p>
