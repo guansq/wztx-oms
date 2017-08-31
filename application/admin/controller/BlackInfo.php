@@ -32,19 +32,19 @@ class BlackInfo extends BaseController {
             'check' => '认证中',
             'pass' => '认证通过',
             'refuse' => '认证失败',
-            'delete' => '后台删除'];
-        foreach (['name', 'sex', 'province', 'auth_status'] as $key) {
-            $get[$key] = trim($get[$key]);
+            'delete' => '后台删除'];*/
+        foreach (['is_reg'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
-                if ($key == 'province') {
-                    $where['a.address'] = ['like', "%{$get[$key]}%"];
-                } elseif ($key == 'name') {
-                    $where['a.real_name|b.card_number'] = ['like', "%{$get[$key]}%"];
-                } else {
-                    $where[$key] = $get[$key];
+                if ($key == 'is_reg') {
+                    if($get[$key] == 'is'){
+                        $where['user_id'] = ['exp', "is not null"];
+                    }else if($get[$key] == 'isnot'){
+                        $where['user_id'] = ['exp', "is  null"];
+                    }
                 }
             }
-        }*/
+
+        }
         if(!in_array(input('type'),['person','company','driver','car','phone'])){
             $info = ['draw' => time(), 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => [], 'extdata' => $where];
             return json($info);
@@ -67,6 +67,7 @@ class BlackInfo extends BaseController {
                 $where['type'] = ['exp','in (1,0)'];
                 break;
         }
+
         $where['is_del'] = 0;
         $start = input('start') == '' ? 0 : input('start');
         $length = input('length') == '' ? 10 : input('length');

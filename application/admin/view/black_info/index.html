@@ -64,9 +64,11 @@
 </style>
 {/block}
 
-{block name="button"}
+{block name="script"}
 
 {/block}
+
+
 
 {block name="content"}
 
@@ -87,13 +89,6 @@
             </button>
         </p></h1>
         <div class="operate_box">
-            <!--<form class="form-inline"  onsubmit="return false;">-->
-                <!--<div class="form-group mr_20">-->
-                    <!--<input type="text" class="form-control mr_20" placeholder="ID" id="number" name="number" autocomplete="off" onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">-->
-                    <!--<input type="text" class="form-control mr_20" placeholder="名称" id="name" name="name" autocomplete="off"  onkeyup="value = value.replace(/(^\s*)|(\s*$)/g, '');">-->
-                <!--</div>-->
-                <!--<button type="button" class="btn btn-primary" id="searchVal"><i class="fa fa-search"></i> 搜索</button>-->
-            <!--</form>-->
             <div class="container">
                 <div class="tab-wrapper">
                     <input type="radio" name="tab-radio" class="tab-radio company-radio" id="tab-radio-1" >
@@ -108,6 +103,11 @@
                     <!--<label for="tab-radio-5" class="tab-handler tab-handler-5" data-value="phone"  >手机</label>-->
                     <input type="hidden" name="type" value="company" id="type">
                     <input type="hidden" name="searchflag" value="0" id="searchflag">
+                    <select class="form-control mr_20"   id="is_reg" name="is_reg" style="    width: 200px;    float: right;margin-top: 10px;    height: 40px;">
+                        <option value="all">所有</option>
+                        <option value="is">已注册</option>
+                        <option value="isnot">未注册</option>
+                    </select>
                 </div>
             </div>
             <div class="operate_tab">
@@ -218,6 +218,7 @@
                     $('.'+$("#type").val()+'-radio').attr('checked',true);
 //                    parameter.name = $("#name").val();
                     parameter.type = $("#type").val();
+                    parameter.is_reg = $("#is_reg").val();
                 },
             },
             "pageLength": 10,
@@ -236,10 +237,14 @@
 
             },
         });
+        $("#is_reg").change(function(){
+            table.ajax.reload();
+        });
 
         $("#searchVal").on('click', function () {
             table.ajax.reload();
         })
+
 
         $(".tab-handler").on('click', function () {
             $('#searchflag').val(1) ;
@@ -275,6 +280,7 @@
             $("#examplename").html(name);
             $("#exampleid").html(id);
             $("#examplecheck").attr('checked',false);
+            $("#is_reg").val('all')
             table.ajax.reload();
         })
 
