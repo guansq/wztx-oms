@@ -120,6 +120,7 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
+                    $.cookie('auth_status', '{$auth_status}');
                     if(  $('#searchflag').val() == 0){
                         if($.inArray( $.cookie('sex'), ['2','1']) != -1){
                             $("#sex").val( $.cookie('sex'));
