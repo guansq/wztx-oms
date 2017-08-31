@@ -145,17 +145,17 @@
                     </tr>
                     <tr>
                         <td class="col-sm-6">用车时间</td>
-                        <td class="col-sm-6">{if condition="$list.usecar_time neq ''"}{$list.usecar_time|date='Y-m-d',###}{/if}
+                        <td class="col-sm-6">{if condition="$list.usecar_time neq ''"}{$list.usecar_time|date='Y-m-d H:i',###}{/if}
                         </td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">发货时间</td>
-                        <td class="col-sm-6">{if condition="$list.send_time neq ''"}{$list.send_time|date='Y-m-d',###}{/if}
+                        <td class="col-sm-6">{if condition="$list.send_time neq ''"}{$list.send_time|date='Y-m-d  H:i',###}{/if}
                         </td>
                     </tr>
                     <tr>
                         <td class="col-sm-6">到达时间</td>
-                        <td class="col-sm-6">{if condition="$list.arr_time neq  ''"}{$list.arr_time|date='Y-m-d',###}{/if}
+                        <td class="col-sm-6">{if condition="$list.arr_time neq  ''"}{$list.arr_time|date='Y-m-d H:i',###}{/if}
                         </td>
                     </tr>
                     <tr>
