@@ -2,7 +2,7 @@
 
 use service\DataService;
 use think\Db;
-
+use service\LogService;
 /**
  * 打印输出数据到文件
  * @param mixed $data
