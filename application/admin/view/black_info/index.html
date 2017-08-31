@@ -96,13 +96,13 @@
             <!--</form>-->
             <div class="container">
                 <div class="tab-wrapper">
-                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-1" checked>
+                    <input type="radio" name="tab-radio" class="tab-radio company-radio" id="tab-radio-1" >
                     <label for="tab-radio-1" class="tab-handler tab-handler-1" data-value="company" >企业</label>
-                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-2">
+                    <input type="radio" name="tab-radio" class="tab-radio person-radio" id="tab-radio-2">
                     <label for="tab-radio-2" class="tab-handler tab-handler-2" data-value="person" >个人</label>
-                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-3">
+                    <input type="radio" name="tab-radio" class="tab-radio car-radio" id="tab-radio-3">
                     <label for="tab-radio-3" class="tab-handler tab-handler-3" data-value="car" >车辆</label>
-                    <input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-4">
+                    <input type="radio" name="tab-radio" class="tab-radio driver-radio" id="tab-radio-4">
                     <label for="tab-radio-4" class="tab-handler tab-handler-4" data-value="driver" >司机</label>
                     <!--<input type="radio" name="tab-radio" class="tab-radio" id="tab-radio-5">-->
                     <!--<label for="tab-radio-5" class="tab-handler tab-handler-5" data-value="phone"  >手机</label>-->
@@ -206,25 +206,16 @@
                 "type": "POST",
                 "data": function (parameter) {
                     //添加额外的参数传给服务器
-//                    if(  $('#searchflag').val() == 0){
-//                        if( $.cookie('comment_name')){
-//                            $("#name").val( $.cookie('comment_name'));
-//                        }
-//                        if( $.cookie('ordernum')){
-//                            $("#ordernum").val( $.cookie('ordernum'));
-//                        }
-//                        if( $.cookie('endtime')){
-//                            $("#endtime").val( $.cookie('endtime'));
-//                        }
-//                        if( $.cookie('begintime')){
-//                            $("#begintime").val( $.cookie('begintime'));
-//                        }
-//                    }else {
-//                        $.cookie('comment_name',$("#name").val() );
-//                        $.cookie('ordernum',$("#ordernum").val() );
-//                        $.cookie('endtime',$("#endtime").val() );
-//                        $.cookie('begintime',$("#begintime").val() );
-//                    }
+                    if(  $('#searchflag').val() == 0){
+                        if( $.cookie('type')){
+                            $("#type").val( $.cookie('type'));
+                        }else{
+                            $.cookie('type',$("#type").val() );
+                        }
+                    }else {
+                        $.cookie('type',$("#type").val() );
+                    }
+                    $('.'+$("#type").val()+'-radio').attr('checked',true);
 //                    parameter.name = $("#name").val();
                     parameter.type = $("#type").val();
                 },
@@ -251,6 +242,7 @@
         })
 
         $(".tab-handler").on('click', function () {
+            $('#searchflag').val(1) ;
             $("#type").val($(this).attr('data-value'));
             if($(this).attr('data-value') == 'phone'){
                 $("#add_black").attr('data-modal','{:url("black_info/blackphoneadd")}');
