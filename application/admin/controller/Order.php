@@ -192,10 +192,10 @@ class Order extends BaseController {
         $detail = $orderLogic->updateStatus(['id' => $id,'status'=>['exp','in ("init","quote","quoted")']], $status);
         if ($detail) {
             LogService::write('订单:' . $id, '订单挂起成功');
-            $this->success('更新成功！', '');
+            $this->success('订单挂起成功！', '');
         } else {
             LogService::write('订单:' . $id, '订单挂起失败');
-            $this->error('更新失败！', '');
+            $this->error('订单挂起失败！', '');
         }
     }
     //订单结算
