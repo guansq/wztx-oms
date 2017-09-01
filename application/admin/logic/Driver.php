@@ -146,7 +146,7 @@ class Driver extends BaseLogic {
             $data['create_at'] = time();
             $result = DataService::save('BlackList', $data);
         } else {
-            $result = Db::name('BlackList')->where(['name' => $data['name'], 'number' => $data['number'], 'type' => $data['type']])->update(['is_del' => 0, 'update_at' => time()]);
+            $result = Db::name('BlackList')->where(['name' => $data['name'], 'number' => $data['number'], 'type' => $data['type']])->update(['is_del' => 0, 'update_at' => time(),'user_id'=>$data['user_id']]);
         }
 
         $dataphone['type'] = 1;
@@ -159,7 +159,7 @@ class Driver extends BaseLogic {
             $dataphone['create_at'] = time();
             $result = DataService::save('BlackList', $dataphone);
         } else {
-            $result = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->update(['is_del' => 0, 'update_at' => time()]);
+            $result = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->update(['is_del' => 0, 'update_at' => time(),'user_id'=>$dataphone['user_id']]);
         }
         $datacar['update_at'] = time();
         $datacar['type'] = 5;
@@ -175,7 +175,7 @@ class Driver extends BaseLogic {
                 $datacar['create_at'] = time();
                 $result = DataService::save('BlackList', $datacar);
             } else {
-                $result = Db::name('BlackList')->where(['name' => $datacar['name'], 'number' => $datacar['number'], 'type' => $datacar['type']])->update(['is_del' => 0, 'update_at' => time()]);
+                $result = Db::name('BlackList')->where(['name' => $datacar['name'], 'number' => $datacar['number'], 'type' => $datacar['type']])->update(['is_del' => 0, 'update_at' => time(),'user_id'=>$datacar['user_id']]);
             }
         }
         return true;

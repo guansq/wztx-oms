@@ -26,31 +26,31 @@ class BlackInfo extends BaseController {
     public function getBlackList() {
         $where = [];
         $get = input('param.');
-      /*  //性别 车牌/姓名 省
-        // 应用搜索条件
-        $auth_statuss = ['init' => '未认证',
-            'check' => '认证中',
-            'pass' => '认证通过',
-            'refuse' => '认证失败',
-            'delete' => '后台删除'];*/
+        /*  //性别 车牌/姓名 省
+          // 应用搜索条件
+          $auth_statuss = ['init' => '未认证',
+              'check' => '认证中',
+              'pass' => '认证通过',
+              'refuse' => '认证失败',
+              'delete' => '后台删除'];*/
         foreach (['is_reg'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '' && $get[$key] != 'all') {
                 if ($key == 'is_reg') {
-                    if($get[$key] == 'is'){
+                    if ($get[$key] == 'is') {
                         $where['user_id'] = ['exp', "is not null"];
-                    }else if($get[$key] == 'isnot'){
+                    } else if ($get[$key] == 'isnot') {
                         $where['user_id'] = ['exp', "is  null"];
                     }
                 }
             }
 
         }
-        if(!in_array(input('type'),['person','company','driver','car','phone'])){
+        if (!in_array(input('type'), ['person', 'company', 'driver', 'car', 'phone'])) {
             $info = ['draw' => time(), 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => [], 'extdata' => $where];
             return json($info);
-          //  `type` tinyint(1) DEFAULT '0' COMMENT '0=货主端，1=司机端，2=个人货主,3=公司货主，4=司机，5=车辆',
+            //  `type` tinyint(1) DEFAULT '0' COMMENT '0=货主端，1=司机端，2=个人货主,3=公司货主，4=司机，5=车辆',
         }
-        switch (input('type')){
+        switch (input('type')) {
             case 'person':
                 $where['type'] = 2;
                 break;
@@ -64,7 +64,7 @@ class BlackInfo extends BaseController {
                 $where['type'] = 5;
                 break;
             case 'phone':
-                $where['type'] = ['exp','in (1,0)'];
+                $where['type'] = ['exp', 'in (1,0)'];
                 break;
         }
 
@@ -75,21 +75,21 @@ class BlackInfo extends BaseController {
         $list = $blackLogic->getListInfo($start, $length, $where);
         $returnArr = [];
         foreach ($list as $k => $v) {
-            if(in_array($v['type'],[0,1])){
-                $number = ($v['type']==1)?'司机端':'货主端';
+            if (in_array($v['type'], [0, 1])) {
+                $number = ($v['type'] == 1) ? '司机端' : '货主端';
                 $name = $v['phone'];
-            }else{
+            } else {
                 $number = $v['number'];
                 $name = $v['name'];
             }
             //  $action = '';
             $returnArr[] = [
-                'id'=>$v['id'],
+                'id' => $v['id'],
                 'check' => '<input class="list-check-box" value="' . $v['id'] . '" type="checkbox"/>',//id
                 'name' => $name,//用户名称
-                'number' =>$number,//手机号
+                'number' => $number,//手机号
                 'action' => '<a class="look"  href="javascript:void(0);"  data-field="id" data-value="' . $v['id'] . '" data-update="' . $v['id'] . '" data-action="' . url('BlackInfo/changeStatus', ['id' => $v['id']]) . '"     >拉回白名单</a>',
-          //      'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Driver/showdetail', ['id' => $v['a_id']]) . '" >查看</a>',
+                //      'action' => '<a class="look"  href="javascript:void(0);" data-open="' . url('Driver/showdetail', ['id' => $v['a_id']]) . '" >查看</a>',
             ];
         }
 
@@ -101,9 +101,9 @@ class BlackInfo extends BaseController {
     }
 
     //批量拉回白名单
-    public function blackdel(){
+    public function blackdel() {
         $ids = explode(',', input("id", ''));
-        foreach ($ids as $k =>$v){
+        foreach ($ids as $k => $v) {
             $this->changeStatusAll($v);
         }
         $this->success('拉回白名单成功', '');
@@ -116,15 +116,15 @@ class BlackInfo extends BaseController {
             $data['phone'] = input('name');
             $data['type'] = input('client_type');
             $data['update_at'] = time();
-            $isexist = Db::name('BlackList')->where(['phone'=>$data['phone'],'type'=>$data['type']])->find();
-            if($data['type'] == 1){
+            $isexist = Db::name('BlackList')->where(['phone' => $data['phone'], 'type' => $data['type']])->find();
+            if ($data['type'] == 1) {
                 $driverLogic = model('Driver', 'logic');
-                $detail = $driverLogic->updateStatus(['phone'=>$data['phone']], ['is_black'=>1]);
-            }else if($data['type'] == 0){
+                $detail = $driverLogic->updateStatus(['phone' => $data['phone']], ['is_black' => 1]);
+            } else if ($data['type'] == 0) {
                 $shipperLogic = model('Shipper', 'logic');
-                $detail = $shipperLogic->updateStatus(['phone'=>$data['phone']], ['is_black'=>1]);
+                $detail = $shipperLogic->updateStatus(['phone' => $data['phone']], ['is_black' => 1]);
             }
-            if(empty($isexist)){
+            if (empty($isexist)) {
                 $data['create_at'] = time();
                 $result = DataService::save('BlackList', $data);
                 if ($result !== false) {
@@ -134,8 +134,8 @@ class BlackInfo extends BaseController {
                     LogService::write('黑名单添加失败', implode(',', $data));
                     $this->error('保存失败，请稍候再试！', '');
                 }
-            }else{
-                if (  Db::name('BlackList')->where(['phone'=>$data['phone'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time()])){
+            } else {
+                if (Db::name('BlackList')->where(['phone' => $data['phone'], 'type' => $data['type']])->update(['is_del' => 0, 'update_at' => time()])) {
                     LogService::write('黑名单添加成功', '黑名单添加成功' . input("post.id", ''));
                     $this->success("黑名单添加成功！", '');
                 }
@@ -147,31 +147,137 @@ class BlackInfo extends BaseController {
             return view();
         }
     }
-    //车型添加
+
+    //添加
     public function blackadd() {
         //var_dump('1111');
         if (request()->isPost()) {
             $data = input('param.');
-            switch (input('typeval')){
+            switch (input('typeval')) {
                 case 'person':
                     $data['type'] = 2;
+                    $persondetail = Db::name('SpBaseInfo')->where(['identity' => $data['number'], 'auth_status' => 'pass'])->find();
+                    if (!empty($persondetail)) {
+                        $data['user_id'] = $persondetail['id'];
+                        $dataphone['type'] = 0;
+                        $dataphone['phone'] = $persondetail['phone'];
+                        $dataphone['user_id'] = $persondetail['id'];
+
+                        $isexist = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->find();
+                        if (empty($isexist)) {
+                            $dataphone['create_at'] = time();
+                            $result = DataService::save('BlackList', $dataphone);
+                        } else {
+                            $result = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->update(['is_del' => 0, 'update_at' => time(), 'user_id' => $dataphone['user_id']]);
+                        }
+                        $detail = model('Shipper', 'logic')->updateStatus(['id' => $data['user_id']], ['is_black' => 1]);
+                    }
                     break;
                 case 'company':
                     $data['type'] = 3;
+                    $companydetail = Db::name('SpCompanyAuth')->where(['com_buss_num' => $data['number']])->find();
+                    if (!empty($companydetail)) {
+                        $spdetail = Db::name('SpBaseInfo')->where(['company_id' => $companydetail['id'], 'auth_status' => 'pass'])->find();
+                        if (!empty($spdetail)) {
+                            $data['user_id'] = $spdetail['id'];
+                            $dataphone['type'] = 0;
+                            $dataphone['phone'] = $spdetail['phone'];
+                            $dataphone['user_id'] = $spdetail['id'];
+
+                            $isexist = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->find();
+                            if (empty($isexist)) {
+                                $dataphone['create_at'] = time();
+                                $result = DataService::save('BlackList', $dataphone);
+                            } else {
+                                $result = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->update(['is_del' => 0, 'update_at' => time(), 'user_id' => $dataphone['user_id']]);
+                            }
+                            $detail = model('Shipper', 'logic')->updateStatus(['id' => $data['user_id']], ['is_black' => 1]);
+                        }
+                    }
                     break;
                 case 'driver':
                     $data['type'] = 4;
+                    $persondetail = Db::name('DrBaseInfo')->where(['identity' => $data['number'], 'auth_status' => 'pass'])->find();
+                    if (!empty($persondetail)) {
+                        $data['user_id'] = $persondetail['id'];
+                        $detail = model('Driver', 'logic')->updateStatus(['id' => $data['user_id']], ['is_black' => 1]);
+                        $dataphone['type'] = 1;
+                        $dataphone['phone'] = $persondetail['phone'];
+                        $dataphone['user_id'] = $persondetail['id'];
+
+                        $isexist = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->find();
+                        if (empty($isexist)) {
+                            $dataphone['create_at'] = time();
+                            $result = DataService::save('BlackList', $dataphone);
+                        } else {
+                            $result = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->update(['is_del' => 0, 'update_at' => time(), 'user_id' => $dataphone['user_id']]);
+                        }
+
+                        $datacar['update_at'] = time();
+                        $datacar['type'] = 5;
+                        $cardetail = Db::name('DrCarinfoAuth')->where(['id' => $persondetail['car_id']])->find();
+                        if (!empty($cardetail)) {
+                            $datacar['name'] = $cardetail['card_number'];
+                            $datacar['number'] = '';
+                            $datacar['user_id'] = $persondetail['id'];
+
+                            $isexist = Db::name('BlackList')->where(['name' => $datacar['name'], 'number' => $datacar['number'], 'type' => $datacar['type']])->find();
+                            if (empty($isexist)) {
+                                $datacar['create_at'] = time();
+                                $result = DataService::save('BlackList', $datacar);
+                            } else {
+                                $result = Db::name('BlackList')->where(['name' => $datacar['name'], 'number' => $datacar['number'], 'type' => $datacar['type']])->update(['is_del' => 0, 'update_at' => time(), 'user_id' => $datacar['user_id']]);
+                            }
+                        }
+                    }
                     break;
                 case 'car':
                     $data['type'] = 5;
+                    $cardetail = Db::name('DrCarinfoAuth')->where(['card_number' => $data['name']])->find();
+                    if (!empty($cardetail)) {
+                        $persondetail = Db::name('DrBaseInfo')->where(['car_id' => $cardetail['id'], 'auth_status' => 'pass'])->find();
+                        if (!empty($persondetail)) {
+                            $data['user_id'] = $persondetail['id'];
+                            $detail = model('Driver', 'logic')->updateStatus(['id' => $data['user_id']], ['is_black' => 1]);
+                            $dataphone['type'] = 1;
+                            $dataphone['phone'] = $persondetail['phone'];
+                            $dataphone['user_id'] = $persondetail['id'];
+
+                            $isexist = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->find();
+                            if (empty($isexist)) {
+                                $dataphone['create_at'] = time();
+                                $result = DataService::save('BlackList', $dataphone);
+                            } else {
+                                $result = Db::name('BlackList')->where(['phone' => $dataphone['phone'], 'type' => $dataphone['type']])->update(['is_del' => 0, 'update_at' => time(), 'user_id' => $dataphone['user_id']]);
+                            }
+
+                            $dataidentity['update_at'] = time();
+                            $dataidentityr['type'] = 4;
+                            $dataidentityr['name'] = $persondetail['real_name'];
+                            $dataidentityr['number'] = $persondetail['identity'];
+                            $dataidentityr['user_id'] = $persondetail['id'];
+
+                            $isexist = Db::name('BlackList')->where(['name' => $dataidentityr['name'], 'number' => $dataidentityr['number'], 'type' => $dataidentityr['type']])->find();
+                            if (empty($isexist)) {
+                                $dataidentityr['create_at'] = time();
+                                $result = DataService::save('BlackList', $dataidentityr);
+                            } else {
+                                $result = Db::name('BlackList')->where(['name' => $dataidentityr['name'], 'number' => $dataidentityr['number'], 'type' => $dataidentityr['type']])->update(['is_del' => 0, 'update_at' => time(), 'user_id' => $dataidentityr['user_id']]);
+                            }
+                        }
+                    }
                     break;
                 default:
                     $this->error('保存失败，请稍候再试！', '');
                     break;
             }
+            if (isset($data['user_id']) && !empty($data['user_id'])) {
+
+            }
+
             $data['update_at'] = time();
-            $isexist = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->find();
-            if(empty($isexist)){
+            $isexist = Db::name('BlackList')->where(['name' => $data['name'], 'number' => $data['number'], 'type' => $data['type']])->find();
+            if (empty($isexist)) {
                 $data['create_at'] = time();
                 $result = DataService::save('BlackList', $data);
                 if ($result !== false) {
@@ -181,8 +287,14 @@ class BlackInfo extends BaseController {
                     LogService::write('黑名单添加失败', implode(',', $data));
                     $this->error('保存失败，请稍候再试！', '');
                 }
-            }else{
-                if (Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time()])) {
+            } else {
+                if (isset($data['user_id']) && !empty($data['user_id'])) {
+                    $updateStatus = ['is_del' => 0, 'update_at' => time(), 'user_id' => $data['user_id']];
+                } else {
+                    $updateStatus = ['is_del' => 0, 'update_at' => time()];
+                }
+
+                if (Db::name('BlackList')->where(['name' => $data['name'], 'number' => $data['number'], 'type' => $data['type']])->update($updateStatus)) {
                     LogService::write('黑名单添加成功', '黑名单添加成功' . input("post.id", ''));
                     $this->success("黑名单添加成功！", '');
                 }
@@ -194,8 +306,9 @@ class BlackInfo extends BaseController {
             return view();
         }
     }
+
     //拉回白名单
-    public function changeStatusAll($id='') {
+    public function changeStatusAll($id = '') {
         $data['id'] = $id;
         $isexist = Db::name('BlackList')->where(['id' => $data['id']])->find();
 
@@ -234,24 +347,24 @@ class BlackInfo extends BaseController {
     }
 
 
-        //拉回白名单
+    //拉回白名单
     public function changeStatus() {
-         $data = input('param.');
-        $isexist = Db::name('BlackList')->where(['id'=>$data['id']])->find();
+        $data = input('param.');
+        $isexist = Db::name('BlackList')->where(['id' => $data['id']])->find();
 
-        if(empty($isexist)){
+        if (empty($isexist)) {
             $this->error("保存失败，请稍候再试！");
         }
-        if(in_array($isexist['type'],[2,3,4,5]) ){
-            if (Db::name('BlackList')->where(['id'=>$data['id'],'type'=>$isexist['type']])->update(['is_del'=>1,'update_at'=>time()])) {
-                if(!empty($isexist['user_id'])){
+        if (in_array($isexist['type'], [2, 3, 4, 5])) {
+            if (Db::name('BlackList')->where(['id' => $data['id'], 'type' => $isexist['type']])->update(['is_del' => 1, 'update_at' => time()])) {
+                if (!empty($isexist['user_id'])) {
                     //0=货主端，1=司机端，2=个人货主,3=公司货主，4=司机，5=车辆
-                    if(in_array($isexist['type'],[2,3])){
-                        Db::name('BlackList')->where(['user_id'=>$isexist['user_id'],'type'=>['exp','in (0,2,3)']])->update(['is_del'=>1,'update_at'=>time()]);
-                        $detail = model('Shipper', 'logic')->updateStatus(['id'=>$isexist['user_id']], ['is_black'=>0]);
-                    }else if(in_array($isexist['type'],[4,5])){
-                        Db::name('BlackList')->where(['user_id'=>$isexist['user_id'],'type'=>['exp','in (1,4,5)']])->update(['is_del'=>1,'update_at'=>time()]);
-                        $detail = model('Driver', 'logic')->updateStatus(['id'=>$isexist['user_id']], ['is_black'=>0]);
+                    if (in_array($isexist['type'], [2, 3])) {
+                        Db::name('BlackList')->where(['user_id' => $isexist['user_id'], 'type' => ['exp', 'in (0,2,3)']])->update(['is_del' => 1, 'update_at' => time()]);
+                        $detail = model('Shipper', 'logic')->updateStatus(['id' => $isexist['user_id']], ['is_black' => 0]);
+                    } else if (in_array($isexist['type'], [4, 5])) {
+                        Db::name('BlackList')->where(['user_id' => $isexist['user_id'], 'type' => ['exp', 'in (1,4,5)']])->update(['is_del' => 1, 'update_at' => time()]);
+                        $detail = model('Driver', 'logic')->updateStatus(['id' => $isexist['user_id']], ['is_black' => 0]);
                     }
                 }
                 LogService::write('拉回白名单成功', '拉回白名单成功' . $data['id']);
@@ -260,14 +373,14 @@ class BlackInfo extends BaseController {
             }
             LogService::write('拉回白名单失败', '拉回白名单失败' . $data['id']);
             $this->error("保存失败，请稍候再试！");
-        }else{
-            Db::name('BlackList')->where(['id'=>$data['id'],'type'=>$isexist['type']])->update(['is_del'=>1,'update_at'=>time()]);
-            if($isexist['type'] == 1){
+        } else {
+            Db::name('BlackList')->where(['id' => $data['id'], 'type' => $isexist['type']])->update(['is_del' => 1, 'update_at' => time()]);
+            if ($isexist['type'] == 1) {
                 $driverLogic = model('Driver', 'logic');
-                $detail = $driverLogic->updateStatus(['phone'=>$isexist['phone']], ['is_black'=>0]);
-            }else if($isexist['type'] == 0){
+                $detail = $driverLogic->updateStatus(['phone' => $isexist['phone']], ['is_black' => 0]);
+            } else if ($isexist['type'] == 0) {
                 $shipperLogic = model('Shipper', 'logic');
-                $detail = $shipperLogic->updateStatus(['phone'=>$isexist['phone']], ['is_black'=>0]);
+                $detail = $shipperLogic->updateStatus(['phone' => $isexist['phone']], ['is_black' => 0]);
             }
             LogService::write('拉回白名单成功', '拉回白名单成功' . $data['id']);
             $this->success("拉回白名单成功！", '');

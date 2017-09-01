@@ -144,7 +144,7 @@ class Shipper extends BaseLogic {
                 $data['create_at'] = time();
                 $result = DataService::save('BlackList', $data);
             }else{
-                $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time()]);
+                $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time(),'user_id'=>$data['user_id']]);
             }
             $dataphone['type'] = 0;
             $dataphone['phone'] = $spdetail['phone'];
@@ -156,7 +156,7 @@ class Shipper extends BaseLogic {
                 $dataphone['create_at'] = time();
                 $result = DataService::save('BlackList', $dataphone);
             }else{
-                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>0,'update_at'=>time()]);
+                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>0,'update_at'=>time(),'user_id'=>$dataphone['user_id']]);
             }
             return true;
         }else if($spdetail['type'] == 'company'){
@@ -170,7 +170,7 @@ class Shipper extends BaseLogic {
                 $dataphone['create_at'] = time();
                 $result = DataService::save('BlackList', $dataphone);
             }else{
-                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>0,'update_at'=>time()]);
+                $result = Db::name('BlackList')->where(['phone'=>$dataphone['phone'],'type'=>$dataphone['type']])->update(['is_del'=>0,'update_at'=>time(),'user_id'=>$dataphone['user_id']]);
             }
             $data['update_at'] = time();
             $data['type'] = 3;
@@ -186,7 +186,7 @@ class Shipper extends BaseLogic {
                     $data['create_at'] = time();
                     $result = DataService::save('BlackList', $data);
                 }else{
-                    $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time()]);
+                    $result = Db::name('BlackList')->where(['name'=>$data['name'],'number'=>$data['number'],'type'=>$data['type']])->update(['is_del'=>0,'update_at'=>time(),'user_id'=>$data['user_id']]);
                 }
             }
             return true;
