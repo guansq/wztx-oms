@@ -47,12 +47,19 @@ class Log extends BaseController {
             }
         }
         if(session('user')['username'] != 'admin'){
-            $db->where('username', 'exp',"not in('admin')")->where(['is_deleted'=>0]);
+            $db->where('username', 'exp',"not in('admin')");
         }
+        $db->where(['is_deleted'=>0]);
+        $row_page = $this->request->get('rows', cookie('rows'), 'intval');
+        cookie('rows', $row_page >= 10 ? $row_page : 20);
+        $page = $db->paginate($row_page, false);
+        $result['list'] = $page->all();
+        $result['page'] = preg_replace(['|href="(.*?)"|', '|pagination|'], ['data-load="$1" href="javascript:void(0);"', 'pagination pull-right'], $page->render());
 
-        $list = $db->select();
-        $this->assign('list', $list);
-        return view();
+        $this->assign('list', $result['list'] );
+        $this->assign('page',   $result['page']);
+      return view();
+       // parent::_list($db);
        // parent::_list($db);
     }
 
