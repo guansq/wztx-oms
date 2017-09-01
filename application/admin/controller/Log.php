@@ -52,7 +52,7 @@ class Log extends BaseController {
         $db->where(['is_deleted'=>0]);
         $row_page = $this->request->get('rows', cookie('rows'), 'intval');
         cookie('rows', $row_page >= 10 ? $row_page : 20);
-        $page = $db->paginate($row_page, false);
+        $page = $db->paginate($row_page, false,['query' => $this->request->get()]);
         $result['list'] = $page->all();
         $result['page'] = preg_replace(['|href="(.*?)"|', '|pagination|'], ['data-load="$1" href="javascript:void(0);"', 'pagination pull-right'], $page->render());
 
