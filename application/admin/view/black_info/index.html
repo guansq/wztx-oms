@@ -216,6 +216,31 @@
                         $.cookie('type',$("#type").val() );
                     }
                     $('.'+$("#type").val()+'-radio').attr('checked',true);
+                    switch ($("#type").val()){
+                        case 'person':
+                            name = '姓名';
+                            id = '身份证号码';
+                            break;
+                        case 'company':
+                            name = '企业名称';
+                            id = '营业执照编号';
+                            break;
+                        case 'car':
+                            name = '车牌号';
+                            id = '发动机号';
+                            break;
+                        case 'driver':
+                            name = '姓名';
+                            id = '身份证号码';
+                            break;
+                        case 'phone':
+                            name = '手机号码';
+                            id = '客户端类型';
+                            break;
+                        //'person','company','driver','car','phone'
+                    }
+                    $("#examplename").html(name);
+                    $("#exampleid").html(id);
 //                    parameter.name = $("#name").val();
                     parameter.type = $("#type").val();
                     parameter.is_reg = $("#is_reg").val();
