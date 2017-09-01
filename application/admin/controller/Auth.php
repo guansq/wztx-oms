@@ -19,7 +19,7 @@ use service\DataService;
 use service\NodeService;
 use service\ToolsService;
 use think\Db;
-
+use think\Url;
 /**
  * 系统权限管理控制器
  * Class Auth
@@ -72,7 +72,11 @@ class Auth extends BaseController {
                 }
                 Db::name('SystemAuthNode')->where('auth', $auth_id)->delete();
                 Db::name('SystemAuthNode')->insertAll($data);
-                $this->success('节点授权更新成功！', '');
+
+               // $this->success('节点授权更新成功！', '');
+                $url = str_replace($_SERVER['SERVER_NAME'] . '/', $_SERVER['SERVER_NAME'] . '/#/', Url::build('Auth/index')) . '?' . $_SERVER['QUERY_STRING'];
+                $url = preg_replace('/s=[^\s]*&/', '', $url);
+                $this->success('节点授权更新成功！', $url);
                 break;
             default :
                 $this->assign('title', '节点授权');
@@ -101,6 +105,16 @@ class Auth extends BaseController {
      * 权限添加
      */
     public function add() {
+        $title = input('title');
+        $titledetail = Db::name($this->table)->where('title', $title)->find();
+        if(!empty($titledetail)){
+            $this->error("权限名称需唯一");
+        }
+     //   $articledetail = Db::name($this->table)->where('id', $id)->find();
+//        CREATE TABLE `rt_system_auth` (
+//        `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+//  `title` varchar(20) NOT NULL COMMENT '权限名称',
+//  `status` tinyint(1) unsigned DEF
         return $this->_form($this->table, 'form');
     }
 

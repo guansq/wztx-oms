@@ -393,7 +393,7 @@ function clearOrder($order_id = '') {
         $detail =updateDrStatus(['id' => $dr_id], $status);
         if($detail){
             LogService::write('订单:' . $id, '订单结算成功'.$clear_price);
-            $push_token = getPushToken($dr_id);
+            $push_token = getDrPushToken($dr_id);
             if(!empty($push_token) && !empty($clear_price)){
                 $titlepush = '有一笔订单结算成功';
                 $contentpush = '订单:'.$list['order_code'].'，结算金额:'.$clear_price.'元';

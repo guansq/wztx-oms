@@ -29,6 +29,7 @@ class Article extends BaseController {
             $num =$num+1;
             $list[$k]['content'] = mb_substr( strip_tags( $v['content']),0,20);
             $list[$k]['num'] = $num;
+            $list[$k]['name'] = ($v['show_type']==1)?'司机端':'货主端';
         }
 
         $this->assign('list',$list);
@@ -50,8 +51,8 @@ class Article extends BaseController {
         } else {
             $id = input('id');
             if (!empty($id)) {
-                $articledetail = Db::name($this->table)->where('id', $id)->select();
-                $articledetail = $articledetail[0];
+                $articledetail = Db::name($this->table)->where('id', $id)->find();
+                $articledetail['name']=($articledetail['show_type']==1)?'司机端':'货主端';
             }
             $this->assign('articledetail', $articledetail);
             return view();
@@ -87,8 +88,8 @@ class Article extends BaseController {
         } else {
             $id = input('id');
             if (!empty($id)) {
-                $articledetail = Db::name($this->table)->where('id', $id)->select();
-                $articledetail = $articledetail[0];
+                $articledetail = Db::name($this->table)->where('id', $id)->find();
+                $articledetail['name']=($articledetail['show_type']==1)?'司机端':'货主端';
             }
             $this->assign('articledetail', $articledetail);
             return view();
