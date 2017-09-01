@@ -68,7 +68,7 @@ class Financial extends BaseController {
                 $info = ['draw' => time(), 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => [], 'extdata' => $where, 'showmsg' => '查询时间不能超过30天'];
             }
             $begin_time = strtotime(input('begintime'));
-            $end_time = strtotime(input('endtime'));
+            $end_time = strtotime(input('endtime')) + 86400 - 1;
         }
         $where['pay_time'] = array('between', array($begin_time, $end_time));
         // $titile = '统计';
