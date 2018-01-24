@@ -18,7 +18,7 @@ return [
     //-------------------
     '__domain__' => [
         //'atwwg.api'      => 'api',
-        'wztx.oms' => 'admin',
+        //'admin' => 'admin',
         //'atwwg.spl'      => 'spl'
     ],
     '__rest__' => [
